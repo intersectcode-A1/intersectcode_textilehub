@@ -49,30 +49,6 @@
                 </nav>
             @endif
         </header>
-        <!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Selamat Datang</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gradient-to-br from-blue-100 to-white min-h-screen flex items-center justify-center p-6">
-
-  <div class="text-center max-w-xl bg-white shadow-xl rounded-2xl p-10 space-y-6">
-    <h1 class="text-4xl font-bold text-blue-600">Selamat Datang!</h1>
-    <p class="text-gray-600 text-lg">
-      Terima kasih telah mengunjungi situs kami. Mari mulai petualangan Anda bersama kami.
-    </p>
-    <a href="/dashboard" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition duration-300">
-      Mulai Sekarang
-    </a>
-  </div>
-
-</body>
-</html>
-
-
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
         @endif
