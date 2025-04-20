@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <title>{{ $title ?? 'Sistem Aplikasi' }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+      }
+    </style>
     @livewireStyles
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
@@ -29,7 +35,7 @@
     {{-- FOOTER --}}
     <footer class="bg-white border-t p-4 mt-6">
         <div class="container mx-auto text-center text-sm text-gray-500">
-            &copy; {{ date('Y') }} Sistem Aplikasi by Abid Mustaghfirin. All rights reserved.
+            &copy; {{ date('Y') }} intersectcode. All rights reserved.
         </div>
     </footer>
 
