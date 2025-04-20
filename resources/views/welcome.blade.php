@@ -33,18 +33,11 @@
 
     <main class="text-center">
         <h1 class="text-3xl font-bold mb-4 text-blue-700 transition-opacity duration-1000" id="mainTitle">
-            Selamat datang di Laravel
+            Selamat datang di Toko Usaha Muda
         </h1>
-        <form onsubmit="submitForm(event)" class="flex flex-col sm:flex-row items-center gap-2">
-            <input type="email" placeholder="Masukkan email..." class="px-4 py-2 border border-gray-300 rounded w-64" required />
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                Kirim
-            </button>
-        </form>
-
         <p id="thanksMessage" class="mt-4 text-green-600 font-semibold hidden">Terima kasih! 🎉</p>
     </main>
-
+    
     <script>
         // Fade in on load
         window.addEventListener('load', () => {
