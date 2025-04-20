@@ -18,7 +18,10 @@ class Login extends Component
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
             session()->flash('success', 'Login berhasil!');
-            return redirect()->to('/dashboard');
+            if (Auth::user()->role == 'admin') {
+                return redirect()->to('/dashboard');
+            }
+            return redirect()->to('/landing');
         } else {
             session()->flash('error', 'Email atau password salah.');
         }
