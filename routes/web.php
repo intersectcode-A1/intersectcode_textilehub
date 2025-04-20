@@ -7,7 +7,7 @@ use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\NewPasswordController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 });
 
 Route::get('/register', Register::class)->name('register');
