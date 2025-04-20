@@ -17,7 +17,7 @@ Route::get('/landing', function () {
 Route::get('/register', Register::class)->name('register');
 Route::get('/login', Login::class)->name('login');
 
-Route::post('/logout', function () {
+Route::get('/logout', function () {
     Auth::logout(); 
     request()->session()->invalidate(); 
     request()->session()->regenerateToken(); 
