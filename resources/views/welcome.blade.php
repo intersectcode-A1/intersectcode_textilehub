@@ -22,9 +22,13 @@
                 @auth
                     <a href="{{ url('/dashboard') }}" class="px-5 py-1.5 border text-gray-700 border-gray-300 hover:border-gray-400 rounded-sm text-sm">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="px-5 py-1.5 text-gray-700 hover:text-blue-600 text-sm">Log in</a>
+                <a href="{{ route('login') }}"
+                class="px-5 py-1.5 border border-white text-white-700 hover:text-white-600 text-sm rounded transition duration-200 active:scale-95 ease-in-out hover:bg-white/10">
+                Log in</a>
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="px-5 py-1.5 border text-gray-700 border-gray-300 hover:border-blue-400 rounded-sm text-sm">Register</a>
+                    <a href="{{ route('register') }}"
+                    class="px-5 py-1.5 border text-white-700 border-white-300 hover:border-white-400 hover:bg-white/10 rounded-sm text-sm transition duration-200 ease-in-out active:scale-95">
+                    Register</a>
                     @endif
                 @endauth
             </nav>
