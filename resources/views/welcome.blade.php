@@ -56,6 +56,7 @@
     #thanksMessage:not(.hidden) {
         opacity: 1;
     }
+    
 </style>
 
     <meta charset="utf-8">
@@ -93,11 +94,35 @@
     </header>
 
     <main class="text-center">
-        <h1 class="text-3xl font-bold mb-4 text-blue-700 transition-opacity duration-1000" id="mainTitle">
+        <h1 class="text-3xl font-bold mb-2 text-blue-700 transition-opacity duration-1000" id="mainTitle">
             Selamat datang di Toko Usaha Muda
         </h1>
+    
+        <!-- Tambahan: Slogan -->
+        <p class="text-lg text-gray-300 italic mb-4">Temukan produk berkualitas dari para pengusaha muda Indonesia!</p>
+    
+        <!-- Tambahan: Ikon ilustrasi -->
+        <div class="mt-4 mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-20 w-20 text-blue-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3 8 4-16 3 8h4" />
+            </svg>
+        </div>
+    
+        <!-- Tambahan: Sambutan -->
+        <p class="text-base text-gray-400 max-w-2xl mx-auto mb-6">
+            Kami hadir untuk membantu Anda menemukan berbagai produk kreatif dari anak muda berbakat. 
+            Dukung usaha lokal dan jadilah bagian dari gerakan wirausaha muda yang berdampak!
+        </p>
+    
+        <!-- Tambahan: Tombol CTA -->
+        <a href="#produk" class="inline-block px-6 py-2 text-sm bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-md transition duration-300 ease-in-out animate-pulse">
+            Lihat Produk Unggulan
+        </a>
+    
+        <!-- Tetap: Pesan terima kasih -->
         <p id="thanksMessage" class="mt-4 text-green-600 font-semibold hidden">Terima kasih! 🎉</p>
     </main>
+    
     
     <script>
         // Fade in on load
