@@ -121,6 +121,25 @@
     
         <!-- Tetap: Pesan terima kasih -->
         <p id="thanksMessage" class="mt-4 text-green-600 font-semibold hidden">Terima kasih! 🎉</p>
+
+        <section class="mt-20 text-white text-center">
+            <h2 class="text-2xl font-semibold mb-6">Apa Kata Mereka?</h2>
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <p class="italic text-gray-300">“Produknya keren banget dan pengirimannya cepat. Mantap!”</p>
+                    <div class="mt-2 text-sm text-gray-400">— Rina, Jakarta</div>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <p class="italic text-gray-300">“Usaha muda yang sangat inspiratif. Aku pasti repeat order!”</p>
+                    <div class="mt-2 text-sm text-gray-400">— Budi, Bandung</div>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <p class="italic text-gray-300">“Kualitas oke, harga terjangkau. Sukses terus!”</p>
+                    <div class="mt-2 text-sm text-gray-400">— Ayu, Surabaya</div>
+                </div>
+            </div>
+        </section>
+        
     </main>
     
     
@@ -142,5 +161,16 @@
             document.getElementById('thanksMessage').classList.remove('hidden');
         }
     </script>
+
+<footer class="mt-20 bg-gray-900 p-6 text-center text-white rounded-t-2xl">
+    <h3 class="text-xl font-semibold mb-2">Dukung Usaha Muda Indonesia 💡</h3>
+    <p class="text-gray-400 mb-4">Follow kami di sosial media & jadilah bagian dari komunitas pengusaha muda.</p>
+    <div class="flex justify-center gap-4">
+        <a href="#" class="hover:text-blue-400 transition">Instagram</a>
+        <a href="#" class="hover:text-blue-400 transition">Facebook</a>
+        <a href="#" class="hover:text-blue-400 transition">Twitter</a>
+    </div>
+</footer>
+
 </body>
 </html>
