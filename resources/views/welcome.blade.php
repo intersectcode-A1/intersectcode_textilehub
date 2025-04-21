@@ -99,7 +99,7 @@
         </h1>
     
         <!-- Tambahan: Slogan -->
-        <p class="text-lg text-gray-300 italic mb-4">Temukan produk berkualitas dari para pengusaha muda Indonesia!</p>
+        <p class="text-lg text-gray-300 italic mb-4">Temukan produk berkualitas dari Kami</p>
     
         <!-- Tambahan: Ikon ilustrasi -->
         <div class="mt-4 mb-6">
@@ -110,8 +110,8 @@
     
         <!-- Tambahan: Sambutan -->
         <p class="text-base text-gray-400 max-w-2xl mx-auto mb-6">
-            Kami hadir untuk membantu Anda menemukan berbagai produk kreatif dari anak muda berbakat. 
-            Dukung usaha lokal dan jadilah bagian dari gerakan wirausaha muda yang berdampak!
+            Kami hadir untuk membantu Anda menemukan berbagai produk yang berkualitas,
+            berbahan dasar lembut
         </p>
     
         <!-- Tambahan: Tombol CTA -->
