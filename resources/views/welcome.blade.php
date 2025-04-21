@@ -1,6 +1,63 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <!-- Tambahan: Background gradient & animasi -->
+<style>
+    body {
+        background: linear-gradient(to bottom right, #1e293b, #0f172a);
+    }
+
+    #mainTitle {
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 1s ease, transform 1s ease;
+    }
+
+    #mainTitle.opacity-100 {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Tambahan: efek hover tombol */
+    nav a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: scale(1.05);
+    }
+
+    nav a {
+        transition: all 0.3s ease;
+    }
+
+    /* Tambahan: efek teks heading */
+    h1::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: #3b82f6;
+        margin: 8px auto 0;
+        border-radius: 9999px;
+        transition: width 0.4s ease;
+    }
+
+    h1:hover::after {
+        width: 120px;
+    }
+
+    /* Tambahan: animasi teks terima kasih */
+    #thanksMessage {
+        transition: opacity 0.6s ease;
+    }
+
+    #thanksMessage.hidden {
+        opacity: 0;
+    }
+
+    #thanksMessage:not(.hidden) {
+        opacity: 1;
+    }
+</style>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel</title>
