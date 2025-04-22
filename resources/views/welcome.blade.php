@@ -102,7 +102,7 @@
     </header>
 
     <main class="text-center">
-        <h1 class="text-3xl font-bold mb-2 text-blue-700 transition-opacity duration-1000" id="mainTitle">
+        <h1 class="text-3xl font-bold mb-2 text-black-700 transition-opacity duration-1000" id="mainTitle">
             Selamat datang di Toko Usaha Muda
         </h1>
     
@@ -111,13 +111,13 @@
     
         <!-- Tambahan: Ikon ilustrasi -->
         <div class="mt-4 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-20 w-20 text-blue-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-20 w-20 text-black-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3 8 4-16 3 8h4" />
             </svg>
         </div>
     
         <!-- Tambahan: Sambutan -->
-        <p class="text-base text-gray-400 max-w-2xl mx-auto mb-6">
+        <p class="text-base text-black-400 max-w-2xl mx-auto mb-6">
             Kami hadir untuk membantu Anda menemukan berbagai produk yang berkualitas,
             berbahan dasar lembut
         </p>
