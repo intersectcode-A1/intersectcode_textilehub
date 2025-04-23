@@ -18,11 +18,11 @@
     {{-- HEADER --}}
     <header class="bg-white shadow p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-blue-600">Sistem Aplikasi</h1>
+            <h1 class="text-xl font-bold text-blue-600">Toko.usahamuda</h1>
             <nav>
                 <a href="/" class="text-sm mx-2 hover:text-blue-500">Beranda</a>
-                <a href="/login" class="text-sm mx-2 hover:text-blue-500">Login</a>
-                <a href="/register" class="text-sm mx-2 hover:text-blue-500">Register</a>
+                {{-- <a href="/login" class="text-sm mx-2 hover:text-blue-500">Login</a>
+                <a href="/register" class="text-sm mx-2 hover:text-blue-500">Register</a> --}}
             </nav>
         </div>
     </header>

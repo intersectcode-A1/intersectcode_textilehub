@@ -57,10 +57,6 @@
         </section>
     </div>
 </main>
-
-
-
-
 <script>
     /*Toggle dropdown list*/
     function toggleDD(myDropMenu) {
@@ -94,8 +90,5 @@
         }
     }
 </script>
-
-
 </body>
-
 </html>
