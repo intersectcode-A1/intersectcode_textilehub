@@ -42,10 +42,22 @@
                             </a>
                         </li>
                         <li class="mr-3 flex-1">
-                            <a href="#" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-red-500">
-                                <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Transaksi</span>
+                            <a href="#" 
+                               class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-red-500"
+                               onclick="toggleSubmenu('submenuTransaksi')">
+                                <i class="fa fa-wallet pr-0 md:pr-3"></i>
+                                <span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Transaksi</span>
                             </a>
-                        </li>
+                        
+                            <div id="submenuTransaksi" class="ml-2 mt-2 hidden">
+                                <a href="#" class="block px-3 py-1 text-gray-300 hover:text-white">
+                                    <i class="fa fa-chart-line"></i> Total Order
+                                </a>
+                                <a href="#" class="block px-3 py-1 text-gray-300 hover:text-white">
+                                    <i class="fa fa-coins"></i> Total Pendapatan
+                                </a>
+                            </div>
+                        </li>                        
                     </ul>
                 </div>
 
@@ -58,6 +70,10 @@
     </div>
 </main>
 <script>
+     function toggleSubmenu(id) {
+    const submenu = document.getElementById(id);
+    submenu.classList.toggle('hidden');
+}
     /*Toggle dropdown list*/
     function toggleDD(myDropMenu) {
         document.getElementById(myDropMenu).classList.toggle("invisible");
