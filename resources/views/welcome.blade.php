@@ -19,7 +19,7 @@
         opacity: 0;
         transform: translateY(-10px);
         transition: opacity 1s ease, transform 1s ease;
-        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+        
     }
 
     #mainTitle.opacity-100 {
