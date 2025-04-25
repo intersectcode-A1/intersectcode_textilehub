@@ -16,9 +16,9 @@
 <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
 
     {{-- HEADER --}}
-    <header class="bg-white shadow p-4">
+    <header class="bg-gray-200 shadow p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-blue-600">Toko.usahamuda</h1>
+            <h1 class="text-xl font-bold text-white-600"><img src="{{ asset('images/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda">Toko Usaha Muda</h1>
             <nav>
                 <a href="/" class="text-sm mx-2 hover:text-blue-500">Beranda</a>
                 {{-- <a href="/login" class="text-sm mx-2 hover:text-blue-500">Login</a>
@@ -33,7 +33,7 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer class="bg-white border-t p-4 mt-6">
+    <footer class="bg-gray-200 border-t p-4 mt-6">
         <div class="container mx-auto text-center text-sm text-gray-500">
             &copy; {{ date('Y') }} intersectcode. All rights reserved.
         </div>
