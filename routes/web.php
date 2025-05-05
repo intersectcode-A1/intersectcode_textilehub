@@ -17,37 +17,37 @@ Route::get('/landing', function () {
     return view('landing');
 });
 
-// Routing ke Livewire Component: Register dan Login
-Route::get('/register', Register::class)->middleware('guest')->name('register');
-Route::get('/login', Login::class)->middleware('guest')->name('login');
+// Register & Login (khusus untuk yang BELUM LOGIN)
+Route::middleware('guest')->group(function () {
+    Route::get('/register', Register::class)->name('register');
+    Route::get('/login', Login::class)->name('login');
 
-// Logout
-Route::get('/logout', function () {
-    Auth::logout(); 
-    request()->session()->invalidate(); 
-    request()->session()->regenerateToken(); 
-    return redirect('/login'); 
-})->middleware('auth')->name('logout');
+    // Forgot Password
+    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
 
-// Dashboard (hanya bisa diakses kalau sudah login)
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->name('password.email');
 
-// Forgot Password
-Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-    ->middleware('guest')
-    ->name('password.request');
+    // Reset Password
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->name('password.reset');
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.email');
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.update');
+});
 
-// Reset Password
-Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-    ->middleware('guest')
-    ->name('password.reset');
+// Dashboard (hanya untuk yang SUDAH LOGIN)
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::post('/reset-password', [NewPasswordController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.update');
+    // Logout
+    Route::post('/logout', function () {
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect('/login');
+    })->name('logout');
+});
