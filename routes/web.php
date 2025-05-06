@@ -6,9 +6,7 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Auth\Login;
 use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\NewPasswordController;
-use App\Livewire\Auth\OtpVerification;
 
-Route::get('/register/verify-otp', OtpVerification::class)->name('verify-otp');
 Route::get('/', function () {
     return view('welcome');
 });
