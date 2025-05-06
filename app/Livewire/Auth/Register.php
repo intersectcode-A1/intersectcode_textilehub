@@ -11,10 +11,13 @@ use Carbon\Carbon;
 
 class Register extends Component
 {
-    public $name, $email, $password, $otp, $step = 1, $generatedOtp;
+    public $name, $email, $password, $password_confirmation, $otp, $step = 1, $generatedOtp;
 
     public function submitRegistration()
     {
+        if ($this->password !== $this->password_confirmation) {
+            return session()->flash('error', 'Password dan konfirmasi password tidak cocok.');
+        }
         $this->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -42,6 +45,8 @@ class Register extends Component
         });
 
         $this->step = 2; // Masuk ke step verifikasi OTP
+        // return session()->flash('success', 'Registrasi berhasil! Cek email Anda untuk kode OTP.');
+        return redirect()->to('/register/verify-otp');
     }
 
     public function verifyOtp()

@@ -6,8 +6,9 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Auth\Login;
 use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\NewPasswordController;
+use App\Livewire\Auth\OtpVerification;
 
-// Halaman Welcome
+Route::get('/register/verify-otp', OtpVerification::class)->name('verify-otp');
 Route::get('/', function () {
     return view('welcome');
 });
@@ -44,7 +45,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     // Logout
-    Route::post('/logout', function () {
+    Route::get('/logout', function () {
         Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();

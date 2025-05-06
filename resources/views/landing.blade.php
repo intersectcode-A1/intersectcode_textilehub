@@ -16,7 +16,7 @@
                     <a href="/login" class="text-sm text-gray-700 hover:text-blue-600">Login</a>
                     <a href="/register" class="text-sm text-gray-700 hover:text-blue-600">Daftar</a>
                 @else
-                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                    <form action="{{ route('logout') }}" method="GET" class="inline">
                         @csrf
                         <button type="submit" class="text-sm text-gray-700 hover:text-blue-600">Logout</button>
                     </form>
@@ -30,7 +30,7 @@
         <div class="max-w-7xl mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold text-gray-800 mb-4">Belanja Kebutuhan Menjahit Jadi Lebih Mudah</h2>
             <p class="text-lg text-gray-600 mb-6">Temukan benang, kain, renda, kancing, dan perlengkapan menjahit lainnya di satu tempat</p>
-            <a href="/login" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Mulai Belanja</a>
+            <a href="/login" class="bg-blue-600 text-black px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Mulai Belanja</a>
         </div>
     </section>
 
