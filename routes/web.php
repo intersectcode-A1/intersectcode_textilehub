@@ -16,7 +16,7 @@ Route::get('/', function () {
 // Landing Page
 Route::get('/landing', function () {
     return view('landing');
-});
+})->name('landing');
 
 // Register & Login (khusus untuk yang BELUM LOGIN)
 Route::middleware('guest')->group(function () {

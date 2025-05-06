@@ -45,8 +45,8 @@ class Register extends Component
         });
 
         $this->step = 2; // Masuk ke step verifikasi OTP
-        // return session()->flash('success', 'Registrasi berhasil! Cek email Anda untuk kode OTP.');
-        return redirect()->to('/register/verify-otp');
+        return session()->flash('success', 'Registrasi berhasil! Cek email Anda untuk kode OTP.');
+        // return redirect()->to('/register/verify-otp');
     }
 
     public function verifyOtp()

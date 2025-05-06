@@ -23,7 +23,7 @@ class OtpVerification extends Component
     {
         // Ambil data OTP dari session
         $otpData = session('otp_user_data');
-
+        
         // Validasi OTP yang dimasukkan oleh pengguna
         if ($this->otp == $otpData['otp'] && now()->lessThan($otpData['otp_expires_at'])) {
             // OTP valid, lakukan registrasi dan login otomatis
