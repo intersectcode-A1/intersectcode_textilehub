@@ -16,11 +16,11 @@
 <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
 
     {{-- HEADER --}}
-    <header class="bg-gray-200 shadow p-4">
+    <header class="bg-[#1859E7] shadow p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-white-600"><img src="{{ asset('images/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda">Toko Usaha Muda</h1>
+            <h1 class="text-xl font-bold text-white flex items-center  font-serif"><img class="h-10" src="{{ asset('image/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda">Toko Usaha Muda</h1>
             <nav>
-                <a href="/" class="text-sm mx-2 hover:text-blue-500">Beranda</a>
+                <a href="/" class="bg-white px-3 py-1 rounded-lg text-sm mx-2 hover:text-blue-500">Beranda</a>
                 {{-- <a href="/login" class="text-sm mx-2 hover:text-blue-500">Login</a>
                 <a href="/register" class="text-sm mx-2 hover:text-blue-500">Register</a> --}}
             </nav>
