@@ -70,7 +70,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
+    <title>Toko Usaha Muda</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -124,9 +124,23 @@
         </p>
     
         <!-- Tambahan: Tombol CTA -->
-        <a href="#produk" class="inline-block px-6 py-2 text-sm bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-md transition duration-300 ease-in-out animate-pulse">
-            Lihat Produk Unggulan
-        </a>
+        <section id="produk" class="mt-20 text-white text-center">
+            <h2 class="text-2xl font-semibold mb-6">Produk Unggulan</h2>
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <img src="/image/Benang.jpg" alt="Benang Jahit Premium" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Benang Jahit Premium</p>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <img src="/images/produk2.jpg" alt="Kain Katun Lembut" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Kain Katun Lembut</p>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <img src="/images/produk3.jpg" alt="Mesin Jahit Portable" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Mesin Jahit Portable</p>
+                </div>
+            </div>
+        </section>
     
         <!-- Tetap: Pesan terima kasih -->
         <p id="thanksMessage" class="mt-4 text-green-600 font-semibold hidden">Terima kasih! 🎉</p>
@@ -134,21 +148,24 @@
         <section class="mt-20 text-white text-center">
             <h2 class="text-2xl font-semibold mb-6">Apa Kata Mereka?</h2>
             <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                <div class="bg-blue-600 p-4 rounded-xl shadow flex flex-col items-center">
+                    <img src="/image/Akbar.jpg" alt="Akbar" class="w-16 h-16 object-cover rounded-full mb-3">
                     <p class="italic text-gray-300">“Produknya keren banget dan pengirimannya cepat. Mantap!”</p>
-                    <div class="mt-2 text-sm text-gray-400">— Rina, Jakarta</div>
+                    <div class="mt-2 text-sm text-gray-400">— Akbar, Padang</div>
                 </div>
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                <div class="bg-blue-600 p-4 rounded-xl shadow flex flex-col items-center">
+                    <img src="/image/Dini.jpg" alt="Dini" class="w-16 h-16 object-cover rounded-full mb-3">
                     <p class="italic text-gray-300">“Usaha muda yang sangat inspiratif. Aku pasti repeat order!”</p>
-                    <div class="mt-2 text-sm text-gray-400">— Budi, Bandung</div>
+                    <div class="mt-2 text-sm text-gray-400">— Dini, Solok</div>
                 </div>
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                <div class="bg-blue-600 p-4 rounded-xl shadow flex flex-col items-center">
+                    <img src="/image/wahyu.jpg" alt="wahyu" class="w-16 h-16 object-cover rounded-full mb-3">
                     <p class="italic text-gray-300">“Kualitas oke, harga terjangkau. Sukses terus!”</p>
-                    <div class="mt-2 text-sm text-gray-400">— Ayu, Surabaya</div>
+                    <div class="mt-2 text-sm text-gray-400">— Wahyu, Solo</div>
                 </div>
             </div>
         </section>
-        
+
     </main>
     
     
