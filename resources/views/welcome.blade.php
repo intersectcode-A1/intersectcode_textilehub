@@ -139,6 +139,19 @@
                     <img src="/images/produk3.jpg" alt="Mesin Jahit Portable" class="w-full h-48 object-cover rounded mb-3">
                     <p class="text-lg font-medium">Mesin Jahit Portable</p>
                 </div>
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <img src="/images/produk4.jpg" alt="Gunting Kain Tajam" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Gunting Kain Tajam</p>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <img src="/images/produk5.jpg" alt="Set Alat Jahit" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Set Alat Jahit</p>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-xl shadow">
+                    <img src="/images/produk6.jpg" alt="Kain Batik Tradisional" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Kain Batik Tradisional</p>
+                </div>
+
             </div>
         </section>
     
