@@ -1,73 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
-    <!-- Tambahan: Background gradient & animasi -->
-<style>
-    body {
-    background: linear-gradient(135deg, #1e293b, #3b0764, #2563eb, #0f172a);
-    background-size: 400% 400%;
-    animation: gradientFlow 15s ease infinite;
-}
-@keyframes gradientFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-
-    #mainTitle {
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: opacity 1s ease, transform 1s ease;
-        
-    }
-
-    #mainTitle.opacity-100 {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* Tambahan: efek hover tombol */
-    nav a:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        transform: scale(1.05);
-    }
-
-    nav a {
-        transition: all 0.3s ease;
-    }
-
-    /* Tambahan: efek teks heading */
-    h1::after {
-        content: '';
-        display: block;
-        width: 80px;
-        height: 3px;
-        background: #3b82f6;
-        margin: 8px auto 0;
-        border-radius: 9999px;
-        transition: width 0.4s ease;
-    }
-
-    h1:hover::after {
-        width: 120px;
-    }
-
-    /* Tambahan: animasi teks terima kasih */
-    #thanksMessage {
-        transition: opacity 0.6s ease;
-    }
-
-    #thanksMessage.hidden {
-        opacity: 0;
-    }
-
-    #thanksMessage:not(.hidden) {
-        opacity: 1;
-    }
-    
-</style>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Toko Usaha Muda</title>
@@ -75,141 +9,140 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Styles / Scripts -->
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
-</head>
-<body class="bg-gray-800 text-white flex p-6 lg:p-8 items-center lg:justify-center flex-col">
 
-    <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-white text-gray-800 font-sans flex flex-col items-center p-6 lg:p-8">
+
+    <!-- Header -->
+    <header class="w-full max-w-[335px] lg:max-w-4xl text-sm mb-6">
         @if (Route::has('login'))
-            <nav class="flex items-center justify-end gap-4">
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="px-5 py-1.5 border text-gray-700 border-gray-300 hover:border-gray-400 rounded-sm text-sm">Dashboard</a>
-                @else
-                <a href="{{ route('login') }}"
-                class="px-5 py-1.5 border border-white text-white-700 hover:text-white-600 text-sm rounded transition duration-200 active:scale-95 ease-in-out hover:bg-white/10">
-                Log in</a>
-                    @if (Route::has('register'))
-                    <a href="{{ route('register') }}"
-                    class="px-5 py-1.5 border text-white-700 border-white-300 hover:border-white-400 hover:bg-white/10 rounded-sm text-sm transition duration-200 ease-in-out active:scale-95">
-                    Register</a>
-                    @endif
-                @endauth
-            </nav>
+        <nav class="flex justify-end items-center gap-4">
+            @auth
+            <a href="{{ url('/dashboard') }}" class="px-5 py-1.5 border border-gray-300 rounded hover:bg-gray-100 hover:scale-105 transition"> Dashboard </a>
+            @else
+            <a href="{{ route('login') }}" class="px-5 py-1.5 border border-gray-300 rounded hover:bg-blue-500 hover:scale-105 transition"> Log in </a>
+            @if (Route::has('register'))
+            <a href="{{ route('register') }}" class="px-5 py-1.5 border border-gray-300 rounded hover:bg-blue-500 hover:scale-105 transition"> Register </a>
+            @endif
+            @endauth
+        </nav>
         @endif
     </header>
 
+    <!-- Main Content -->
     <main class="text-center">
-        <h1 class="text-3xl font-bold mb-2 text-black-700 transition-opacity duration-1000" id="mainTitle">
-            Selamat datang di Toko Usaha Muda
-        </h1>
-    
-        <!-- Tambahan: Slogan -->
-        <p class="text-lg text-gray-300 italic mb-4">Temukan produk berkualitas dari Kami</p>
-    
-        <!-- Tambahan: Ikon ilustrasi -->
+        <h1 class="text-3xl font-bold mb-2 transition duration-1000 transform translate-y-[-10px] opacity-0 animate-fadeIn"> Selamat datang di Toko Usaha Muda </h1>
+        <p class="text-lg text-gray-600 italic mb-4">Temukan produk berkualitas dari Kami</p>
         <div class="mt-4 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-20 w-20 text-black-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3 8 4-16 3 8h4" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-20 w-20 text-blue-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3 8 4-16 3 8h4"/>
             </svg>
         </div>
-    
-        <!-- Tambahan: Sambutan -->
-        <p class="text-base text-black-400 max-w-2xl mx-auto mb-6">
-            Kami hadir untuk membantu Anda menemukan berbagai produk yang berkualitas,
-            berbahan dasar lembut
+        <p class="text-base text-gray-700 max-w-2xl mx-auto mb-6">
+            Kami hadir untuk membantu Anda menemukan berbagai produk yang berkualitas, berbahan dasar lembut.
         </p>
-    
-        <!-- Tambahan: Tombol CTA -->
-        <section id="produk" class="mt-20 text-white text-center">
-            <h2 class="text-2xl font-semibold mb-6">Produk Unggulan</h2>
-            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
-                    <img src="/image/Benang.jpg" alt="Benang Jahit Premium" class="w-full h-48 object-cover rounded mb-3">
-                    <p class="text-lg font-medium">Benang Jahit Premium</p>
-                </div>
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
-                    <img src="/images/produk2.jpg" alt="Kain Katun Lembut" class="w-full h-48 object-cover rounded mb-3">
-                    <p class="text-lg font-medium">Kain Katun Lembut</p>
-                </div>
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
-                    <img src="/images/produk3.jpg" alt="Mesin Jahit Portable" class="w-full h-48 object-cover rounded mb-3">
-                    <p class="text-lg font-medium">Mesin Jahit Portable</p>
-                </div>
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
-                    <img src="/images/produk4.jpg" alt="Gunting Kain Tajam" class="w-full h-48 object-cover rounded mb-3">
-                    <p class="text-lg font-medium">Gunting Kain Tajam</p>
-                </div>
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
-                    <img src="/images/produk5.jpg" alt="Set Alat Jahit" class="w-full h-48 object-cover rounded mb-3">
-                    <p class="text-lg font-medium">Set Alat Jahit</p>
-                </div>
-                <div class="bg-gray-700 p-4 rounded-xl shadow">
-                    <img src="/images/produk6.jpg" alt="Kain Batik Tradisional" class="w-full h-48 object-cover rounded mb-3">
-                    <p class="text-lg font-medium">Kain Batik Tradisional</p>
-                </div>
 
+        <!-- Produk Section -->
+        <section id="produk" class="mt-20 px-4">
+            <h2 class="text-2xl font-semibold mb-6 relative after:content-[''] after:block after:w-20 after:h-1 after:bg-blue-500 after:mx-auto after:rounded-full after:transition-all after:duration-400 hover:after:w-32"> Produk Unggulan </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                <div class="bg-gray-100 p-4 rounded-xl shadow hover:shadow-lg transition">
+                    <img src="/image/BenangObras.png" alt="Benang Obras" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Benang Obras</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-xl shadow hover:shadow-lg transition">
+                    <img src="/image/KainKatun.png" alt="Kain Katun" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Kain Katun</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-xl shadow hover:shadow-lg transition">
+                    <img src="/image/Renda.png" alt="Renda" class="w-full h-48 object-cover rounded mb-3">
+                    <p class="text-lg font-medium">Renda</p>
+                </div>
             </div>
         </section>
-    
-        <!-- Tetap: Pesan terima kasih -->
-        <p id="thanksMessage" class="mt-4 text-green-600 font-semibold hidden">Terima kasih! 🎉</p>
 
-        <section class="mt-20 text-white text-center">
+        <!-- Testimoni Section -->
+        <section class="mt-20 px-4">
             <h2 class="text-2xl font-semibold mb-6">Apa Kata Mereka?</h2>
-            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
-                <div class="bg-blue-600 p-4 rounded-xl shadow flex flex-col items-center">
-                    <img src="/image/Akbar.jpg" alt="Akbar" class="w-16 h-16 object-cover rounded-full mb-3">
-                    <p class="italic text-gray-300">“Produknya keren banget dan pengirimannya cepat. Mantap!”</p>
-                    <div class="mt-2 text-sm text-gray-400">— Akbar, Padang</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                <div class="bg-blue-100 p-4 rounded-xl shadow hover:shadow-lg transition flex flex-col items-center">
+                    <img src="/image/Akbar.jpg" alt="Akbar"
+                         class="w-24 h-24 object-cover object-center rounded-full mb-3 ring-4 ring-white">
+                    <p class="italic text-gray-600">“Produknya keren banget dan pengirimannya cepat. Mantap!”</p>
+                    <div class="mt-2 text-sm text-gray-500">— Akbar, Padang</div>
                 </div>
-                <div class="bg-blue-600 p-4 rounded-xl shadow flex flex-col items-center">
-                    <img src="/image/Dini.jpg" alt="Dini" class="w-16 h-16 object-cover rounded-full mb-3">
-                    <p class="italic text-gray-300">“Usaha muda yang sangat inspiratif. Aku pasti repeat order!”</p>
-                    <div class="mt-2 text-sm text-gray-400">— Dini, Solok</div>
+                <div class="bg-blue-100 p-4 rounded-xl shadow hover:shadow-lg transition flex flex-col items-center">
+                    <img src="/image/Dini.jpg" alt="Dini"
+                         class="w-24 h-24 object-cover object-center rounded-full mb-3 ring-4 ring-white">
+                    <p class="italic text-gray-600">“Saya sangat puas dengan produknya dan pelayanannya. Terimakasih!”</p>
+                    <div class="mt-2 text-sm text-gray-500">— Dini, Solok</div>
                 </div>
-                <div class="bg-blue-600 p-4 rounded-xl shadow flex flex-col items-center">
-                    <img src="/image/wahyu.jpg" alt="wahyu" class="w-16 h-16 object-cover rounded-full mb-3">
-                    <p class="italic text-gray-300">“Kualitas oke, harga terjangkau. Sukses terus!”</p>
-                    <div class="mt-2 text-sm text-gray-400">— Wahyu, Solo</div>
+                <div class="bg-blue-100 p-4 rounded-xl shadow hover:shadow-lg transition flex flex-col items-center">
+                    <img src="/image/wahyu.jpg" alt="Wahyu"
+                         class="w-24 h-24 object-cover object-center rounded-full mb-3 ring-4 ring-white">
+                    <p class="italic text-gray-600">“Produknya sangat berkualitas dan harganya terjangkau. Saya sangat merekomendasikan!”</p>
+                    <div class="mt-2 text-sm text-gray-500">— Wahyu, Solok</div>
                 </div>
             </div>
         </section>
+        
 
+        <!-- Hubungi Kami Section -->
+        <section class="mt-20 max-w-xl mx-auto">
+            <h2 class="text-2xl font-semibold mb-4">Hubungi Kami</h2>
+            <form onsubmit="submitForm(event)" class="flex flex-col gap-4">
+                <input type="text" placeholder="Nama Anda" required class="p-2 border rounded">
+                <input type="email" placeholder="Email Anda" required class="p-2 border rounded">
+                <textarea placeholder="Pesan Anda" required class="p-2 border rounded"></textarea>
+                <button type="submit" class="bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">Kirim Pesan</button>
+            </form>
+            <p id="thanksMessage"class="mt-4 text-green-600 font-semibold opacity-0 transition-opacity duration-500">Terima kasih! 🎉</p>
+        </section>
     </main>
-    
-    
+
+    <!-- Footer -->
+    <footer class="mt-20 bg-gray-100 p-6 text-center rounded-t-2xl">
+        <h3 class="text-xl font-semibold mb-2">Dukung Usaha Muda Indonesia 💡</h3>
+        <p class="text-gray-600 mb-4 max-w-xl mx-auto">Follow kami di sosial media & jadilah bagian dari komunitas pengusaha muda.</p>
+        <div class="flex justify-center gap-6 flex-wrap">
+            <a href="https://www.instagram.com/toko.usahamuda?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="hover:text-blue-600 transition">Instagram</a>
+            <a href="#" target="_blank" class="hover:text-blue-600 transition">Facebook</a>
+            <a href="#" target="_blank" class="hover:text-blue-600 transition">Twitter</a>
+            <a href="https://wa.me/628116655050" target="_blank" class="hover:text-blue-600 transition">WhatsApp</a>
+        </div>
+    </footer>
+    <button id="scrollTopBtn"
+        class="hidden fixed bottom-6 right-6 bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow hover:bg-blue-600 transition">
+        ↑
+    </button>
     <script>
-        // Fade in on load
         window.addEventListener('load', () => {
-            document.getElementById('mainTitle').classList.add('opacity-100');
+            const title = document.querySelector('h1');
+            title.classList.remove('translate-y-[-10px]', 'opacity-0');
         });
 
-        // (Optional) Toggle Dark Mode
-        function toggleDarkMode() {
-            // Disabled dark mode permanently by not toggling class
-            alert("Tema gelap dinonaktifkan. Tema saat ini adalah terang.");
-        }
-
-        // Submit handler
         function submitForm(event) {
             event.preventDefault();
-            document.getElementById('thanksMessage').classList.remove('hidden');
+            const thanksMessage = document.getElementById('thanksMessage');
+            thanksMessage.classList.remove('opacity-0');
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.remove('hidden');
+            } else {
+                scrollTopBtn.classList.add('hidden');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 
-<footer class="mt-20 bg-gray-900 p-6 text-center text-white rounded-t-2xl">
-    <h3 class="text-xl font-semibold mb-2">Dukung Usaha Muda Indonesia 💡</h3>
-    <p class="text-gray-400 mb-4">Follow kami di sosial media & jadilah bagian dari komunitas pengusaha muda.</p>
-    <div class="flex justify-center gap-4">
-        <a href="#" class="hover:text-blue-400 transition">Instagram</a>
-        <a href="#" class="hover:text-blue-400 transition">Facebook</a>
-        <a href="#" class="hover:text-blue-400 transition">Twitter</a>
-    </div>
-</footer>
-
 </body>
+
 </html>
