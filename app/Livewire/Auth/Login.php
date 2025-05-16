@@ -7,24 +7,40 @@ use Illuminate\Support\Facades\Auth;
 
 class Login extends Component
 {
-    public $email, $password;
+    public $email;
+    public $password;
+
+    // Aturan validasi input
+    protected $rules = [
+        'email' => 'required|email|exists:users,email',
+        'password' => 'required',
+    ];
 
     public function login()
     {
-        $this->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $this->validate();
 
+        // Coba login user
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
-            session()->flash('success', 'Login berhasil!');
-            if (Auth::user()->role == 'admin') {
-                return redirect()->to('/dashboard');
-            }
-            return redirect()->to('/landing');
-        } else {
-            session()->flash('error', 'Email atau password salah.');
+            $user = Auth::user();
+
+            // // Cek apakah user adalah admin
+            // if ($user->role === 'admin') {
+            //     session()->flash('message', 'Login berhasil sebagai admin.');
+            //     return redirect()->route('dashboard');
+            // }
+return redirect()->route('dashboard');
+            // Jika bukan admin, logout dan tolak akses
+            // Auth::logout();
+            // session()->invalidate();
+            // session()->regenerateToken();
+
+            // session()->flash('error', 'Akses ditolak. Anda bukan admin.');
+            // return;
         }
+
+        // Jika kombinasi email/password salah
+        session()->flash('error', 'Email atau password salah.');
     }
 
     public function render()

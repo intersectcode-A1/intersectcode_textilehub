@@ -114,58 +114,48 @@
             <form onsubmit="submitForm(event)" class="flex flex-col gap-4">
                 <input type="text" placeholder="Nama Anda" required class="p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <input type="email" placeholder="Email Anda" required class="p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <textarea placeholder="Pesan Anda" required class="p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                <button type="submit" class="bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">Kirim Pesan</button>
+                <textarea placeholder="Pesan Anda" required class="p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4"></textarea>
+                <button type="submit" class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600">Kirim Pesan</button>
             </form>
-            <p id="thanksMessage" class="mt-4 text-green-600 font-semibold opacity-0 transition-opacity duration-500">Terima kasih! 🎉</p>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="mt-20 bg-gray-100 p-6 text-center rounded-t-2xl">
-        <h3 class="text-xl font-semibold mb-2">Dukung Usaha Muda Indonesia 💡</h3>
-        <p class="text-gray-600 mb-4 max-w-xl mx-auto">Follow kami di sosial media & jadilah bagian dari komunitas pengusaha muda.</p>
-        <div class="flex justify-center gap-6 flex-wrap">
-            <a href="https://www.instagram.com/toko.usahamuda?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="hover:text-blue-600 transition">Instagram</a>
-            <a href="#" target="_blank" class="hover:text-blue-600 transition">Facebook</a>
-            <a href="#" target="_blank" class="hover:text-blue-600 transition">Twitter</a>
-            <a href="https://wa.me/628116655050" target="_blank" class="hover:text-blue-600 transition">WhatsApp</a>
-        </div>
+    <footer class="w-full mt-12 py-4 text-center bg-gray-800 text-white">
+        <p>&copy; 2025 Toko Usaha Muda. All Rights Reserved.</p>
     </footer>
 
-    <button id="scrollTopBtn" class="hidden fixed bottom-6 right-6 bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow hover:bg-blue-600 transition">↑</button>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex justify-end p-6">
+            <button id="closeMenuBtn" class="text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="flex flex-col items-center space-y-6 text-white">
+            <a href="#produk" class="hover:bg-gray-700 px-6 py-2 rounded">Produk</a>
+            <a href="#testimoni" class="hover:bg-gray-700 px-6 py-2 rounded">Testimoni</a>
+            <a href="#hubungi" class="hover:bg-gray-700 px-6 py-2 rounded">Hubungi Kami</a>
+            @auth
+            <a href="{{ url('/dashboard') }}" class="px-6 py-2 rounded bg-blue-600 hover:bg-blue-500">Dashboard</a>
+            @else
+            <a href="{{ route('login') }}" class="px-6 py-2 rounded bg-blue-600 hover:bg-blue-500">Login</a>
+            <a href="{{ route('register') }}" class="px-6 py-2 rounded bg-blue-600 hover:bg-blue-500">Register</a>
+            @endauth
+        </div>
+    </div>
 
     <script>
-        window.addEventListener('load', () => {
-            const title = document.querySelector('h1');
-            title.classList.remove('translate-y-[-10px]', 'opacity-0');
-        });
-
-        function submitForm(event) {
-            event.preventDefault();
-            const thanksMessage = document.getElementById('thanksMessage');
-            thanksMessage.classList.remove('opacity-0');
+        // Open and close the mobile menu
+        document.getElementById('mobileMenuBtn').onclick = function() {
+            document.getElementById('mobileMenu').classList.remove('hidden');
         }
-
-        window.addEventListener('scroll', () => {
-            const scrollTopBtn = document.getElementById('scrollTopBtn');
-            if (window.pageYOffset > 300) {
-                scrollTopBtn.classList.remove('hidden');
-            } else {
-                scrollTopBtn.classList.add('hidden');
-            }
-        });
-
-        document.getElementById('scrollTopBtn').addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Toggle mobile menu
-        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        });
+        document.getElementById('closeMenuBtn').onclick = function() {
+            document.getElementById('mobileMenu').classList.add('hidden');
+        }
     </script>
-
 </body>
+
 </html>

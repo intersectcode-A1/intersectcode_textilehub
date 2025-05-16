@@ -2,20 +2,19 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<string>
      */
     protected $fillable = [
         'name',
@@ -27,7 +26,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<string>
      */
     protected $hidden = [
         'password',
@@ -35,15 +34,61 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    /**
+     * Mendapatkan daftar role yang valid.
+     *
+     * @return array
+     */
+    public static function validRoles()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return ['admin', 'pembeli'];
+    }
+
+    /**
+     * Set the user's role.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setRoleAttribute($value)
+    {
+        // Pastikan role yang dimasukkan valid
+        if (!in_array(strtolower($value), self::validRoles())) {
+            throw new \InvalidArgumentException("Role yang diberikan tidak valid.");
+        }
+
+        // Set role menjadi huruf kecil
+        $this->attributes['role'] = strtolower($value);
+    }
+
+    /**
+     * Get the user's role.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getRoleAttribute($value)
+    {
+        // Menampilkan role dalam huruf kapital
+        return strtoupper($value);
+    }
+
+    /**
+     * Relasi dengan model Order (Jika ada).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }
