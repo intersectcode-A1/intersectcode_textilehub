@@ -18,6 +18,6 @@ class DashboardController extends Controller
         $totalOrders = Order::count();
         $totalProducts = Product::count();
 
-        return view('dashboard', compact('totalUsers', 'totalOrders', 'totalProducts'));
+        return view('admin.dashboard', compact('totalUsers', 'totalOrders', 'totalProducts'));
     }
 }
