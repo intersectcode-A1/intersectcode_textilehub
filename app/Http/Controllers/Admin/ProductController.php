@@ -1,14 +1,16 @@
 <?php
-namespace App\Http\Controllers;
 
-use App\Models\Product;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Product; // Pastikan model Product sudah ada
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::latest()->get();
+        $products = Product::latest()->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
@@ -20,13 +22,12 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'harga' => 'required|numeric',
-            'stok' => 'required|integer',
-            'deskripsi' => 'nullable',
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            // tambahkan validasi lainnya sesuai kebutuhan
         ]);
 
-        Product::create($request->only('nama', 'harga', 'stok', 'deskripsi'));
+        Product::create($request->all());
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
@@ -39,21 +40,19 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-            'nama' => 'required',
-            'harga' => 'required|numeric',
-            'stok' => 'required|integer',
-            'deskripsi' => 'nullable',
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            // validasi lainnya
         ]);
 
-        $product->update($request->only('nama', 'harga', 'stok', 'deskripsi'));
+        $product->update($request->all());
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil diupdate.');
     }
 
     public function destroy(Product $product)
     {
         $product->delete();
-
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
     }
 }

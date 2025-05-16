@@ -13,7 +13,7 @@
 <!-- Sidebar -->
 <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 shadow-lg h-screen sticky top-0 transition-all duration-300 overflow-hidden">
     <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
-        <span class="font-bold text-blue-600 dark:text-blue-400 sidebar-label">Usaha Muda</span>
+        <span class="font-bold text-blue-600 dark:text-blue-400 sidebar-label">Toko Usaha Muda</span>
         <button onclick="toggleSidebar()">
             <i id="sidebar-icon" data-lucide="chevron-left"></i>
         </button>

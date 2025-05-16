@@ -12,16 +12,13 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 
-// =============================
-// 🏠 Halaman Utama
-// =============================
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// =============================
-// 👤 Auth (Login, Register, Reset Password)
-// =============================
+// Route resource produk tanpa prefix admin dihapus, karena sudah ada di admin prefix.
+// Route::resource('/products', App\Http\Controllers\Admin\ProductController::class);
+
 Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
     Route::get('/login', Login::class)->name('login');
@@ -32,9 +29,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
-// =============================
-// 🛒 Fitur Belanja (Shop)
-// =============================
 Route::prefix('shop')->group(function () {
     Route::get('/katalog', [ShopController::class, 'index'])->name('katalog');
     Route::post('/keranjang/tambah', [ShopController::class, 'tambahKeKeranjang'])->name('keranjang.tambah');
@@ -42,29 +36,26 @@ Route::prefix('shop')->group(function () {
     Route::post('/checkout', [ShopController::class, 'prosesCheckout'])->name('checkout.proses');
 });
 
-// =============================
-// 🔒 Setelah Login (User/Admin)
-// =============================
 Route::middleware('auth')->group(function () {
-    // Admin Dashboard
+    // Dashboard User/Admin
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Logout menggunakan POST method
+    // Logout POST method
     Route::post('/logout', function () {
         Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
-        return redirect()->route('home'); // kembali ke halaman utama (welcome)
+        return redirect()->route('home');
     })->name('logout');
 });
 
 // =============================
-// 🛠️ Admin Panel (Proteksi Login)
+// 🛠️ Admin Panel (Protected by auth middleware)
 // =============================
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Manajemen Produk & Kategori
+    // CRUD Produk dan Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
 
