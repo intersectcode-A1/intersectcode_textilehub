@@ -1,7 +1,13 @@
+<<<<<<< Updated upstream
 <div>
     <div class="max-w-md mx-auto mt-10">
         <h2 class="text-2xl font-bold mb-1 text-center">toko.usahamuda</h2>
         <h3 class="mb-3 text-center">Silahkan Login Untuk Melanjutkan</h3>
+=======
+<div class="max-w-md mx-auto mt-10">
+    <h2 class="text-2xl font-bold mb-1 text-center">Toko Usaha Muda</h2>
+    <h3 class="mb-3 text-center">Silahkan Login Untuk Melanjutkan</h3>
+>>>>>>> Stashed changes
 
         @if (session()->has('error'))
             <div class="bg-red-200 p-2 rounded mb-3">
