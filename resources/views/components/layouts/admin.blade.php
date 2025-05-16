@@ -1,74 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            margin: 0;
-        }
-        .sidebar {
-            width: 220px;
-            background: #f4f4f4;
-            padding: 20px;
-            height: 100vh;
-            box-sizing: border-box;
-        }
-        .sidebar h3 {
-            margin-top: 0;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        .sidebar ul li {
-            margin-bottom: 10px;
-        }
-        .sidebar ul li a, .sidebar ul li form button {
-            color: #007bff;
-            text-decoration: none;
-            background: none;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: normal;
-        }
-        .sidebar ul li form button:hover,
-        .sidebar ul li a:hover {
-            text-decoration: underline;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            background: #fafafa;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="sidebar">
-        <h3>Admin Menu</h3>
-        <ul>
-            <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li><a href="{{ route('products.index') }}">Products</a></li>
-            <li><a href="{{ route('categories.index') }}">Categories</a></li>
-            <li><a href="{{ route('orders.index') }}">Orders</a></li>
-            <li>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-    <div class="content">
-        <h1>@yield('title', 'Admin Dashboard')</h1>
-        @yield('content')
-    </div>
+<body class="bg-gray-100 min-h-screen flex">
+
+    {{-- Sidebar --}}
+    <aside class="w-64 bg-white shadow-lg h-screen sticky top-0">
+        <div class="p-6 font-bold text-lg text-blue-600">
+            Toko Usaha Muda
+        </div>
+        <nav class="px-6">
+            <ul class="space-y-3">
+                <li><a href="{{ route('admin.dashboard') }}" class="text-blue-500 hover:underline">Dashboard</a></li>
+                <li><a href="{{ route('products.index') }}" class="text-blue-500 hover:underline">Products</a></li>
+                <li><a href="{{ route('categories.index') }}" class="text-blue-500 hover:underline">Categories</a></li>
+                <li><a href="{{ route('orders.index') }}" class="text-blue-500 hover:underline">Orders</a></li>
+                <li>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="text-red-500 hover:underline">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    {{-- Main Content --}}
+    <main class="flex-1 overflow-y-auto">
+        <div class="bg-white shadow px-6 py-4">
+            <h1 class="text-2xl font-bold text-gray-800">Admin Panel</h1>
+        </div>
+        <div class="px-6 py-4">
+            @yield('content')
+        </div>
+    </main>
+
 </body>
 </html>
