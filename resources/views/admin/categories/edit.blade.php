@@ -1,0 +1,20 @@
+@extends('components.layouts.admin')
+
+@section('title', 'Edit Kategori')
+
+@section('content')
+    <h1 class="text-2xl font-bold mb-4">Edit Kategori</h1>
+
+    <form action="{{ route('categories.update', $category->id) }}" method="POST" class="space-y-4">
+        @csrf
+        @method('PUT')
+        <div>
+            <label class="block font-semibold">Nama Kategori</label>
+            <input type="text" name="name" value="{{ $category->name }}" class="w-full border border-gray-300 px-3 py-2 rounded" required>
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
+            <a href="{{ route('categories.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</a>
+        </div>
+    </form>
+@endsection
