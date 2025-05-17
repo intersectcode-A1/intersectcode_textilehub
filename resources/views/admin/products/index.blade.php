@@ -2,42 +2,74 @@
 
 @section('content')
 <div class="p-6">
-    <h1 class="text-2xl font-bold mb-4">Daftar Produk</h1>
+    <h1 class="text-2xl font-bold mb-4 text-white">Daftar Produk</h1>
 
-    <a href="{{ route('products.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Tambah Produk</a>
+    <a href="{{ route('products.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">+ Tambah Produk</a>
 
     @if(session('success'))
-        <div class="bg-green-200 text-green-800 p-2 rounded mt-4">{{ session('success') }}</div>
+        <div class="bg-green-500 text-white p-3 rounded mt-4">
+            {{ session('success') }}
+        </div>
     @endif
 
-    <table class="table-auto w-full mt-4 border-collapse border border-gray-300">
-        <thead>
-            <tr class="bg-gray-200">
-                <th class="border border-gray-300 px-4 py-2">Nama</th>
-                <th class="border border-gray-300 px-4 py-2">Harga</th>
-                <th class="border border-gray-300 px-4 py-2">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($products as $product)
-            <tr class="hover:bg-gray-100">
-                <td class="border border-gray-300 px-4 py-2">{{ $product->name }}</td>
-                <td class="border border-gray-300 px-4 py-2">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                <td class="border border-gray-300 px-4 py-2 flex gap-2">
-                    <a href="{{ route('products.edit', $product) }}" class="text-blue-600 hover:underline">Edit</a>
+    <div class="overflow-x-auto mt-6">
+        <table class="table-auto w-full border-collapse border border-gray-700 text-white">
+            <thead>
+                <tr class="bg-gray-800">
+                    <th class="border border-gray-700 px-4 py-2">Foto</th>
+                    <th class="border border-gray-700 px-4 py-2">Nama</th>
+                    <th class="border border-gray-700 px-4 py-2">Harga</th>
+                    <th class="border border-gray-700 px-4 py-2">kategori</th>
+                     <th class="border border-gray-700 px-4 py-2">Deskripsi</th>
+                    <th class="border border-gray-700 px-4 py-2">Aksi</th>
+                </tr>
+            </thead>
+         
+            <tbody>
+    @forelse($products as $product)
+        <tr class="hover:bg-gray-700">
+            <td class="border border-gray-700 px-4 py-2">
+                @if($product->foto)
+                    <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama }}" class="w-20 h-20 object-cover rounded">
+                @else
+                    <span class="text-gray-400 italic">Tidak ada foto</span>
+                @endif
+            </td>
+            <td class="border border-gray-700 px-4 py-2">{{ $product->nama }}</td>
+            <td class="border border-gray-700 px-4 py-2">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
+            <td class="border border-gray-700 px-4 py-2">{{ $product->kategori }}</td>
+            <td class="border border-gray-700 px-4 py-2">{{ $product->deskripsi }}</td>
+            <td class="border border-gray-700 px-4 py-2">
+                <div class="flex gap-2">
+                    <a href="{{ route('products.edit', $product) }}">
+                        <button type="button" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
+                            Edit
+                        </button>
+                    </a>
                     <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Yakin ingin hapus?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-red-600 hover:underline">Hapus</button>
+                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+                            Hapus
+                        </button>
                     </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                </div>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="6" class="text-center text-gray-400 py-6 italic">Belum ada produk.</td>
+        </tr>
+    @endforelse
+</tbody>
 
-    <div class="mt-4">
-        {{ $products->links() }}
+
+
+        </table>
+    </div>
+
+    <div class="mt-6 text-white">
+        {{ $products->links('pagination::tailwind') }}
     </div>
 </div>
 @endsection

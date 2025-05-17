@@ -28,4 +28,36 @@ return new class extends Migration
     {
         Schema::dropIfExists('order_items');
     }
+
+    public function store(Request $request)
+{
+    // Ubah harga ke format numerik dulu (jika pakai titik)
+    $request->merge([
+        'harga' => str_replace('.', '', $request->harga)
+    ]);
+
+    $request->validate([
+        'nama' => 'required|string',
+        'harga' => 'required|numeric',
+        'stok' => 'required|integer',
+        'deskripsi' => 'nullable|string',
+        'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $fotoPath = null;
+    if ($request->hasFile('foto')) {
+        $fotoPath = $request->file('foto')->store('produk', 'public');
+    }
+
+    Product::create([
+        'nama' => $request->nama,
+        'harga' => $request->harga,
+        'stok' => $request->stok,
+        'deskripsi' => $request->deskripsi,
+        'foto' => $fotoPath,
+    ]);
+
+    return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
+}
+
 };
