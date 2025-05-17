@@ -1,73 +1,85 @@
-<div>
-    <div class="max-w-md mx-auto mt-10">
-        <h2 class="text-2xl font-bold mb-1 text-center">toko.usahamuda</h2>
-        <h3 class="mb-3 text-center">
-            @if ($step == 1)
-                Silahkan Daftar Untuk Melanjutkan
-            @elseif ($step == 2)
-                Masukkan Kode OTP
+<components.layouts.app>
+    <div class="flex items-center justify-center min-h-[70vh]">
+        <div class="bg-white/80 backdrop-blur-md shadow-2xl border border-gray-200 rounded-2xl px-10 py-8 w-full max-w-md">
+            <h2 class="text-3xl font-bold text-center text-blue-800 mb-1">Daftar Akun</h2>
+            <p class="text-center text-gray-600 mb-6">Buat akun untuk mulai berbelanja di Toko Usaha Muda</p>
+
+            @if (session()->has('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+                    {{ session('error') }}
+                </div>
             @endif
-        </h3>
 
-        @if (session()->has('error'))
-            <div class="bg-red-200 p-2 rounded mb-3">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @if (session()->has('success'))
-            <div class="bg-green-200 p-2 rounded mb-3">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        {{-- STEP 1: FORM REGISTRASI --}}
-        @if ($step == 1)
-            <form wire:submit.prevent="submitRegistration" class="space-y-4">
+            <form wire:submit.prevent="register" class="space-y-5">
                 <div>
-                    <input type="text" wire:model="name" placeholder="Nama Lengkap" required class="w-full p-2 border rounded">
-                    @error('name') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+                    <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                    <div class="relative mt-1">
+                        <input type="text" id="name" wire:model="name" required
+                            class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                        <div class="absolute left-3 top-2.5 text-gray-400">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    @error('name')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <input type="email" wire:model="email" placeholder="Email" required class="w-full p-2 border rounded">
-                    @error('email') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <div class="relative mt-1">
+                        <input type="email" id="email" wire:model="email" required
+                            class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                        <div class="absolute left-3 top-2.5 text-gray-400">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    @error('email')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <input type="password" wire:model="password" placeholder="Password" required class="w-full p-2 border rounded">
-                    @error('password') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="relative mt-1">
+                        <input type="password" id="password" wire:model="password" required
+                            class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                        <div class="absolute left-3 top-2.5 text-gray-400">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    @error('password')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <input type="password" wire:model="password_confirmation" placeholder="Konfirmasi Password" required class="w-full p-2 border rounded">
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
+                    <div class="relative mt-1">
+                        <input type="password" id="password_confirmation" wire:model="password_confirmation" required
+                            class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                        <div class="absolute left-3 top-2.5 text-gray-400">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    @error('password_confirmation')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    Daftar
+                <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300 shadow">
+                    Daftar Sekarang
                 </button>
             </form>
 
-            <p class="mt-4">Sudah punya akun? <a href="/login" class="text-blue-600">Login di sini</a></p>
-        @endif
+            @if (session()->has('message'))
+                <p class="text-green-600 mt-4 text-sm text-center">{{ session('message') }}</p>
+            @endif
 
-        {{-- STEP 2: FORM OTP --}}
-        @if ($step == 2)
-            <form wire:submit.prevent="verifyOtp" class="space-y-4">
-                <div>
-                    <input type="text" wire:model="otp" placeholder="Masukkan Kode OTP" required class="w-full p-2 border rounded">
-                    @error('otp') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
-                </div>
-
-                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-400">
-                    Verifikasi OTP
-                </button>
-            </form>
-
-            <p class="mt-4 text-sm text-gray-600 text-center">
-                Tidak menerima kode? 
-                <button wire:click="submitRegistration" class="text-blue-600 underline">Kirim Ulang</button>
+            <p class="mt-6 text-sm text-center text-gray-700">Sudah punya akun? 
+                <a href="/login" class="text-blue-500 hover:underline font-medium">Login di sini</a>
             </p>
-        @endif
+        </div>
     </div>
-</div>
+</components.layouts.app>

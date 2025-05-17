@@ -1,45 +1,68 @@
-<div>
-    <div class="max-w-md mx-auto mt-10 bg-white shadow-md rounded p-6">
-        <h2 class="text-2xl font-bold mb-1 text-center">Toko Usaha Muda</h2>
-        <h3 class="mb-3 text-center text-gray-600">Silakan login untuk melanjutkan</h3>
+<components.layouts.app>
+    <div class="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
 
-        @if (session()->has('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-3">
-                {{ session('error') }}
-            </div>
-        @endif
+        <!-- Background Gambar -->
+        <div class="absolute inset-0 -z-10">
+            <img src="{{ asset('image/ceo.jpg') }}" alt="Background Login"
+                 class="w-full h-full object-cover brightness-90">
+        </div>
 
-        <form wire:submit.prevent="login" class="space-y-4">
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" wire:model="email" required class="mt-1 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-                @error('email') 
-                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div> 
-                @enderror
-            </div>
+        <!-- Form Login -->
+        <div class="bg-white/90 shadow-2xl border border-gray-200 rounded-2xl px-10 py-8 w-full max-w-md">
+            <h2 class="text-3xl font-bold text-center text-blue-800 mb-1">Toko Usaha Muda</h2>
+            <p class="text-center text-gray-600 mb-6">Silakan login untuk melanjutkan</p>
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" id="password" wire:model="password" required class="mt-1 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-                @error('password') 
-                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div> 
-                @enderror
-            </div>
+            @if (session()->has('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
 
-            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                Login
-            </button>
-        </form>
+            <form wire:submit.prevent="login" class="space-y-5">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <div class="relative mt-1">
+                        <input type="email" id="email" wire:model="email" required
+                            class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                        <div class="absolute left-3 top-2.5 text-gray-400">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    @error('email')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-        @if (session()->has('message'))
-            <div class="text-green-600 mt-2">{{ session('message') }}</div>
-        @endif
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="relative mt-1">
+                        <input type="password" id="password" wire:model="password" required
+                            class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                        <div class="absolute left-3 top-2.5 text-gray-400">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    @error('password')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-        <p class="mt-4 text-sm text-center">Belum punya akun? 
-            <a href="/register" class="text-blue-600 hover:underline">Daftar di sini</a>
-        </p>
-        <p class="text-sm text-center mt-1">
-            <a href="/forgot-password" class="text-blue-500 hover:underline">Lupa password?</a>
-        </p>
+                <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300 shadow">
+                    Login
+                </button>
+            </form>
+
+            @if (session()->has('message'))
+                <p class="text-green-600 mt-4 text-sm text-center">{{ session('message') }}</p>
+            @endif
+
+            <p class="mt-6 text-sm text-center text-gray-700">Belum punya akun? 
+                <a href="/register" class="text-blue-500 hover:underline font-medium">Daftar di sini</a>
+            </p>
+            <p class="text-sm text-center mt-2">
+                <a href="/forgot-password" class="text-blue-500 hover:underline">Lupa password?</a>
+            </p>
+        </div>
     </div>
-</div>
+</components.layouts.app>
