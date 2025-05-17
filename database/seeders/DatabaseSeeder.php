@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\ProductSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,13 +14,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Cek dulu, baru buat user jika belum ada
+        if (!User::where('email', 'admin@gmail.com')->exists()) {
+            User::factory()->create([
+                'name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'password' => Hash::make('admin'),
+                'role' => 'admin',
+            ]);
+        }
 
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('admin'),
-            'role' => 'admin'
-        ]);
+        // Panggil seeder lain
+        $this->call(ProductSeeder::class);
     }
 }
