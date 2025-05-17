@@ -19,30 +19,34 @@
         </button>
     </div>
     <nav class="px-4 py-4 space-y-3">
-        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 hover:text-blue-600">
-            <i data-lucide="layout-dashboard"></i>
-            <span class="sidebar-label">Dashboard</span>
-        </a>
-        <a href="{{ route('products.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-            <i data-lucide="package"></i>
-            <span class="sidebar-label">Produk</span>
-        </a>
-        <a href="{{ route('categories.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-            <i data-lucide="layers"></i>
-            <span class="sidebar-label">Kategori</span>
-        </a>
-        <a href="{{ route('orders.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-            <i data-lucide="shopping-cart"></i>
-            <span class="sidebar-label">Pesanan</span>
-        </a>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="flex items-center gap-2 text-red-500 hover:underline">
-                <i data-lucide="log-out"></i>
-                <span class="sidebar-label">Logout</span>
-            </button>
-        </form>
-    </nav>
+    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 hover:text-blue-600">
+        <i data-lucide="layout-dashboard"></i>
+        <span class="sidebar-label">Dashboard</span>
+    </a>
+    <a href="{{ route('products.index') }}" class="flex items-center gap-2 hover:text-blue-600">
+        <i data-lucide="package"></i>
+        <span class="sidebar-label">Produk</span>
+    </a>
+    <a href="{{ route('categories.index') }}" class="flex items-center gap-2 hover:text-blue-600">
+        <i data-lucide="layers"></i>
+        <span class="sidebar-label">Kategori</span>
+    </a>
+    <a href="{{ route('orders.index') }}" class="flex items-center gap-2 hover:text-blue-600">
+        <i data-lucide="shopping-cart"></i>
+        <span class="sidebar-label">Pesanan</span>
+    </a>
+    <a href="{{ route('admin.sales.analysis') }}" class="flex items-center gap-2 hover:text-blue-600">
+        <i data-lucide="bar-chart-3"></i>
+        <span class="sidebar-label">Analisis Penjualan</span>
+    </a>
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="flex items-center gap-2 text-red-500 hover:underline">
+            <i data-lucide="log-out"></i>
+            <span class="sidebar-label">Logout</span>
+        </button>
+    </form>
+</nav>
 </aside>
 
 <!-- Main Content -->

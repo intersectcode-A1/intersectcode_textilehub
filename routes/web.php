@@ -11,6 +11,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\SalesAnalysisController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -48,6 +49,8 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('home');
     })->name('logout');
 });
+
+Route::get('/admin/analisis-penjualan', [SalesAnalysisController::class, 'index'])->name('admin.sales.analysis');
 
 // =============================
 // 🛠️ Admin Panel (Protected by auth middleware)
