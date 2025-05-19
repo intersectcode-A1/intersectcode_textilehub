@@ -81,25 +81,28 @@
                         Daftar Sekarang
                     </button>
                 </form>
-            @elseif($step === 2)
+            @elseif ($step === 2)
                 <form wire:submit.prevent="verifyOtp" class="space-y-5">
                     <div>
                         <label for="otp" class="block text-sm font-medium text-gray-700">Kode OTP</label>
-                        <div class="relative mt-1">
-                            <input type="text" id="otp" wire:model="otp" maxlength="6" required
-                                   class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
-                            <div class="absolute left-3 top-2.5 text-gray-400">
-                                <i class="fas fa-key"></i>
-                            </div>
-                        </div>
+                        <input type="text" id="otp" wire:model="otp" maxlength="6" required
+                            class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
                         @error('otp') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <button type="submit"
-                            class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-xl transition duration-300 shadow">
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-xl transition duration-300 shadow">
                         Verifikasi OTP
                     </button>
                 </form>
+
+                <button wire:click="resendOtp" class="mt-4 w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded-xl transition duration-300 shadow">
+                    Kirim Ulang OTP
+                </button>
+
+                @if (session()->has('resent'))
+                    <p class="text-green-600 mt-2 text-sm text-center">{{ session('resent') }}</p>
+                @endif
             @endif
 
             <p class="mt-6 text-sm text-center text-gray-700">Sudah punya akun? 
