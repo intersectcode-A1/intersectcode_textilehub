@@ -10,11 +10,18 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     // Menampilkan semua produk
-    public function index()
-    {
-        $products = Product::latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
-    }
+   // Menampilkan semua produk
+public function index()
+{
+    $products = Product::latest()->paginate(10);
+
+    // Cek apakah semua stok produk = 0
+    $semuaKosong = $products->count() > 0 && $products->every(function ($product) {
+        return $product->stok == 0;
+    });
+
+    return view('admin.products.index', compact('products', 'semuaKosong'));
+}
 
     // Menampilkan form tambah produk
     public function create()

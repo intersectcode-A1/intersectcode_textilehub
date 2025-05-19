@@ -45,6 +45,12 @@
             @error('foto')
                 <p class="text-red-600 text-sm">{{ $message }}</p>
             @enderror
+            <td>
+            <img src="{{ asset('storage/images/' . $item->foto) }}" alt="{{ $item->nama }}" width="100">
+            <br>
+            {{ asset('storage/images/' . $item->foto) }}
+        </td>
+
         </div>
 
         <div class="flex gap-2">
