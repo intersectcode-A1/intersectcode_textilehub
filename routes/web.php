@@ -31,12 +31,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
-Route::prefix('shop')->group(function () {
-    Route::get('/katalog', [ShopController::class, 'index'])->name('katalog');
-    Route::post('/keranjang/tambah', [ShopController::class, 'tambahKeKeranjang'])->name('keranjang.tambah');
-    Route::get('/keranjang', [ShopController::class, 'lihatKeranjang'])->name('keranjang');
-    Route::post('/checkout', [ShopController::class, 'prosesCheckout'])->name('checkout.proses');
-});
+// Route::prefix('shop')->group(function () {
+//     Route::get('/katalog', [ShopController::class, 'index'])->name('katalog');
+//     Route::post('/keranjang/tambah', [ShopController::class, 'tambahKeKeranjang'])->name('keranjang.tambah');
+//     Route::get('/keranjang', [ShopController::class, 'lihatKeranjang'])->name('keranjang');
+//     Route::post('/checkout', [ShopController::class, 'prosesCheckout'])->name('checkout.proses');
+// });
 
 Route::middleware('auth')->group(function () {
     // Dashboard User/Admin
@@ -62,6 +62,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // CRUD Produk dan Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+});
+
+
 
     // Manajemen Pesanan
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
@@ -71,7 +74,4 @@ Route::prefix('admin')->middleware('auth')->group(function () {
      //tracking
     Route::get('/pelacakan', [TrackingController::class, 'index'])->name('tracking.index');
     Route::post('/pelacakan', [TrackingController::class, 'search'])->name('tracking.search');
-
-
-
-});
+;
