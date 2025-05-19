@@ -13,7 +13,7 @@ class Register extends Component
 {
     public $name, $email, $password, $password_confirmation, $otp, $step = 1, $generatedOtp;
 
-    public function submitRegistration()
+    public function register()
     {
         if ($this->password !== $this->password_confirmation) {
             return session()->flash('error', 'Password dan konfirmasi password tidak cocok.');
