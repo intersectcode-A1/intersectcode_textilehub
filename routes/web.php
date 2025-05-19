@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\SalesAnalysisController;
+use App\Http\Controllers\TrackingController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -66,4 +67,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
+     //tracking
+    Route::get('/pelacakan', [TrackingController::class, 'index'])->name('tracking.index');
+    Route::post('/pelacakan', [TrackingController::class, 'search'])->name('tracking.search');
+
+
+
 });
