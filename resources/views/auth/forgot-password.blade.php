@@ -1,65 +1,51 @@
-<!-- resources/views/auth/forgot-password.blade.php -->
-{{-- <form method="POST" action="{{ route('password.email') }}">
-    @csrf
-    <input type="email" name="email" placeholder="Masukkan email kamu" required />
-    <button type="submit">Kirim Link Reset</button>
-</form> --}}
+<x-layouts.app>
+    <div class="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lupa Password - toko.usahamuda</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <!-- Card Form -->
+        <div class="bg-white/90 shadow-2xl border border-gray-200 rounded-2xl px-10 py-8 w-full max-w-md">
+            <h2 class="text-3xl font-bold text-center text-blue-800 mb-1">Toko Usaha Muda</h2>
+            <p class="text-center text-gray-600 mb-6">Masukkan email untuk reset password</p>
 
-    <style>
-        body {
-            background: linear-gradient(to right, #93c5fd, #bfdbfe); /* gradasi biru muda */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-    </style>
-</head>
-<body class="min-h-screen flex items-center justify-center">
+            @if (session('status'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 text-sm">
+                    {{ session('status') }}
+                </div>
+            @endif
 
-    <div class="max-w-md w-full bg-white p-6 rounded-xl shadow-lg">
-        <h2 class="text-2xl font-bold text-center mb-4 text-blue-600">toko.usahamuda</h2>
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-        @if (session('status'))
-            <div class="bg-green-200 p-2 rounded mb-3 text-green-800">
-                {{ session('status') }}
-            </div>
-        @endif
+            <form method="POST" action="{{ route('password.email') }}" class="space-y-5">
+                @csrf
 
-        @if ($errors->any())
-            <div class="bg-red-200 p-2 rounded mb-3 text-red-800">
-                <ul class="text-sm pl-4 list-disc">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <div class="relative mt-1">
+                        <input type="email" id="email" name="email" required
+                               placeholder="Masukkan email kamu"
+                               class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                        <div class="absolute left-3 top-2.5 text-gray-400">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
 
-        <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
-            @csrf
+                <button type="submit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300 shadow">
+                    Kirim Link Reset
+                </button>
+            </form>
 
-            <div>
-                <label for="email" class="block text-sm font-medium mb-1 text-gray-700">Email</label>
-                <input type="email" name="email" placeholder="Masukkan email kamu" required
-                       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
-            </div>
-
-            <button type="submit"
-                    class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                Kirim Link Reset
-            </button>
-        </form>
-
-        <p class="mt-4 text-center">
-            <a href="/login" class="text-sm text-blue-600 hover:underline">Kembali ke Login</a>
-        </p>
+            <p class="mt-6 text-sm text-center text-gray-700">
+                <a href="/login" class="text-blue-500 hover:underline font-medium">Kembali ke Login</a>
+            </p>
+        </div>
     </div>
-
-</body>
-</html>
+</x-layouts.app>
