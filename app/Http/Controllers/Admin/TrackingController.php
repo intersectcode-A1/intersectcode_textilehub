@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Tracking;
 use App\Models\TrackingHistory;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ class TrackingController extends Controller
     public function index()
     {
         $trackings = Tracking::with('histories')->get();
-        return view('tracking.index', compact('trackings'));
+        return view('admin.tracking.index', compact('trackings'));
     }
 
     public function search(Request $request)
@@ -22,6 +23,6 @@ class TrackingController extends Controller
             return back()->with('error', 'Nomor resi tidak ditemukan.');
         }
 
-        return view('tracking.show', compact('tracking'));
+        return view('admin.tracking.show', compact('tracking'));
     }
 }

@@ -1,4 +1,4 @@
-@extends('components.layouts.dashboard')
+@extends('components.layouts.admin')
 
 @section('title', 'Pelacakan Barang')
 

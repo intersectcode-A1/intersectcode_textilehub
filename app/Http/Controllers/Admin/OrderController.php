@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Order; // Pastikan model Order sudah dibuat dan namespace benar
+use App\Models\Order;
 
 class OrderController extends Controller
 {

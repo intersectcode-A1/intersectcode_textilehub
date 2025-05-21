@@ -11,8 +11,9 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\TrackingController;
 use App\Http\Controllers\SalesAnalysisController;
-use App\Http\Controllers\TrackingController;
+
 
 Route::get('/', function () {
     return view('welcome');
