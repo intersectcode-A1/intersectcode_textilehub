@@ -1,11 +1,6 @@
 <components.layouts.app>
     <div class="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
 
-        <!-- Background Gambar -->
-        <div class="absolute inset-0 -z-10">
-            <img src="{{ asset('image/ceo.jpg') }}" alt="Background Register"
-                 class="w-full h-full object-cover brightness-90">
-        </div>
 
         <!-- Form Register -->
         <div class="bg-white/90 shadow-2xl border border-gray-200 rounded-2xl px-10 py-8 w-full max-w-md">
