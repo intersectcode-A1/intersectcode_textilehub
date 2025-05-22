@@ -2,26 +2,53 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
+// Livewire Auth Components
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\Login;
+
+// Controllers
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\NewPasswordController;
-use App\Http\Controllers\ShopController;
+use App\Http\Controllers\SalesAnalysisController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\TrackingController;
-use App\Http\Controllers\SalesAnalysisController;
+use App\Http\Controllers\User\CheckoutController;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
+// ======================
+// 🔓 Public Routes
+// ======================
+
+// Halaman utama
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Route resource produk tanpa prefix admin dihapus, karena sudah ada di admin prefix.
-// Route::resource('/products', App\Http\Controllers\Admin\ProductController::class);
+// Katalog Produk
+Route::get('/ecatalog', function () {
+    return view('ecatalog.index');
+})->name('ecatalog.index');
 
+Route::get('/ecatalog/{id}', function ($id) {
+    return view('ecatalog.detail', compact('id'));
+})->name('ecatalog.detail');
+
+// Checkout dan Submit Order (user)
+Route::post('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
+
+// ======================
+// 🧑‍💻 Guest Auth Routes
+// ======================
 Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
     Route::get('/login', Login::class)->name('login');
@@ -32,18 +59,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
-// Route::prefix('shop')->group(function () {
-//     Route::get('/katalog', [ShopController::class, 'index'])->name('katalog');
-//     Route::post('/keranjang/tambah', [ShopController::class, 'tambahKeKeranjang'])->name('keranjang.tambah');
-//     Route::get('/keranjang', [ShopController::class, 'lihatKeranjang'])->name('keranjang');
-//     Route::post('/checkout', [ShopController::class, 'prosesCheckout'])->name('checkout.proses');
-// });
-
+// ======================
+// 🔐 Authenticated Routes
+// ======================
 Route::middleware('auth')->group(function () {
-    // Dashboard User/Admin
+    // Dashboard user
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Logout POST method
+    // Logout
     Route::post('/logout', function () {
         Auth::logout();
         request()->session()->invalidate();
@@ -52,27 +75,26 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 });
 
-Route::get('/admin/analisis-penjualan', [SalesAnalysisController::class, 'index'])->name('admin.sales.analysis');
-
-// =============================
-// 🛠️ Admin Panel (Protected by auth middleware)
-// =============================
+// ======================
+// 🛠️ Admin Panel Routes
+// ======================
 Route::prefix('admin')->middleware('auth')->group(function () {
+    // Admin Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // CRUD Produk dan Kategori
+    // CRUD Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
-});
 
+    // Pesanan
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
-
-    // Manajemen Pesanan
-    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-    Route::post('orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
-
-     //tracking
+    // Pelacakan
     Route::get('/pelacakan', [TrackingController::class, 'index'])->name('tracking.index');
     Route::post('/pelacakan', [TrackingController::class, 'search'])->name('tracking.search');
-;
+
+    // Analisis Penjualan
+    Route::get('/analisis-penjualan', [SalesAnalysisController::class, 'index'])->name('admin.sales.analysis');
+});

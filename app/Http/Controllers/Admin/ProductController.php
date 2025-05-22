@@ -3,45 +3,42 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-  public function index()
-{
-    $products = Product::latest()->paginate(10);
+    public function index()
+    {
+        $products = Product::latest()->paginate(10);
+        $semuaKosong = $products->count() > 0 && $products->every(fn ($p) => $p->stok == 0);
+        return view('admin.products.index', compact('products', 'semuaKosong'));
+    }
 
-    $semuaKosong = $products->count() > 0 && $products->every(function ($product) {
-        return $product->stok == 0;
-    });
-
-    return view('admin.products.index', compact('products', 'semuaKosong'));
-}
-
+    public function create()
+    {
+        return view('admin.products.create');
+    }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama' => 'required',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $fotoPath = null;
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('produk', 'public');
-        }
+        $path = $request->file('foto')?->store('produk', 'public');
 
         Product::create([
             'nama' => $request->nama,
             'harga' => $request->harga,
             'stok' => $request->stok,
             'deskripsi' => $request->deskripsi,
-            'foto' => $fotoPath,
+            'foto' => $path,
         ]);
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
@@ -54,25 +51,16 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
+        $data = $request->validate([
+            'nama' => 'required',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $data = [
-            'nama' => $request->nama,
-            'harga' => $request->harga,
-            'stok' => $request->stok,
-            'deskripsi' => $request->deskripsi,
-        ];
-
         if ($request->hasFile('foto')) {
-            if ($product->foto) {
-                Storage::disk('public')->delete($product->foto);
-            }
+            if ($product->foto) Storage::disk('public')->delete($product->foto);
             $data['foto'] = $request->file('foto')->store('produk', 'public');
         }
 
@@ -83,12 +71,8 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        if ($product->foto) {
-            Storage::disk('public')->delete($product->foto);
-        }
-
+        if ($product->foto) Storage::disk('public')->delete($product->foto);
         $product->delete();
-
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus!');
     }
 }
