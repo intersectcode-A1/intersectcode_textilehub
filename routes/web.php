@@ -20,7 +20,6 @@ use App\Http\Controllers\Admin\TrackingController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\PublicProductController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,30 +30,13 @@ use App\Http\Controllers\PublicProductController;
 // 🔓 Public Routes
 // ======================
 
-// Halaman utama
+// Halaman utama (welcome)
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-
-// Katalog Produk
-Route::get('/ecatalog', [PublicProductController::class, 'index'])->name('ecatalog.index');
-Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.detail');
-// Route::get('/ecatalog', function () {
-//     return view('ecatalog.index');
-// })->name('ecatalog.index');
-
-// Route::get('/ecatalog/{id}', function ($id) {
-//     return view('ecatalog.detail', compact('id'));
-// })->name('ecatalog.detail');
-
-// Checkout dan Submit Order (user)
-Route::post('/checkout', [CheckoutController::class, 'show'])->name('checkout');
-Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
-
 // ======================
-// 🧑‍💻 Guest Auth Routes
-// ======================
+// 🧑‍💻 Guest Auth Routes (register, login, forgot password)
 Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
     Route::get('/login', Login::class)->name('login');
@@ -66,11 +48,19 @@ Route::middleware('guest')->group(function () {
 });
 
 // ======================
-// 🔐 Authenticated Routes
+// 🔐 Authenticated Routes (harus login)
 // ======================
 Route::middleware('auth')->group(function () {
     // Dashboard user
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // E-Catalog harus login
+    Route::get('/ecatalog', [PublicProductController::class, 'index'])->name('ecatalog.index');
+    Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.detail');
+
+    // Checkout dan Submit Order
+    Route::post('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+    Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
 
     // Logout
     Route::post('/logout', function () {
@@ -82,7 +72,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // ======================
-// 🛠️ Admin Panel Routes
+// 🛠️ Admin Panel Routes (prefix admin, harus login)
 // ======================
 Route::prefix('admin')->middleware('auth')->group(function () {
     // Admin Dashboard
@@ -104,9 +94,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // Analisis Penjualan
     Route::get('/analisis-penjualan', [SalesAnalysisController::class, 'index'])->name('admin.sales.analysis');
 
-    // kelola data supplier
-    Route::middleware(['auth'])->group(function () {
+    // Kelola Data Supplier
     Route::resource('supplier', SupplierController::class);
-
-});
 });
