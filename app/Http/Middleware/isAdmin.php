@@ -4,16 +4,20 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
-class IsAdmin
+class isAdmin
 {
-    public function handle(Request $request, Closure $next)
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            return $next($request);
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Akses ditolak.');
         }
-
-        abort(403, 'Access denied');  // atau redirect ke halaman lain
+        return $next($request);
     }
 }

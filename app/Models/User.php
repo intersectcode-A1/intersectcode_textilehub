@@ -61,25 +61,21 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function setRoleAttribute($value)
     {
-        // Pastikan role yang dimasukkan valid
         if (!in_array(strtolower($value), self::validRoles())) {
             throw new \InvalidArgumentException("Role yang diberikan tidak valid.");
         }
 
-        // Set role menjadi huruf kecil
         $this->attributes['role'] = strtolower($value);
     }
 
     /**
-     * Get the user's role.
+     * Fungsi untuk mengecek apakah user adalah admin.
      *
-     * @param  string  $value
-     * @return string
+     * @return bool
      */
-    public function getRoleAttribute($value)
+    public function isAdmin()
     {
-        // Menampilkan role dalam huruf kapital
-        return strtoupper($value);
+        return strtolower($this->attributes['role']) === 'admin';
     }
 
     /**

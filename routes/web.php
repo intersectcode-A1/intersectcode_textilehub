@@ -23,6 +23,8 @@ use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\PublicProductController;
 use App\Http\Controllers\KatalogController;
 
+// Middleware
+use App\Http\Middleware\IsAdmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,12 +44,9 @@ Route::get('/', function () {
 // 🧑‍💻 Guest Auth Routes
 // ======================
 
-//middleware ketika user gabisa akses halaman admin
-Route::middleware(['auth', 'isAdmin'])->group(function () {
+Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
-
-
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
@@ -71,10 +70,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/ecatalog', [PublicProductController::class, 'index'])->name('ecatalog.index');
     Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.detail');
 
-    //laporan
+    // laporan
     Route::get('/laporan-keuangan', [LaporanKeuanganController::class, 'index'])->name('laporan.index');
     Route::post('/laporan-keuangan/filter', [LaporanKeuanganController::class, 'filter'])->name('laporan.filter');
-
 
     // Checkout dan Submit Order
     Route::post('/checkout', [CheckoutController::class, 'show'])->name('checkout');
@@ -96,7 +94,7 @@ Route::middleware('auth')->group(function () {
 // 🛠️ Admin Panel Routes
 // ======================
 
-Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
     // Admin Dashboard
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
