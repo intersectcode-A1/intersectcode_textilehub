@@ -48,6 +48,12 @@
         <span class="sidebar-label">Kelola Data Supplier</span>
     </a>
 
+    <a href="{{ route('laporan.index') }}" class="flex items-center gap-2 hover:text-blue-600">
+    <i data-lucide="bar-chart-2"></i>
+    <span class="sidebar-label">Laporan Keuangan</span>
+</a>
+
+
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit" class="flex items-center gap-2 text-red-500 hover:underline">
