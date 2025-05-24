@@ -25,7 +25,7 @@ class Login extends Component
            if (Auth::user()->role === 'admin')
             return redirect()->intended('/dashboard');
         else
-            return redirect()->intended('/katalog');
+            return redirect()->intended('/ecatalog');
 
              // // Cek apakah user adalah admin
             // if ($user->role === 'admin') {

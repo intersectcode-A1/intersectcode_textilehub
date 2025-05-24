@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\Admin\TrackingController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\PublicProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,14 +36,17 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Katalog Produk
-Route::get('/ecatalog', function () {
-    return view('ecatalog.index');
-})->name('ecatalog.index');
 
-Route::get('/ecatalog/{id}', function ($id) {
-    return view('ecatalog.detail', compact('id'));
-})->name('ecatalog.detail');
+// Katalog Produk
+Route::get('/ecatalog', [PublicProductController::class, 'index'])->name('ecatalog.index');
+Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.detail');
+// Route::get('/ecatalog', function () {
+//     return view('ecatalog.index');
+// })->name('ecatalog.index');
+
+// Route::get('/ecatalog/{id}', function ($id) {
+//     return view('ecatalog.detail', compact('id'));
+// })->name('ecatalog.detail');
 
 // Checkout dan Submit Order (user)
 Route::post('/checkout', [CheckoutController::class, 'show'])->name('checkout');
