@@ -43,6 +43,10 @@
     <i data-lucide="map-pin"></i>
     <span class="sidebar-label">Pelacakan</span>
 </a>
+    <a href="{{ route('supplier.index') }}" class="flex items-center gap-2 hover:text-blue-600">
+        <i data-lucide="truck"></i>
+        <span class="sidebar-label">Kelola Data Supplier</span>
+    </a>
 
     <form method="POST" action="{{ route('logout') }}">
         @csrf

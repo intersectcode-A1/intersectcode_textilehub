@@ -15,6 +15,7 @@ use App\Http\Controllers\SalesAnalysisController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\Admin\TrackingController;
 use App\Http\Controllers\User\CheckoutController;
 
@@ -97,4 +98,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     // Analisis Penjualan
     Route::get('/analisis-penjualan', [SalesAnalysisController::class, 'index'])->name('admin.sales.analysis');
+
+    // kelola data supplier
+    Route::middleware(['auth'])->group(function () {
+    Route::resource('supplier', SupplierController::class);
+
+});
 });
