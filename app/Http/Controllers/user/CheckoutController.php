@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 
 class CheckoutController extends Controller
 {
@@ -27,9 +29,20 @@ class CheckoutController extends Controller
             'price' => 'required|numeric',
         ]);
 
-        // Simpan ke database jika ingin, contoh:
-        // Order::create($validated);
+        // Simpan pesanan ke database
+        Order::create([
+            'user_id'      => Auth::id(), // optional jika ada relasi user
+            'email'        => Auth::user()->email, // ambil email dari yang login
+            'nama'         => $validated['nama'],
+            'alamat'       => $validated['alamat'],
+            'telepon'      => $validated['telepon'],
+            'product_id'   => $validated['product_id'],
+            'product_name' => $validated['product_name'],
+            'price'        => $validated['price'],
+            'status'       => 'Diproses', // status default
+        ]);
 
-        return redirect()->route('ecatalog.index')->with('success', 'Pesanan berhasil dikirim!');
+        // Redirect ke status pesanan
+        return redirect()->route('order.status')->with('success', 'Pesanan berhasil dikirim!');
     }
 }
