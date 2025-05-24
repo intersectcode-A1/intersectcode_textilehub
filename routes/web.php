@@ -19,6 +19,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\Admin\TrackingController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\PublicProductController;
+use App\Http\Controllers\KatalogController;
 
 
 /*
@@ -107,6 +108,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // kelola data supplier
     Route::middleware(['auth'])->group(function () {
     Route::resource('supplier', SupplierController::class);
+
+
+
+    Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog.index');
+
 
 });
 });
