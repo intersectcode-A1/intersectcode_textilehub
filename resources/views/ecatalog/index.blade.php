@@ -4,7 +4,7 @@
         <p class="text-gray-500 text-lg">Temukan produk terbaik kami di sini</p>
     </div>
 
-    <form class="mb-8" method="GET" action="{{ route('ecatalog.index') }}">
+    <form class="mb-6" method="GET" action="{{ route('ecatalog.index') }}">
         <div class="flex flex-col md:flex-row items-center gap-4">
             <input
                 type="text"
@@ -29,6 +29,15 @@
             </button>
         </div>
     </form>
+
+    {{-- Tombol ke Status Pemesanan User --}}
+    <div class="mb-8 text-right">
+        <a href="{{ route('order.status') }}"
+           class="inline-block bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700 transition text-sm font-semibold"
+        >
+            🧾 Lihat Status Pemesanan Saya
+        </a>
+    </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         @forelse($products as $product)
