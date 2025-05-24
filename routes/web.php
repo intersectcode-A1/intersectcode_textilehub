@@ -31,13 +31,14 @@ use App\Http\Controllers\KatalogController;
 // 🔓 Public Routes
 // ======================
 
-// Halaman utama (welcome)
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
 // ======================
-// 🧑‍💻 Guest Auth Routes (register, login, forgot password)
+// 🧑‍💻 Guest Auth Routes
+// ======================
+
 Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
     Route::get('/login', Login::class)->name('login');
@@ -49,8 +50,9 @@ Route::middleware('guest')->group(function () {
 });
 
 // ======================
-// 🔐 Authenticated Routes (harus login)
+// 🔐 Authenticated Routes
 // ======================
+
 Route::middleware('auth')->group(function () {
     // Dashboard user
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -63,6 +65,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
 
+    // ✅ Tambahan: Lihat status pesanan
+    Route::get('/order/status', [CheckoutController::class, 'status'])->name('order.status');
+
     // Logout
     Route::post('/logout', function () {
         Auth::logout();
@@ -73,8 +78,9 @@ Route::middleware('auth')->group(function () {
 });
 
 // ======================
-// 🛠️ Admin Panel Routes (prefix admin, harus login)
+// 🛠️ Admin Panel Routes
 // ======================
+
 Route::prefix('admin')->middleware('auth')->group(function () {
     // Admin Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
