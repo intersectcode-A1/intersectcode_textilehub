@@ -16,23 +16,18 @@ class Login extends Component
     ];
 
     public function login()
-{
-    $this->validate();
+    {
+        $this->validate();
 
-    if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
-        $user = Auth::user();
-        session()->regenerate();
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+            session()->regenerate();
 
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');  // ⬅️ redirect ke admin dashboard
-        } else {
-            return redirect()->route('ecatalog.index');    // ⬅️ redirect ke e-catalog
+            // Semua user diarahkan ke /dashboard (nanti dibedakan view-nya di controller)
+            return redirect()->route('dashboard');
         }
+
+        session()->flash('error', 'Email atau password salah.');
     }
-
-    session()->flash('error', 'Email atau password salah.');
-}
-
 
     public function render()
     {

@@ -19,7 +19,7 @@
         </button>
     </div>
     <nav class="px-4 py-4 space-y-3">
-    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 hover:text-blue-600">
+    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 hover:text-blue-600">
         <i data-lucide="layout-dashboard"></i>
         <span class="sidebar-label">Dashboard</span>
     </a>

@@ -1,7 +1,6 @@
 <components.layouts.app>
     <div class="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
 
-
         <!-- Form Login -->
         <div class="bg-white/90 shadow-2xl border border-gray-200 rounded-2xl px-10 py-8 w-full max-w-md">
             <h2 class="text-3xl font-bold text-center text-blue-800 mb-1">Toko Usaha Muda</h2>
@@ -36,6 +35,10 @@
                         <div class="absolute left-3 top-2.5 text-gray-400">
                             <i class="fas fa-lock"></i>
                         </div>
+                        <button type="button" id="togglePassword"
+                            class="absolute right-3 top-2.5 text-gray-400 focus:outline-none" tabindex="-1">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </div>
                     @error('password')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
@@ -52,7 +55,7 @@
                 <p class="text-green-600 mt-4 text-sm text-center">{{ session('message') }}</p>
             @endif
 
-            <p class="mt-6 text-sm text-center text-gray-700">Belum punya akun? 
+            <p class="mt-6 text-sm text-center text-gray-700">Belum punya akun?
                 <a href="/register" class="text-blue-500 hover:underline font-medium">Daftar di sini</a>
             </p>
             <p class="text-sm text-center mt-2">
@@ -60,4 +63,17 @@
             </p>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#password');
+            togglePassword.addEventListener('click', function () {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
 </components.layouts.app>

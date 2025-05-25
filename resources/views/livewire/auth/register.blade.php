@@ -1,7 +1,6 @@
 <components.layouts.app>
     <div class="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
 
-
         <!-- Form Register -->
         <div class="bg-white/90 shadow-2xl border border-gray-200 rounded-2xl px-10 py-8 w-full max-w-md">
             <h2 class="text-3xl font-bold text-center text-blue-800 mb-1">Daftar Akun</h2>
@@ -47,6 +46,7 @@
                         @error('email') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
+                    <!-- Password dengan toggle show/hide -->
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                         <div class="relative mt-1">
@@ -55,10 +55,15 @@
                             <div class="absolute left-3 top-2.5 text-gray-400">
                                 <i class="fas fa-lock"></i>
                             </div>
+                            <button type="button" id="togglePassword"
+                                class="absolute right-3 top-2.5 text-gray-400 focus:outline-none" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
                         </div>
                         @error('password') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
+                    <!-- Konfirmasi Password dengan toggle show/hide -->
                     <div>
                         <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
                         <div class="relative mt-1">
@@ -67,12 +72,16 @@
                             <div class="absolute left-3 top-2.5 text-gray-400">
                                 <i class="fas fa-lock"></i>
                             </div>
+                            <button type="button" id="togglePasswordConfirmation"
+                                class="absolute right-3 top-2.5 text-gray-400 focus:outline-none" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
                         </div>
                         @error('password_confirmation') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <button type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300 shadow">
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300shadow">
                         Daftar Sekarang
                     </button>
                 </form>
@@ -100,9 +109,31 @@
                 @endif
             @endif
 
-            <p class="mt-6 text-sm text-center text-gray-700">Sudah punya akun? 
+            <p class="mt-6 text-sm text-center text-gray-700">Sudah punya akun?
                 <a href="/login" class="text-blue-500 hover:underline font-medium">Login di sini</a>
             </p>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#password');
+            togglePassword.addEventListener('click', function () {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+
+            const togglePasswordConfirmation = document.querySelector('#togglePasswordConfirmation');
+            const passwordConfirmation = document.querySelector('#password_confirmation');
+            togglePasswordConfirmation.addEventListener('click', function () {
+                const type = passwordConfirmation.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordConfirmation.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
 </components.layouts.app>

@@ -8,7 +8,6 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Auth\Login;
 
 // Controllers
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\LaporanKeuanganController;
 use App\Http\Controllers\PasswordResetLinkController;
@@ -44,10 +43,6 @@ Route::get('/', function () {
 // 🧑‍💻 Guest Auth Routes
 // ======================
 
-Route::middleware(['auth', IsAdmin::class])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-});
-
 Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
     Route::get('/login', Login::class)->name('login');
@@ -63,14 +58,14 @@ Route::middleware('guest')->group(function () {
 // ======================
 
 Route::middleware('auth')->group(function () {
-    // Dashboard user
+    // Semua user (admin & user biasa) akan diarahkan ke sini
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // E-Catalog harus login
+    // E-Catalog
     Route::get('/ecatalog', [PublicProductController::class, 'index'])->name('ecatalog.index');
     Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.detail');
 
-    // laporan
+    // Laporan
     Route::get('/laporan-keuangan', [LaporanKeuanganController::class, 'index'])->name('laporan.index');
     Route::post('/laporan-keuangan/filter', [LaporanKeuanganController::class, 'filter'])->name('laporan.filter');
 
@@ -78,7 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
 
-    // ✅ Tambahan: Lihat status pesanan
+    // Status Pesanan
     Route::get('/order/status', [CheckoutController::class, 'status'])->name('order.status');
 
     // Logout
@@ -91,13 +86,10 @@ Route::middleware('auth')->group(function () {
 });
 
 // ======================
-// 🛠️ Admin Panel Routes
+// 🛠️ Admin Panel Routes (Manajemen Data)
 // ======================
 
 Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
-    // Admin Dashboard
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
     // CRUD Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
