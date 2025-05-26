@@ -28,8 +28,21 @@
                 <img class="h-10" src="{{ asset('image/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda">
                 Toko Usaha Muda
             </h1>
-            <nav>
-                <a href="/" class="bg-white px-3 py-1 rounded-lg text-sm mx-2 hover:text-blue-500">Beranda</a>
+            <nav class="flex items-center space-x-4">
+                <a href="/" class="bg-white px-3 py-1 rounded-lg text-sm hover:text-blue-500">Beranda</a>
+
+                {{-- Tombol Logout --}}
+                @auth
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button
+                            type="submit"
+                            class="bg-red-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-700 transition"
+                        >
+                            Logout
+                        </button>
+                    </form>
+                @endauth
             </nav>
         </div>
     </header>
