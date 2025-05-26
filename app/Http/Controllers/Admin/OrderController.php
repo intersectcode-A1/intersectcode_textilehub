@@ -8,18 +8,27 @@ use App\Models\Order;
 
 class OrderController extends Controller
 {
+    /**
+     * Menampilkan daftar semua pesanan (untuk admin).
+     */
     public function index()
     {
-        $orders = Order::latest()->paginate(10);
+        $orders = Order::with('user')->latest()->paginate(10); // Include user info if needed
         return view('admin.orders.index', compact('orders'));
     }
 
+    /**
+     * Menampilkan detail satu pesanan berdasarkan ID.
+     */
     public function show($id)
     {
-        $order = Order::with('items')->findOrFail($id);
+        $order = Order::with(['items.product', 'user'])->findOrFail($id); // Menampilkan detail produk & user jika ada
         return view('admin.orders.show', compact('order'));
     }
 
+    /**
+     * Memperbarui status dari pesanan tertentu.
+     */
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
@@ -30,6 +39,6 @@ class OrderController extends Controller
         $order->status = $request->status;
         $order->save();
 
-        return redirect()->back()->with('success', 'Status pesanan diperbarui.');
+        return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
     }
 }

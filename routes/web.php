@@ -39,6 +39,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+
 // ======================
 // 🧑‍💻 Guest Auth Routes
 // ======================
@@ -49,32 +50,35 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
+
 
 // ======================
 // 🔐 Authenticated Routes
 // ======================
 
 Route::middleware('auth')->group(function () {
-    // Semua user (admin & user biasa) akan diarahkan ke sini
+    // Dashboard untuk semua user (admin & user biasa)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // E-Catalog
     Route::get('/ecatalog', [PublicProductController::class, 'index'])->name('ecatalog.index');
     Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.detail');
 
-    // Laporan
+    // Laporan Keuangan
     Route::get('/laporan-keuangan', [LaporanKeuanganController::class, 'index'])->name('laporan.index');
     Route::post('/laporan-keuangan/filter', [LaporanKeuanganController::class, 'filter'])->name('laporan.filter');
 
     // Checkout dan Submit Order
-    Route::post('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+    Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
 
-    // Status Pesanan
+    // Status Pesanan untuk user
     Route::get('/order/status', [CheckoutController::class, 'status'])->name('order.status');
+    Route::get('/order/status/{id}', [CheckoutController::class, 'statusDetail'])->name('order.status.detail');
 
     // Logout
     Route::post('/logout', function () {
@@ -85,27 +89,31 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 });
 
+
 // ======================
 // 🛠️ Admin Panel Routes (Manajemen Data)
 // ======================
 
 Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
-    // CRUD Produk & Kategori
+    // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
 
-    // Pesanan
+    // Pesanan dari user (Admin)
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Status pesanan admin (detail + update)
+    Route::get('/orders/{id}/status', [OrderController::class, 'statusDetail'])->name('orders.status.detail');
     Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
-    // Pelacakan
+    // Pelacakan pesanan
     Route::get('/pelacakan', [TrackingController::class, 'index'])->name('tracking.index');
     Route::post('/pelacakan', [TrackingController::class, 'search'])->name('tracking.search');
 
     // Analisis Penjualan
     Route::get('/analisis-penjualan', [SalesAnalysisController::class, 'index'])->name('admin.sales.analysis');
 
-    // Kelola Data Supplier
+    // Supplier
     Route::resource('supplier', SupplierController::class);
 });

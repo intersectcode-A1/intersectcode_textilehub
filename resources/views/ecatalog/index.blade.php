@@ -21,20 +21,14 @@
                     </option>
                 @endforeach
             </select>
-            <button
-                type="submit"
-                class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
-            >
+            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
                 Cari
             </button>
         </div>
     </form>
 
-    {{-- Tombol ke Status Pemesanan User --}}
     <div class="mb-8 text-right">
-        <a href="{{ route('order.status') }}"
-           class="inline-block bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700 transition text-sm font-semibold"
-        >
+        <a href="{{ route('order.status') }}" class="inline-block bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700 transition text-sm font-semibold">
             🧾 Lihat Status Pemesanan Saya
         </a>
     </div>
@@ -44,44 +38,24 @@
             <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 flex flex-col">
                 <div class="overflow-hidden">
                     @if($product->foto)
-                        <img
-                            src="{{ asset('storage/' . $product->foto) }}"
-                            alt="{{ $product->nama }}"
-                            class="w-full h-56 object-cover transform transition-transform duration-300 hover:scale-105"
-                        >
+                        <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama }}" class="w-full h-56 object-cover transform transition-transform duration-300 hover:scale-105">
                     @else
-                        <div class="w-full h-56 bg-gray-200 flex items-center justify-center">
-                            No Image
-                        </div>
+                        <div class="w-full h-56 bg-gray-200 flex items-center justify-center">No Image</div>
                     @endif
                 </div>
                 <div class="p-5 flex flex-col flex-1">
                     <h3 class="text-xl font-semibold text-gray-800 mb-1">{{ $product->nama }}</h3>
-                    <p class="text-gray-600 text-sm mb-2 flex-1">
-                        {{ \Illuminate\Support\Str::limit($product->deskripsi, 80) }}
-                    </p>
+                    <p class="text-gray-600 text-sm mb-2 flex-1">{{ \Illuminate\Support\Str::limit($product->deskripsi, 80) }}</p>
                     <div class="text-lg font-bold text-green-600 mb-4">
                         Rp {{ number_format($product->harga, 0, ',', '.') }}
                     </div>
                     <div class="flex justify-between gap-2 mt-auto">
-                        <a
-                            href="{{ route('ecatalog.detail', $product->id) }}"
-                            class="text-sm text-blue-600 font-semibold hover:underline"
-                        >
+                        <a href="{{ route('ecatalog.detail', $product->id) }}" class="text-sm text-blue-600 font-semibold hover:underline">
                             Lihat Detail
                         </a>
-                        <form method="POST" action="{{ route('checkout') }}">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <input type="hidden" name="product_name" value="{{ $product->nama }}">
-                            <input type="hidden" name="price" value="{{ $product->harga }}">
-                            <button
-                                type="submit"
-                                class="text-sm bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 transition"
-                            >
-                                Tambah ke Keranjang
-                            </button>
-                        </form>
+                        <a href="{{ route('checkout', ['product_name' => $product->nama, 'price' => $product->harga]) }}" class="text-sm bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 transition">
+                            Tambah ke Keranjang
+                        </a>
                     </div>
                 </div>
             </div>
