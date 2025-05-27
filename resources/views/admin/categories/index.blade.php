@@ -23,12 +23,12 @@
         @else
             <table class="w-full table-auto text-left border border-gray-600 dark:border-gray-500">
                 <thead class="bg-gray-100 dark:bg-gray-700 text-sm uppercase text-gray-600 dark:text-gray-300">
-                    <tr>
-                        <th class="px-4 py-3 border border-gray-600 dark:border-gray-500">ID</th>
-                        <th class="px-4 py-3 border border-gray-600 dark:border-gray-500">Nama</th>
-                        <th class="px-4 py-3 border border-gray-600 dark:border-gray-500">Aksi</th>
-                    </tr>
-                </thead>
+                <tr>
+                    <th class="px-4 py-3 border border-gray-600 dark:border-gray-500 text-center align-middle">ID</th>
+                    <th class="px-4 py-3 border border-gray-600 dark:border-gray-500 text-center align-middle">Nama</th>
+                    <th class="px-4 py-3 border border-gray-600 dark:border-gray-500 text-center align-middle">Aksi</th>
+                </tr>
+            </thead>
                 <tbody>
                     @foreach ($categories as $index => $category)
                         <tr class="border border-gray-600 dark:border-gray-500">
