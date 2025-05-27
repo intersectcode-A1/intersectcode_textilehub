@@ -9,7 +9,7 @@
     @csrf
     <div>
         <label class="block font-semibold">Nama Kategori</label>
-        <input type="text" name="name" class="w-full border border-gray-300 px-3 py-2 rounded" required>
+        <input type="text" name="name" class="w-full border border-gray-300 px-3 py-2 rounded px-3 py-2 text-black bg-white" required>
     </div>
     <div class="flex gap-2">
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
