@@ -33,6 +33,21 @@
         </div>
 
         <div>
+            <label for="category_id" class="block text-white font-semibold">Kategori</label>
+            <select name="category_id" id="category_id" class="w-full border border-gray-300 rounded px-3 py-2 text-black bg-white" required>
+                <option value="" disabled>-- Pilih Kategori --</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" {{ old('category_id', $data->category_id) == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('category_id')
+                <p class="text-red-600 text-sm">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
             <label for="deskripsi" class="block text-white font-semibold">Deskripsi</label>
             <textarea name="deskripsi" id="deskripsi" class="w-full border border-gray-300 rounded px-3 py-2 text-black bg-white">{{ old('deskripsi', $data->deskripsi) }}</textarea>
             @error('deskripsi')

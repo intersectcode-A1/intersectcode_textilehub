@@ -17,7 +17,7 @@
                 <option value="">Semua Kategori</option>
                 @foreach(\App\Models\Category::all() as $category)
                     <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
-                        {{ $category->nama }}
+                        {{ $category->name }}
                     </option>
                 @endforeach
             </select>

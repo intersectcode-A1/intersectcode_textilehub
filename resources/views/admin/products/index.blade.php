@@ -41,11 +41,21 @@
                                 <span class="text-gray-400 italic">Tidak ada foto</span>
                             @endif
                         </td>
-                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">{{ $product->nama }}</td>
-                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
-                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">{{ $product->stock }}</td>
-                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">{{ $product->kategori }}</td>
-                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">{{ $product->deskripsi }}</td>
+                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                            {{ $product->nama }}
+                        </td>
+                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                            Rp {{ number_format($product->harga, 0, ',', '.') }}
+                        </td>
+                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                            {{ $product->stok }}
+                        </td>
+                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                            {{ $product->category->name ?? '-' }}
+                        </td>
+                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                            {{ $product->deskripsi }}
+                        </td>
                         <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
                             <div class="flex justify-center gap-2">
                                 <a href="{{ route('products.edit', $product) }}">
