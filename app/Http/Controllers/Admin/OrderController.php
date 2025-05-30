@@ -10,14 +10,29 @@ class OrderController extends Controller
 {
     public function index()
     {
+<<<<<<< Updated upstream
         $orders = Order::latest()->paginate(10);
+=======
+        $orders = Order::with('user')->latest()->paginate(10);
+>>>>>>> Stashed changes
         return view('admin.orders.index', compact('orders'));
     }
 
     public function show($id)
     {
+<<<<<<< Updated upstream
         $order = Order::with('items')->findOrFail($id);
         return view('admin.orders.show', compact('order'));
+=======
+        $order = Order::with(['items.product', 'user'])->findOrFail($id);
+
+        // Hitung total pesanan
+        $total = $order->items->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+
+        return view('admin.orders.show', compact('order', 'total'));
+>>>>>>> Stashed changes
     }
 
     public function updateStatus(Request $request, $id)
