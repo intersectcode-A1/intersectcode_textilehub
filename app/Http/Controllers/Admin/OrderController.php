@@ -5,34 +5,33 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
-    /**
-     * Menampilkan daftar semua pesanan (untuk admin).
-     */
     public function index()
     {
-        $orders = Order::with('user')->latest()->paginate(10); // Include user info if needed
+        $orders = Order::with(['user', 'items.product'])->latest()->paginate(10);
+
         return view('admin.orders.index', compact('orders'));
     }
 
-    /**
-     * Menampilkan detail satu pesanan berdasarkan ID.
-     */
     public function show($id)
     {
-        $order = Order::with(['items.product', 'user'])->findOrFail($id); // Menampilkan detail produk & user jika ada
-        return view('admin.orders.show', compact('order'));
+        $order = Order::with('items.product')->findOrFail($id);
+
+        // Bisa juga langsung pakai $order->total jika pakai accessor
+        $total = $order->items->sum(function($item) {
+            return $item->price * $item->quantity;
+        });
+
+        return view('admin.orders.show', compact('order', 'total'));
     }
 
-    /**
-     * Memperbarui status dari pesanan tertentu.
-     */
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,proses,selesai',
+            'status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled'])],
         ]);
 
         $order = Order::findOrFail($id);
@@ -40,5 +39,11 @@ class OrderController extends Controller
         $order->save();
 
         return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
+    }
+
+    public function destroy(Order $order)
+    {
+        $order->delete();
+        return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dihapus.');
     }
 }
