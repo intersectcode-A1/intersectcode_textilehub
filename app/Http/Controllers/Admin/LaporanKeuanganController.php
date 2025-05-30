@@ -10,7 +10,7 @@ class LaporanKeuanganController extends Controller
 {
     public function index()
     {
-        return view('laporan.index', ['laporan' => null]);
+        return view('admin.laporan_keuangan.index', ['laporan' => null]);
     }
 
     public function filter(Request $request)
