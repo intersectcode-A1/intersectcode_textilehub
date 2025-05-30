@@ -57,11 +57,11 @@ Route::middleware('guest')->group(function () {
 
 
 // ======================
-// 🔐 Authenticated Routes
+// 🔐 Authenticated Routes (User Biasa)
 // ======================
 
 Route::middleware('auth')->group(function () {
-    // Dashboard untuk semua user (admin & user biasa)
+    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // E-Catalog
@@ -76,7 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
 
-    // Status Pesanan untuk user
+    // Status Pesanan
     Route::get('/order/status', [CheckoutController::class, 'status'])->name('order.status');
     Route::get('/order/status/{id}', [CheckoutController::class, 'statusDetail'])->name('order.status.detail');
 
@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
 
 
 // ======================
-// 🛠️ Admin Panel Routes (Manajemen Data)
+// 🛠️ Admin Panel Routes
 // ======================
 
 Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
@@ -99,15 +99,15 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
 
-    // Pesanan dari user (Admin)
+    // Pesanan dari user
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 
-    // Status pesanan admin (detail + update)
+    // Status pesanan admin
     Route::get('/orders/{id}/status', [OrderController::class, 'statusDetail'])->name('orders.status.detail');
     Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
-    // Pelacakan pesanan
+    // Pelacakan
     Route::get('/pelacakan', [TrackingController::class, 'index'])->name('tracking.index');
     Route::post('/pelacakan', [TrackingController::class, 'search'])->name('tracking.search');
 
@@ -116,4 +116,12 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
 
     // Supplier
     Route::resource('supplier', SupplierController::class);
+
+    //delete
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+
+    //store
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+
+
 });

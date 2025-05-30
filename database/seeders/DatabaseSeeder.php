@@ -13,18 +13,21 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-    {
-        // Cek dulu, baru buat user jika belum ada
-        if (!User::where('email', 'admin@gmail.com')->exists()) {
-            User::factory()->create([
-                'name' => 'Admin',
-                'email' => 'admin@gmail.com',
-                'password' => Hash::make('admin'),
-                'role' => 'admin',
-            ]);
-        }
-
-        // Panggil seeder lain
-        $this->call(ProductSeeder::class);
+{
+    if (!User::where('email', 'admin@gmail.com')->exists()) {
+        User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('admin'),
+            'role' => 'admin',
+        ]);
     }
+
+    // Panggil seeder kategori dulu
+    $this->call([
+        CategorySeeder::class,
+        ProductSeeder::class,
+    ]);
+}
+
 }
