@@ -34,7 +34,10 @@
 
             {{-- Navigation --}}
             <nav class="flex items-center space-x-4">
-                <a href="/" class="text-white text-sm px-3 py-2 rounded-md hover:bg-blue-600 transition duration-150 ease-in-out">Beranda</a>
+                <a href="{{ route('ecatalog.index') }}" class="text-white text-sm px-3 py-2 rounded-md transition duration-150 ease-in-out {{ request()->routeIs('ecatalog.index') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-700' }}"> <i class="fa fa-home mr-1"></i>
+                    Beranda
+                </a>
+
 
 
                 @auth
