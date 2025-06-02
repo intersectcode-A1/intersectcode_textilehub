@@ -9,7 +9,9 @@ use App\Models\Order;
 
 class CheckoutController extends Controller
 {
-    // Tampilkan form checkout dengan data produk dari query parameter
+    /**
+     * Tampilkan form checkout dengan data produk dari query parameter.
+     */
     public function show(Request $request)
     {
         $productName = $request->query('product_name', 'Produk Tidak Diketahui');
@@ -18,7 +20,9 @@ class CheckoutController extends Controller
         return view('ecatalog.checkout', compact('productName', 'price'));
     }
 
-    // Proses submit pesanan
+    /**
+     * Proses submit pesanan.
+     */
     public function submit(Request $request)
     {
         $request->validate([
@@ -45,22 +49,46 @@ class CheckoutController extends Controller
         return redirect()->route('order.status')->with('success', 'Pesanan berhasil dikirim!');
     }
 
-    // Halaman status pesanan
+    /**
+     * Halaman status pesanan.
+     */
     public function status()
     {
-        $orders = Order::where('user_id', Auth::id())->latest()->paginate(10);
-        return view('ecatalog.status', compact('orders')); // ✅ path view yang benar
+        $orders = Order::where('user_id', Auth::id())
+                       ->latest()
+                       ->paginate(10);
+
+        return view('ecatalog.status', compact('orders'));
     }
 
-public function statusDetail($id)
-{
-    $order = Order::where('id', $id)
-                  ->where('user_id', Auth::id())
-                  ->firstOrFail();
+    /**
+     * Detail status pesanan.
+     */
+    public function statusDetail($id)
+    {
+        $order = Order::where('id', $id)
+                      ->where('user_id', Auth::id())
+                      ->firstOrFail();
 
-    return view('ecatalog.statusdetail', compact('order'));
-}
+        return view('ecatalog.statusdetail', compact('order'));
+    }
 
+    /**
+     * Membatalkan pesanan (bisa ditambahkan di sini jika ingin konsisten)
+     */
+    public function cancel($id)
+    {
+        $order = Order::where('id', $id)
+                      ->where('user_id', Auth::id())
+                      ->firstOrFail();
 
+        if ($order->status === 'pending' || $order->status === null) {
+            $order->status = 'dibatalkan';
+            $order->save();
 
+            return redirect()->route('order.status')->with('success', 'Pesanan berhasil dibatalkan.');
+        }
+
+        return redirect()->route('order.status')->with('error', 'Pesanan tidak dapat dibatalkan.');
+    }
 }

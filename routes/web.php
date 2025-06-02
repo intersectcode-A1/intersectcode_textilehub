@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\TrackingController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\PublicProductController;
 use App\Http\Controllers\KatalogController;
+use App\Http\Controllers\User\CartController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -31,19 +32,12 @@ use App\Http\Middleware\IsAdmin;
 |--------------------------------------------------------------------------
 */
 
-// ======================
 // 🔓 Public Routes
-// ======================
-
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-
-// ======================
 // 🧑‍💻 Guest Auth Routes
-// ======================
-
 Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
     Route::get('/login', Login::class)->name('login');
@@ -55,11 +49,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
-
-// ======================
 // 🔐 Authenticated Routes (User Biasa)
-// ======================
-
 Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -79,6 +69,13 @@ Route::middleware('auth')->group(function () {
     // Status Pesanan
     Route::get('/order/status', [CheckoutController::class, 'status'])->name('order.status');
     Route::get('/order/status/{id}', [CheckoutController::class, 'statusDetail'])->name('order.status.detail');
+    Route::patch('/order/{id}/cancel', [CheckoutController::class, 'cancel'])->name('order.cancel');
+
+    // 🛒 Keranjang (User)
+    Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::get('/checkout-cart', [CartController::class, 'checkoutFromCart'])->name('checkout.cart');
 
     // Logout
     Route::post('/logout', function () {
@@ -89,11 +86,7 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 });
 
-
-// ======================
 // 🛠️ Admin Panel Routes
-// ======================
-
 Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
     // Produk & Kategori
     Route::resource('products', ProductController::class);
@@ -117,11 +110,9 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     // Supplier
     Route::resource('supplier', SupplierController::class);
 
-    //delete
+    // Delete Order
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
-    //store
+    // Store Order
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-
-
 });
