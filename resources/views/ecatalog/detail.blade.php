@@ -30,19 +30,19 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('checkout') }}">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="product_name" value="{{ $product->nama }}">
-                <input type="hidden" name="price" value="{{ $product->harga }}">
-                
-                <button
-                    type="submit"
-                    class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full md:w-auto"
-                >
-                    Tambah ke Keranjang & Checkout
-                </button>
-            </form>
+            <div class="flex gap-4">
+                <a href="{{ $checkoutUrl }}"
+                   class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md py-3 text-center transition">
+                    Pesan
+                </a>
+                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="flex-1">
+                    @csrf
+                    <button type="submit"
+                            class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-md py-3 transition">
+                        + Keranjang
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 

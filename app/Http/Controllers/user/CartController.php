@@ -50,4 +50,34 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Produk berhasil dihapus dari keranjang.');
     }
+
+    // Checkout dari keranjang
+    public function checkoutFromCart()
+    {
+        $cart = session()->get('cart', []);
+        
+        if (empty($cart)) {
+            return redirect()->route('cart.index')->with('error', 'Keranjang belanja kosong!');
+        }
+
+        // Hitung total harga
+        $total = 0;
+        $items = [];
+        foreach ($cart as $id => $item) {
+            $subtotal = $item['harga'] * $item['quantity'];
+            $total += $subtotal;
+            $items[] = [
+                'id' => $id,
+                'nama' => $item['nama'],
+                'harga' => $item['harga'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $subtotal
+            ];
+        }
+
+        return view('ecatalog.checkout-cart', [
+            'items' => $items,
+            'total' => $total
+        ]);
+    }
 }

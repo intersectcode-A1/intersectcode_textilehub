@@ -94,11 +94,11 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
 
     // Pesanan dari user
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/export', [OrderController::class, 'export'])->name('orders.export');
+    Route::get('/orders/filter', [OrderController::class, 'filter'])->name('orders.filter');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-
-    // Status pesanan admin
-    Route::get('/orders/{id}/status', [OrderController::class, 'statusDetail'])->name('orders.status.detail');
     Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     // Pelacakan
     Route::get('/pelacakan', [TrackingController::class, 'index'])->name('tracking.index');
@@ -109,9 +109,6 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
 
     // Supplier
     Route::resource('supplier', SupplierController::class);
-
-    // Delete Order
-    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     // Store Order
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');

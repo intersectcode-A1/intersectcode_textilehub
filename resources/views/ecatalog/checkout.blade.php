@@ -16,6 +16,7 @@
             {{-- Data tersembunyi untuk produk --}}
             <input type="hidden" name="produk" value="{{ $productName }}">
             <input type="hidden" name="harga" value="{{ $price }}">
+            <input type="hidden" name="product_id" value="{{ $productId }}">
 
             {{-- Nama pengguna --}}
             <div>

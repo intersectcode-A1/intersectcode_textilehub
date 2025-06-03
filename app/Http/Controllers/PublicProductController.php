@@ -31,6 +31,13 @@ class PublicProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('ecatalog.detail', compact('product'));
+        return view('ecatalog.detail', [
+            'product' => $product,
+            'checkoutUrl' => route('checkout', [
+                'product_name' => $product->nama,
+                'price' => $product->harga,
+                'product_id' => $product->id
+            ])
+        ]);
     }
 }
