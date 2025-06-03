@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
     
     // Riwayat & Status Pesanan
     Route::get('/purchase-history', [CatalogController::class, 'purchaseHistory'])->name('purchase.history');
+    Route::get('/order-status', [CatalogController::class, 'orderStatus'])->name('order.status');
     Route::get('/order/{id}', [CatalogController::class, 'orderDetail'])->name('order.detail');
     Route::patch('/order/{id}/cancel', [CatalogController::class, 'cancel'])->name('order.cancel');
 

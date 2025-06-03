@@ -1,5 +1,15 @@
 <x-layouts.catalog>
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- Tombol Kembali --}}
+        <div class="mb-6">
+            <a href="{{ route('ecatalog.index') }}" class="text-blue-600 hover:text-blue-800 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Kembali ke Katalog
+            </a>
+        </div>
+
         <div class="text-center max-w-3xl mx-auto mb-12">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Status Pesanan</h1>
             <p class="text-lg text-gray-600">Pantau status pesanan Anda</p>
