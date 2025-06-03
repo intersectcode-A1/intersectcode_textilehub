@@ -18,6 +18,8 @@
             <div class="grid md:grid-cols-2 gap-4 text-gray-800 dark:text-gray-100">
                 <p><span class="font-medium">Nama:</span> {{ $order->user_name ?? '-' }}</p>
                 <p><span class="font-medium">Email:</span> {{ $order->email ?? '-' }}</p>
+                <p><span class="font-medium">Telepon:</span> {{ $order->telepon ?? '-' }}</p>
+                <p><span class="font-medium">Alamat:</span> {{ $order->alamat ?? '-' }}</p>
                 <p><span class="font-medium">Tanggal Pesan:</span> {{ $order->created_at->format('d M Y, H:i') }}</p>
                 <p><span class="font-medium">Status:</span> 
                     <span class="inline-block px-2 py-1 text-xs rounded font-medium
@@ -38,46 +40,37 @@
         </div>
 
         {{-- Tabel Produk --}}
-        <div class="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
-            <table class="w-full table-auto text-sm text-left">
-                <thead class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 uppercase">
-                    <tr>
-                        <th class="px-4 py-3">Produk</th>
-                        <th class="px-4 py-3">Total</th>
-                        <th class="px-4 py-3">Status</th>
-                        <th class="px-4 py-3">Tanggal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($order->items as $item)
-                        <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                            <td class="px-4 py-3">{{ $item->product->name ?? '-' }}</td>
-                            <td class="px-4 py-3">Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
-                            <td class="px-4 py-3">
-                                <span class="inline-block px-2 py-1 text-xs rounded font-medium
-                                    @if($order->status === 'completed')
-                                        bg-green-100 text-green-700
-                                    @elseif($order->status === 'processing')
-                                        bg-yellow-100 text-yellow-700
-                                    @elseif($order->status === 'cancelled')
-                                        bg-red-100 text-red-700
-                                    @else
-                                        bg-gray-200 text-gray-800
-                                    @endif
-                                ">
-                                    {{ ucfirst($order->status) }}
-                                </span>
-                            </td>
-                            <td class="px-4 py-3">{{ $order->created_at->format('d M Y') }}</td>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 p-6 border-b">Daftar Produk</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto text-sm text-left">
+                    <thead class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 uppercase">
+                        <tr>
+                            <th class="px-4 py-3">Produk</th>
+                            <th class="px-4 py-3">Harga Satuan</th>
+                            <th class="px-4 py-3">Jumlah</th>
+                            <th class="px-4 py-3">Subtotal</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($order->items as $item)
+                            <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                <td class="px-4 py-3">{{ $item->product_name }}</td>
+                                <td class="px-4 py-3">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+                                <td class="px-4 py-3">{{ $item->quantity }}</td>
+                                <td class="px-4 py-3">Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         {{-- Total keseluruhan --}}
-        <div class="mt-4 text-right font-semibold text-gray-800 dark:text-gray-100">
-            Total Keseluruhan: Rp{{ number_format($total, 0, ',', '.') }}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <div class="text-right text-xl font-bold text-gray-800 dark:text-gray-100">
+                Total Keseluruhan: Rp{{ number_format($total, 0, ',', '.') }}
+            </div>
         </div>
 
         {{-- Tombol Kembali dan Update Status --}}
@@ -95,7 +88,7 @@
                     <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 </select>
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md transition">
-                    Update
+                    Update Status
                 </button>
             </form>
         </div>

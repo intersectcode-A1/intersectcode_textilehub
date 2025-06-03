@@ -5,7 +5,14 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\Cart;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 
 class CheckoutController extends Controller
 {
@@ -14,10 +21,20 @@ class CheckoutController extends Controller
      */
     public function show(Request $request)
     {
-        $productName = $request->query('product_name', 'Produk Tidak Diketahui');
-        $price = $request->query('price', 0);
+        $productId = $request->query('product_id');
+        $product = null;
+        
+        if ($productId) {
+            $product = Product::findOrFail($productId);
+            return view('ecatalog.checkout', [
+                'product' => $product,
+                'productId' => $productId,
+                'productName' => $product->nama,
+                'price' => $product->harga
+            ]);
+        }
 
-        return view('ecatalog.checkout', compact('productName', 'price'));
+        return redirect()->route('cart.index')->with('error', 'Produk tidak ditemukan');
     }
 
     /**
@@ -27,26 +44,57 @@ class CheckoutController extends Controller
     {
         $request->validate([
             'user_name' => 'required|string|max:255',
-            'email'     => 'required|email',
-            'alamat'    => 'required|string',
-            'telepon'   => 'required|string',
-            'produk'    => 'required|string',
-            'harga'     => 'required|numeric|min:0',
+            'email' => 'required|email',
+            'alamat' => 'required|string',
+            'telepon' => 'required|string',
+            'product_id' => 'required|exists:products,id',
         ]);
 
-        $order = new Order();
-        $order->user_id = Auth::id();
-        $order->produk = $request->produk;
-        $order->harga = $request->harga;
-        $order->user_name = $request->user_name;
-        $order->email = $request->email;
-        $order->alamat = $request->alamat;
-        $order->telepon = $request->telepon;
-        $order->status = 'pending';
+        try {
+            DB::beginTransaction();
 
-        $order->save();
+            // Create order
+            $order = new Order();
+            $order->user_id = Auth::id();
+            $order->user_name = $request->user_name;
+            $order->email = $request->email;
+            $order->alamat = $request->alamat;
+            $order->telepon = $request->telepon;
+            $order->status = 'pending';
+            $order->save();
 
-        return redirect()->route('order.status')->with('success', 'Pesanan berhasil dikirim!');
+            // Get product
+            $product = Product::findOrFail($request->product_id);
+            
+            if ($product->stok < 1) {
+                throw new \Exception('Stok produk tidak mencukupi');
+            }
+
+            // Create order item
+            $orderItem = new OrderItem([
+                'product_id' => $product->id,
+                'product_name' => $product->nama,
+                'quantity' => 1,
+                'price' => $product->harga
+            ]);
+            
+            $order->items()->save($orderItem);
+
+            // Update stock
+            $product->stok -= 1;
+            $product->save();
+
+            // Send notification to admin
+            $admins = User::where('role', 'admin')->get();
+            Notification::send($admins, new NewOrderNotification($order));
+
+            DB::commit();
+
+            return redirect()->route('order.status')->with('success', 'Pesanan berhasil dibuat!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -55,8 +103,9 @@ class CheckoutController extends Controller
     public function status()
     {
         $orders = Order::where('user_id', Auth::id())
-                       ->latest()
-                       ->paginate(10);
+                      ->with('items.product')
+                      ->latest()
+                      ->paginate(10);
 
         return view('ecatalog.status', compact('orders'));
     }
@@ -67,28 +116,48 @@ class CheckoutController extends Controller
     public function statusDetail($id)
     {
         $order = Order::where('id', $id)
-                      ->where('user_id', Auth::id())
-                      ->firstOrFail();
+                     ->where('user_id', Auth::id())
+                     ->with('items.product')
+                     ->firstOrFail();
 
         return view('ecatalog.statusdetail', compact('order'));
     }
 
     /**
-     * Membatalkan pesanan (bisa ditambahkan di sini jika ingin konsisten)
+     * Membatalkan pesanan
      */
     public function cancel($id)
     {
-        $order = Order::where('id', $id)
-                      ->where('user_id', Auth::id())
-                      ->firstOrFail();
+        try {
+            DB::beginTransaction();
 
-        if ($order->status === 'pending' || $order->status === null) {
-            $order->status = 'dibatalkan';
-            $order->save();
+            $order = Order::where('id', $id)
+                         ->where('user_id', Auth::id())
+                         ->with('items')
+                         ->firstOrFail();
 
-            return redirect()->route('order.status')->with('success', 'Pesanan berhasil dibatalkan.');
+            if ($order->status === 'pending') {
+                // Return stock for each item
+                foreach ($order->items as $item) {
+                    $product = Product::find($item->product_id);
+                    if ($product) {
+                        $product->stok += $item->quantity;
+                        $product->save();
+                    }
+                }
+
+                $order->status = 'cancelled';
+                $order->save();
+
+                DB::commit();
+                return redirect()->route('order.status')->with('success', 'Pesanan berhasil dibatalkan.');
+            }
+
+            DB::rollBack();
+            return redirect()->route('order.status')->with('error', 'Pesanan tidak dapat dibatalkan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('order.status')->with('error', 'Terjadi kesalahan saat membatalkan pesanan.');
         }
-
-        return redirect()->route('order.status')->with('error', 'Pesanan tidak dapat dibatalkan.');
     }
 }
