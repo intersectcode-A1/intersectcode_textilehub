@@ -43,7 +43,15 @@
                 {{-- Dropdown Akun --}}
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center text-white focus:outline-none">
-                        <img class="h-8 w-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u={{ auth()->user()->email }}" alt="User">
+                        @if(auth()->user()->profile_photo)
+                            <img class="h-8 w-8 rounded-full border-2 border-white object-cover" 
+                                 src="{{ asset('storage/' . auth()->user()->profile_photo) }}" 
+                                 alt="{{ auth()->user()->name }}">
+                        @else
+                            <img class="h-8 w-8 rounded-full border-2 border-white" 
+                                 src="https://i.pravatar.cc/100?u={{ auth()->user()->email }}" 
+                                 alt="{{ auth()->user()->name }}">
+                        @endif
                         <span class="ml-2 hidden sm:inline">{{ auth()->user()->name }}</span>
                         <i class="fa fa-caret-down ml-1"></i>
                     </button>
@@ -55,7 +63,7 @@
                             <p class="text-sm text-gray-600">{{ auth()->user()->email }}</p>
                         </div>
                         <ul class="divide-y text-sm text-gray-700">
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100"><i class="fa fa-user mr-2"></i>My Account</a></li>
+                            <li><a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-100"><i class="fa fa-user mr-2"></i>My Account</a></li>
                             <li><a href="#" class="block px-4 py-2 hover:bg-gray-100"><i class="fa fa-cog mr-2"></i>Settings</a></li>
                             <li><a href="#" class="block px-4 py-2 hover:bg-gray-100"><i class="fa fa-life-ring mr-2"></i>Support</a></li>
                         </ul>

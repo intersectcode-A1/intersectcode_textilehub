@@ -15,15 +15,34 @@
             <div class="p-6 sm:p-8 bg-gradient-to-r from-blue-500 to-blue-600">
                 <div class="flex items-center space-x-6">
                     <div class="relative">
-                        <img class="h-24 w-24 rounded-full border-4 border-white shadow-lg" 
-                             src="https://i.pravatar.cc/200?u={{ auth()->user()->email }}" 
-                             alt="{{ auth()->user()->name }}">
-                        <button class="absolute bottom-0 right-0 bg-white rounded-full p-1.5 shadow-lg hover:bg-gray-100">
+                        @if(auth()->user()->profile_photo)
+                            <img class="h-24 w-24 rounded-full border-4 border-white shadow-lg object-cover" 
+                                 src="{{ asset('storage/' . auth()->user()->profile_photo) }}" 
+                                 alt="{{ auth()->user()->name }}">
+                        @else
+                            <img class="h-24 w-24 rounded-full border-4 border-white shadow-lg" 
+                                 src="https://i.pravatar.cc/200?u={{ auth()->user()->email }}" 
+                                 alt="{{ auth()->user()->name }}">
+                        @endif
+                        
+                        <label for="profile_photo" class="absolute bottom-0 right-0 bg-white rounded-full p-1.5 shadow-lg hover:bg-gray-100 cursor-pointer">
                             <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
-                        </button>
+                        </label>
+                        @if(auth()->user()->profile_photo)
+                            <form action="{{ route('profile.photo.delete') }}" method="POST" class="absolute -bottom-2 -left-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-100 text-red-600 p-1 rounded-full hover:bg-red-200" 
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus foto profil?')">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        @endif
                     </div>
                     <div class="text-white">
                         <h1 class="text-2xl font-bold">{{ auth()->user()->name }}</h1>
@@ -51,9 +70,12 @@
             {{-- Profile Information Form --}}
             <div class="p-6 sm:p-8">
                 <h2 class="text-xl font-semibold text-gray-900 mb-6">Informasi Profil</h2>
-                <form action="{{ route('profile.update') }}" method="POST" class="space-y-6">
+                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     @method('PATCH')
+
+                    {{-- Hidden file input --}}
+                    <input type="file" name="profile_photo" id="profile_photo" class="hidden" accept="image/*" onchange="this.form.submit()">
 
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
@@ -98,48 +120,6 @@
                         </button>
                     </div>
                 </form>
-            </div>
-
-            {{-- Change Password Section --}}
-            <div class="border-t border-gray-200">
-                <div class="p-6 sm:p-8">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Ubah Password</h2>
-                    <form action="{{ route('password.update') }}" method="POST" class="space-y-6">
-                        @csrf
-                        @method('PUT')
-
-                        <div>
-                            <label for="current_password" class="block text-sm font-medium text-gray-700">Password Saat Ini</label>
-                            <input type="password" name="current_password" id="current_password"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('current_password')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700">Password Baru</label>
-                            <input type="password" name="password" id="password"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('password')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password Baru</label>
-                            <input type="password" name="password_confirmation" id="password_confirmation"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-
-                        <div class="flex justify-end">
-                            <button type="submit"
-                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                Ubah Password
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </section>

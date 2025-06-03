@@ -51,41 +51,119 @@
         </div>
 
         {{-- Search & Filter Section --}}
-        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
-            <form method="GET" action="{{ route('ecatalog.index') }}" class="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
-                <div class="flex-1">
-                    <input
-                        type="text"
-                        name="search"
-                        value="{{ request('search') }}"
-                        placeholder="Cari produk..."
-                        class="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                        aria-label="Cari produk"
-                    />
-                </div>
-                <div class="sm:w-48">
-                    <select
-                        name="category"
-                        class="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                        aria-label="Pilih kategori"
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8" x-data="{ showFilters: false }">
+            <form method="GET" action="{{ route('ecatalog.index') }}">
+                {{-- Search Bar and Filter Toggle --}}
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <input
+                            type="text"
+                            name="search"
+                            id="search"
+                            value="{{ request('search') }}"
+                            placeholder="Cari produk..."
+                            class="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        @click="showFilters = !showFilters"
+                        class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
-                        <option value="">Semua Kategori</option>
-                        @foreach(\App\Models\Category::all() as $category)
-                            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                        Filter
+                        <span class="ml-1" x-show="!showFilters">({{ count(array_filter(request()->only(['category', 'sort', 'min_price', 'max_price']))) }})</span>
+                    </button>
+                    <button
+                        type="submit"
+                        class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Cari
+                    </button>
                 </div>
-                <button
-                    type="submit"
-                    class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200 flex items-center justify-center space-x-2"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <span>Cari</span>
-                </button>
+
+                {{-- Collapsible Filter Section --}}
+                <div x-show="showFilters" x-transition:enter="transition ease-out duration-200" 
+                     x-transition:enter-start="opacity-0 transform -translate-y-2" 
+                     x-transition:enter-end="opacity-100 transform translate-y-0"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 transform translate-y-0"
+                     x-transition:leave-end="opacity-0 transform -translate-y-2"
+                     class="mt-4 border-t border-gray-200 pt-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                            <select
+                                name="category"
+                                id="category"
+                                class="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            >
+                                <option value="">Semua Kategori</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="sort" class="block text-sm font-medium text-gray-700 mb-1">Urutkan</label>
+                            <select
+                                name="sort"
+                                id="sort"
+                                class="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            >
+                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                                <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Harga Terendah</option>
+                                <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Harga Tertinggi</option>
+                                <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Nama (A-Z)</option>
+                                <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Nama (Z-A)</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2 lg:col-span-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Range Harga</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input
+                                    type="number"
+                                    name="min_price"
+                                    placeholder="Min"
+                                    value="{{ request('min_price', $priceRange['min']) }}"
+                                    min="{{ $priceRange['min'] }}"
+                                    max="{{ $priceRange['max'] }}"
+                                    class="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                />
+                                <input
+                                    type="number"
+                                    name="max_price"
+                                    placeholder="Max"
+                                    value="{{ request('max_price', $priceRange['max']) }}"
+                                    min="{{ $priceRange['min'] }}"
+                                    max="{{ $priceRange['max'] }}"
+                                    class="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Filter Actions --}}
+                    <div class="flex items-center justify-end space-x-4 mt-4">
+                        <a href="{{ route('ecatalog.index') }}" 
+                           class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Reset Filter
+                        </a>
+                        <button
+                            type="submit"
+                            class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                            Terapkan Filter
+                        </button>
+                    </div>
+                </div>
             </form>
         </div>
     </section>

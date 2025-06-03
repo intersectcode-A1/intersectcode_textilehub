@@ -24,6 +24,7 @@ use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CatalogController;
 use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\ProfileController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -85,6 +86,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
 
     // Logout
     Route::post('/logout', function () {
