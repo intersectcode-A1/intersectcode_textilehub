@@ -1,7 +1,7 @@
 <x-layouts.catalog>
     <div class="max-w-4xl mx-auto py-10 px-6">
         <div class="mb-8">
-            <a href="{{ route('order.status') }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
+            <a href="{{ route('purchase.history') }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
                 &larr; Kembali ke Daftar Pesanan
             </a>
         </div>

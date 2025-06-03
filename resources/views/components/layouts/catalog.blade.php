@@ -36,8 +36,10 @@
             <nav class="flex items-center space-x-4">
                 <a href="/" class="text-white text-sm px-3 py-2 rounded-md hover:bg-blue-600 transition duration-150 ease-in-out">Beranda</a>
 
-
                 @auth
+                {{-- Cart Icon --}}
+                <x-cart-icon />
+
                 {{-- Dropdown Akun --}}
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center text-white focus:outline-none">

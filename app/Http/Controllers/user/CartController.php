@@ -11,25 +11,29 @@ class CartController extends Controller
     // Tambah produk ke keranjang
     public function add(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        try {
+            $product = Product::findOrFail($id);
 
-        $cart = session()->get('cart', []);
+            $cart = session()->get('cart', []);
 
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-        } else {
-            $cart[$id] = [
-                'nama' => $product->nama,
-                'harga' => $product->harga,
-                'foto' => $product->foto,
-                'quantity' => 1
-            ];
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity']++;
+            } else {
+                $cart[$id] = [
+                    'nama' => $product->nama,
+                    'harga' => $product->harga,
+                    'foto' => $product->foto,
+                    'quantity' => 1
+                ];
+            }
+
+            session()->put('cart', $cart);
+
+            // Kembali ke halaman sebelumnya dengan pesan sukses
+            return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menambahkan produk ke keranjang.');
         }
-
-        session()->put('cart', $cart);
-
-        // Redirect ke halaman keranjang
-        return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 
     // Tampilkan isi keranjang

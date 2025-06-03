@@ -11,20 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::table('orders', function (Blueprint $table) {
-        $table->unsignedBigInteger('user_id')->nullable()->after('id');
-        // nullable jika user bisa guest, tidak wajib user_id
-        // jika pakai relasi user, bisa juga tambahkan foreign key:
-        // $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-    });
-}
+        // Kolom user_id sudah ada di migrasi utama
+    }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
-   {
-    Schema::table('orders', function (Blueprint $table) {
-        $table->dropColumn('user_id');
-    });
-}
+    {
+        // Tidak perlu melakukan apa-apa
+    }
 };

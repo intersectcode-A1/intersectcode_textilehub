@@ -33,14 +33,18 @@
         </div>
 
         {{-- Form Checkout --}}
-        <form action="{{ route('order.submit') }}" method="POST" class="space-y-4">
+        <form action="{{ isset($is_direct) ? route('order.submit') : route('order.submit.cart') }}" method="POST" class="space-y-4">
             @csrf
             
             {{-- Data tersembunyi untuk items --}}
-            <input type="hidden" name="total" value="{{ $total }}">
-            @foreach($items as $item)
-                <input type="hidden" name="items[]" value="{{ json_encode($item) }}">
-            @endforeach
+            @if(isset($is_direct))
+                <input type="hidden" name="product_id" value="{{ $items[0]['id'] }}">
+            @else
+                <input type="hidden" name="total" value="{{ $total }}">
+                @foreach($items as $item)
+                    <input type="hidden" name="items[]" value="{{ json_encode($item) }}">
+                @endforeach
+            @endif
 
             {{-- Nama pengguna --}}
             <div>
