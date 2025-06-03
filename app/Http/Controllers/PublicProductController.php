@@ -10,56 +10,44 @@ class PublicProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query();
-
-        // Filter pencarian nama produk jika ada input search
-        if ($request->has('search') && $request->search != '') {
-            $query->where('nama', 'like', '%' . $request->search . '%');
-        }
-
-        // Filter berdasarkan kategori jika ada input category
-        if ($request->has('category') && $request->category != '') {
-            $query->where('category_id', $request->category);
-        }
-
-        // Filter berdasarkan range harga
-        if ($request->has('min_price')) {
-            $query->where('harga', '>=', $request->min_price);
-        }
-        if ($request->has('max_price')) {
-            $query->where('harga', '<=', $request->max_price);
-        }
+        $query = Product::with(['category'])
+            ->withCount('orderItems')
+            ->when($request->filled('search'), function ($q) use ($request) {
+                return $q->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+            })
+            ->when($request->filled('category'), function ($q) use ($request) {
+                return $q->where('category_id', $request->category);
+            })
+            ->when($request->filled('min_price'), function ($q) use ($request) {
+                return $q->where('harga', '>=', $request->min_price);
+            })
+            ->when($request->filled('max_price'), function ($q) use ($request) {
+                return $q->where('harga', '<=', $request->max_price);
+            });
 
         // Sorting
-        $sort = $request->sort ?? 'latest';
-        switch ($sort) {
-            case 'price_low':
-                $query->orderBy('harga', 'asc');
-                break;
-            case 'price_high':
-                $query->orderBy('harga', 'desc');
-                break;
-            case 'name_asc':
-                $query->orderBy('nama', 'asc');
-                break;
-            case 'name_desc':
-                $query->orderBy('nama', 'desc');
-                break;
-            default:
-                $query->latest();
-                break;
-        }
+        $query->when($request->filled('sort'), function ($q) use ($request) {
+            return match ($request->sort) {
+                'price_low' => $q->orderBy('harga', 'asc'),
+                'price_high' => $q->orderBy('harga', 'desc'),
+                'name_asc' => $q->orderBy('nama', 'asc'),
+                'name_desc' => $q->orderBy('nama', 'desc'),
+                default => $q->latest(),
+            };
+        }, function ($q) {
+            return $q->latest();
+        });
 
-        // Ambil produk stok > 0 dengan pagination 12 per halaman
-        $products = $query->where('stok', '>', 0)->paginate(12)->withQueryString();
+        $products = $query->paginate(12)->withQueryString();
         
-        // Ambil semua kategori untuk filter
-        $categories = Category::all();
-        
-        // Ambil min dan max harga untuk range slider
+        // Get categories with product count
+        $categories = Category::withCount('products')->get();
+
+        // Get price range for filters
         $priceRange = [
-            'min' => Product::min('harga'),
-            'max' => Product::max('harga')
+            'min' => Product::min('harga') ?? 0,
+            'max' => Product::max('harga') ?? 1000000
         ];
 
         return view('ecatalog.index', compact('products', 'categories', 'priceRange'));
@@ -67,7 +55,7 @@ class PublicProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with(['category', 'orderItems'])->findOrFail($id);
         return view('ecatalog.detail', compact('product'));
     }
 }
