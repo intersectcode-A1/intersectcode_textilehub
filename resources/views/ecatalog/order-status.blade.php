@@ -11,8 +11,49 @@
         </div>
 
         <div class="text-center max-w-3xl mx-auto mb-12">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Status Pesanan</h1>
-            <p class="text-lg text-gray-600">Pantau status pesanan Anda</p>
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Status Pemesanan</h1>
+            <p class="text-lg text-gray-600">Pantau status pesanan yang sedang diproses</p>
+        </div>
+
+        {{-- Navigation Tabs --}}
+        <div class="flex justify-center space-x-4 mb-8">
+            <a href="{{ route('order.status') }}" 
+               class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg">
+                Status Pemesanan
+            </a>
+            <a href="{{ route('purchase.history') }}" 
+               class="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300">
+                Riwayat Pembelian
+            </a>
+        </div>
+
+        {{-- Filter Section --}}
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <form action="{{ route('order.status') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select name="status" class="w-full border rounded-lg px-3 py-2">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
+                        <option value="processing" {{ request('status') === 'processing' ? 'selected' : '' }}>Sedang Diproses</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Dari Tanggal</label>
+                    <input type="date" name="start_date" value="{{ request('start_date') }}" 
+                           class="w-full border rounded-lg px-3 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Sampai Tanggal</label>
+                    <input type="date" name="end_date" value="{{ request('end_date') }}" 
+                           class="w-full border rounded-lg px-3 py-2">
+                </div>
+                <div class="md:col-span-3 flex justify-end">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Filter
+                    </button>
+                </div>
+            </form>
         </div>
 
         {{-- Orders List --}}
@@ -41,8 +82,17 @@
                                     Rp {{ number_format($order->total, 0, ',', '.') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $order->status_color }}">
-                                        {{ $order->status_label }}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        @if($order->status === 'pending')
+                                            bg-yellow-100 text-yellow-800
+                                        @else
+                                            bg-blue-100 text-blue-800
+                                        @endif">
+                                        @if($order->status === 'pending')
+                                            Menunggu Konfirmasi
+                                        @else
+                                            Sedang Diproses
+                                        @endif
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -60,18 +110,13 @@
                                                 </button>
                                             </form>
                                         @endif
-                                        @if($order->status === 'completed')
-                                            <a href="{{ route('payment.show', $order->id) }}" class="text-green-600 hover:text-green-900 font-medium">
-                                                Bayar
-                                            </a>
-                                        @endif
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                    Belum ada pesanan
+                                    Tidak ada pesanan yang sedang diproses
                                 </td>
                             </tr>
                         @endforelse
@@ -85,7 +130,7 @@
             @endif
         </div>
 
-        {{-- Success Message --}}
+        {{-- Messages --}}
         @if(session('success'))
             <div class="mt-8 rounded-md bg-green-50 p-4">
                 <div class="flex">
@@ -95,12 +140,10 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm font-medium text-green-800">
-                            {{ session('success') }}
-                        </p>
+                        <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
                     </div>
                 </div>
             </div>
         @endif
     </section>
-</x-layouts.catalog>
+</x-layouts.catalog> 

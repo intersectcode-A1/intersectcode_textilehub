@@ -36,12 +36,12 @@ class OrderController extends Controller
 
         // Cek apakah status pesanan masih bisa dibatalkan
         if ($order->status === 'pending' || $order->status === null) {
-            $order->status = 'dibatalkan';
+            $order->status = 'cancelled';
             $order->save();
 
-            return redirect()->route('order.status')->with('success', 'Pesanan berhasil dibatalkan.');
+            return redirect()->route('purchase.history')->with('success', 'Pesanan berhasil dibatalkan.');
         }
 
-        return redirect()->route('order.status')->with('error', 'Pesanan tidak dapat dibatalkan karena sudah diproses atau selesai.');
+        return redirect()->route('purchase.history')->with('error', 'Pesanan tidak dapat dibatalkan karena sudah diproses atau selesai.');
     }
 }

@@ -22,6 +22,9 @@ use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\PublicProductController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\CatalogController;
+use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\ProfileController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -57,6 +60,16 @@ Route::middleware('auth')->group(function () {
     // E-Catalog
     Route::get('/ecatalog', [PublicProductController::class, 'index'])->name('ecatalog.index');
     Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.detail');
+    
+    // Riwayat & Status Pesanan
+    Route::get('/purchase-history', [CatalogController::class, 'purchaseHistory'])->name('purchase.history');
+    Route::get('/order-status', [CatalogController::class, 'orderStatus'])->name('order.status');
+    Route::get('/order/{id}', [CatalogController::class, 'orderDetail'])->name('order.detail');
+    Route::patch('/order/{id}/cancel', [CatalogController::class, 'cancel'])->name('order.cancel');
+
+    // Pembayaran
+    Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
+    Route::post('/payment/{id}/process', [PaymentController::class, 'process'])->name('payment.process');
 
     // Laporan Keuangan
     Route::get('/laporan-keuangan', [LaporanKeuanganController::class, 'index'])->name('laporan.index');
@@ -64,18 +77,20 @@ Route::middleware('auth')->group(function () {
 
     // Checkout dan Submit Order
     Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+    Route::get('/checkout-direct/{id}', [CheckoutController::class, 'showDirect'])->name('checkout.direct');
     Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
-
-    // Status Pesanan
-    Route::get('/order/status', [CheckoutController::class, 'status'])->name('order.status');
-    Route::get('/order/status/{id}', [CheckoutController::class, 'statusDetail'])->name('order.status.detail');
-    Route::patch('/order/{id}/cancel', [CheckoutController::class, 'cancel'])->name('order.cancel');
+    Route::post('/order/submit-cart', [CheckoutController::class, 'submitFromCart'])->name('order.submit.cart');
+    Route::get('/checkout-cart', [CartController::class, 'checkoutFromCart'])->name('checkout.cart');
 
     // 🛒 Keranjang (User)
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::get('/checkout-cart', [CartController::class, 'checkoutFromCart'])->name('checkout.cart');
+
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
 
     // Logout
     Route::post('/logout', function () {
