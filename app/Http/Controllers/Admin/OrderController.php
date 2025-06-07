@@ -26,7 +26,7 @@ class OrderController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled'])],
+            'status' => ['required', Rule::in(['pending', 'paid', 'processing', 'completed', 'cancelled'])],
         ]);
 
         $order = Order::findOrFail($id);
@@ -42,9 +42,30 @@ class OrderController extends Controller
                 }
             }
         }
+
+        // Jika status diubah menjadi paid, otomatis update payment_status
+        if ($request->status === 'paid') {
+            $order->payment_status = 'paid';
+        }
         
         $order->save();
         return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
+    }
+
+    public function verifyPayment(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        
+        $request->validate([
+            'payment_status' => 'required|in:paid,unpaid',
+            'payment_notes' => 'nullable|string'
+        ]);
+
+        $order->payment_status = $request->payment_status;
+        $order->payment_notes = $request->payment_notes;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui');
     }
 
     public function destroy(Order $order)

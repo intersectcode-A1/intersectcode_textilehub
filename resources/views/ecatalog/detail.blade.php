@@ -73,7 +73,7 @@
 
                     <div class="mb-6">
                         <div class="text-3xl font-bold text-green-600 mb-2">
-                            Rp {{ number_format($product->harga, 0, ',', '.') }}
+                            Rp {{ number_format($product->harga, 0, ',', '.') }}{{ $product->satuan ? '/' . $product->satuan : '' }}
                         </div>
                         <div class="flex items-center space-x-2">
                             <span class="text-sm text-gray-500">Kode Produk:</span>
