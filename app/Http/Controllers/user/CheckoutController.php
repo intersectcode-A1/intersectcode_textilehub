@@ -106,9 +106,12 @@ class CheckoutController extends Controller
 
             // Validasi input
             $request->validate([
-                'name' => 'required|string|max:255',
-                'phone' => 'required|string|max:20',
-                'address' => 'required|string|max:500'
+                'user_name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'telepon' => 'required|string|max:20',
+                'alamat' => 'required|string|max:500',
+                'items' => 'required|array',
+                'total' => 'required|numeric|min:0'
             ]);
 
             $cart = session()->get('cart', []);
@@ -116,35 +119,48 @@ class CheckoutController extends Controller
                 return back()->with('error', 'Keranjang belanja kosong.');
             }
 
-            $total = 0;
-            foreach ($cart as $id => $details) {
-                $product = Product::find($id);
-                if (!$product || $details['quantity'] > $product->stok) {
-                    return back()->with('error', 'Beberapa produk tidak tersedia atau stok tidak mencukupi.');
-                }
-                $total += $product->harga * $details['quantity'];
-            }
+            // Generate nomor pesanan
+            $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
 
             // Buat order baru
             $order = Order::create([
                 'user_id' => Auth::id(),
+                'order_number' => $orderNumber,
                 'status' => 'pending',
-                'total' => $total,
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'address' => $request->address
+                'payment_status' => 'unpaid',
+                'total' => $request->total,
+                'user_name' => $request->user_name,
+                'email' => $request->email,
+                'telepon' => $request->telepon,
+                'alamat' => $request->alamat
             ]);
 
+            // Decode items dari form
+            $items = array_map(function($item) {
+                return json_decode($item, true);
+            }, $request->items);
+
             // Buat order items dan kurangi stok
-            foreach ($cart as $id => $details) {
-                $product = Product::find($id);
+            foreach ($items as $item) {
+                $product = Product::find($item['id']);
+                
+                if (!$product) {
+                    throw new \Exception('Produk tidak ditemukan.');
+                }
+
+                if ($item['quantity'] > $product->stok) {
+                    throw new \Exception("Stok produk {$product->nama} tidak mencukupi.");
+                }
+
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $id,
-                    'quantity' => $details['quantity'],
-                    'price' => $product->harga
+                    'product_id' => $item['id'],
+                    'product_name' => $item['nama'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['harga']
                 ]);
-                $product->decrement('stok', $details['quantity']);
+
+                $product->decrement('stok', $item['quantity']);
             }
 
             // Kosongkan keranjang
@@ -157,7 +173,8 @@ class CheckoutController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan saat memproses pesanan. Silakan coba lagi.');
+            \Log::error('Checkout Error: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat memproses pesanan: ' . $e->getMessage());
         }
     }
 }

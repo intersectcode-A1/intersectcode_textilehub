@@ -118,4 +118,22 @@ class OrderController extends Controller
         $orders = $query->latest()->paginate(10);
         return view('admin.orders.index', compact('orders'));
     }
+
+    public function verifyPayment(Request $request, $id)
+    {
+        $request->validate([
+            'payment_status' => ['required', Rule::in(['unpaid', 'paid'])],
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->payment_status = $request->payment_status;
+        $order->save();
+
+        // Jika pembayaran diverifikasi, kirim notifikasi ke user
+        if ($request->payment_status === 'paid') {
+            // TODO: Implementasi notifikasi ke user bisa ditambahkan di sini
+        }
+
+        return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
+    }
 }

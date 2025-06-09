@@ -25,7 +25,9 @@ class Order extends Model
         'telepon',
         'status',
         'total',
-        'order_number'
+        'order_number',
+        'payment_status',
+        'payment_proof'
     ];
 
     protected $casts = [
