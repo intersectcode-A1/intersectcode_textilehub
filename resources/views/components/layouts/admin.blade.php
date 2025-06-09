@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Dashboard')</title>
+
+    {{-- Favicon --}}
+    <link rel="icon" type="image/png" href="{{ asset('image/img_logo_tokousahamuda.png') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,7 +17,10 @@
 <!-- Sidebar -->
 <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 shadow-lg h-screen sticky top-0 transition-all duration-300 overflow-hidden">
     <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
-        <span class="font-bold text-blue-600 dark:text-blue-400 sidebar-label">Toko Usaha Muda</span>
+        <div class="flex items-center gap-2">
+            <img src="{{ asset('image/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda" class="h-8 w-auto">
+            <span class="font-bold text-blue-600 dark:text-blue-400 sidebar-label">Toko Usaha Muda</span>
+        </div>
         <button onclick="toggleSidebar()">
             <i id="sidebar-icon" data-lucide="chevron-left"></i>
         </button>

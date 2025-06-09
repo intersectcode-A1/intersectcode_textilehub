@@ -5,6 +5,9 @@
     <title>{{ $title ?? 'Sistem Aplikasi' }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    {{-- Favicon --}}
+    <link rel="icon" type="image/png" href="{{ asset('image/img_logo_tokousahamuda.png') }}">
+    
     {{-- Font Awesome for icons --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 

@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Toko Usaha Muda</title>
 
+    {{-- Favicon --}}
+    <link rel="icon" type="image/png" href="{{ asset('image/img_logo_tokousahamuda.png') }}">
+
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
