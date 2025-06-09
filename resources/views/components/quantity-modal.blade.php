@@ -5,23 +5,8 @@
     quantity: 1,
     isCheckout: false,
     maxStock: {{ $product->stok }},
-    price: {{ $product->harga }},
-    total: {{ $product->harga }},
-    decrease() { 
-        if (this.quantity > 1) {
-            this.quantity--;
-            this.updateTotal();
-        }
-    },
-    increase() { 
-        if (this.quantity < this.maxStock) {
-            this.quantity++;
-            this.updateTotal();
-        }
-    },
-    updateTotal() {
-        this.total = this.quantity * this.price;
-    },
+    decrease() { if (this.quantity > 1) this.quantity--; },
+    increase() { if (this.quantity < this.maxStock) this.quantity++; },
     submit() {
         const form = this.isCheckout ? 
             document.getElementById('checkout-form-' + {{ $product->id }}) : 
@@ -29,7 +14,7 @@
         form.querySelector('input[name=quantity]').value = this.quantity;
         form.submit();
     }
-}" x-init="$watch('quantity', value => updateTotal())">
+}">
     <!-- Trigger Buttons -->
     <div class="flex space-x-2">
         <button @click="showModal = true; isCheckout = true" 
@@ -45,30 +30,18 @@
     <!-- Modal -->
     <div x-show="showModal" 
          class="fixed inset-0 z-50 overflow-y-auto"
-         style="display: none;"
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0">
+         style="display: none;">
         <div class="flex items-center justify-center min-h-screen px-4">
             <!-- Backdrop -->
             <div class="fixed inset-0 bg-black opacity-40" @click="showModal = false"></div>
 
             <!-- Modal Content -->
-            <div class="relative bg-white rounded-lg shadow-xl w-full max-w-xs mx-auto"
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="opacity-0 transform scale-95"
-                 x-transition:enter-end="opacity-100 transform scale-100"
-                 x-transition:leave="transition ease-in duration-200"
-                 x-transition:leave-start="opacity-100 transform scale-100"
-                 x-transition:leave-end="opacity-0 transform scale-95">
+            <div class="relative bg-white rounded-lg shadow-xl w-full max-w-xs mx-auto">
                 <div class="p-4">
                     <!-- Header -->
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center">
-                            <i class="fas fa-shopping-cart text-blue-600 mr-2"></i>
+                            <i class="fas fa-lock text-gray-600 mr-2"></i>
                             <span class="text-base font-medium">{{ $product->nama }}</span>
                         </div>
                         <button @click="showModal = false" class="text-gray-400 hover:text-gray-500">
@@ -81,18 +54,15 @@
                     <!-- Quantity Input -->
                     <div class="flex items-center justify-center space-x-4 mb-3">
                         <button @click="decrease()" 
-                                :class="{'opacity-50 cursor-not-allowed': quantity <= 1}"
                                 class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200">
                             <i class="fas fa-minus text-gray-600"></i>
                         </button>
                         <input type="number" 
-                               x-model.number="quantity"
-                               @input="updateTotal()"
+                               x-model="quantity"
                                class="w-16 text-center border-gray-300 rounded-lg"
                                min="1"
                                :max="maxStock">
                         <button @click="increase()"
-                                :class="{'opacity-50 cursor-not-allowed': quantity >= maxStock}"
                                 class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200">
                             <i class="fas fa-plus text-gray-600"></i>
                         </button>
@@ -106,20 +76,20 @@
                     <!-- Total -->
                     <div class="text-center mb-4">
                         <p class="text-sm text-gray-600">Total:</p>
-                        <p class="text-xl font-bold text-blue-600">
-                            Rp <span x-text="total.toLocaleString('id-ID')"></span>
+                        <p class="text-xl font-bold text-gray-900">
+                            Rp <span x-text="(quantity * {{ $product->harga }}).toLocaleString('id-ID')"></span>
                         </p>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex space-x-2">
                         <button @click="showModal = false"
-                                class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                                class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
                             Batal
                         </button>
                         <button @click="submit()"
-                                class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                            <span x-text="isCheckout ? 'Checkout' : 'Tambah ke Keranjang'"></span>
+                                class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            <span x-text="isCheckout ? 'Checkout' : 'Tambah'"></span>
                         </button>
                     </div>
                 </div>
@@ -132,7 +102,7 @@
           action="{{ route('checkout.direct', $product->id) }}" 
           method="GET" 
           class="hidden">
-        <input type="hidden" name="quantity" x-bind:value="quantity">
+        <input type="hidden" name="quantity" value="1">
     </form>
 
     <form id="cart-form-{{ $product->id }}"
@@ -140,6 +110,6 @@
           method="POST"
           class="hidden">
         @csrf
-        <input type="hidden" name="quantity" x-bind:value="quantity">
+        <input type="hidden" name="quantity" value="1">
     </form>
 </div> 

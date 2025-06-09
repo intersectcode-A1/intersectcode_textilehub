@@ -13,24 +13,41 @@ class CartController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
+            
+            // Validasi jumlah yang diminta
+            $quantity = $request->input('quantity', 1);
+            if ($quantity > $product->stok) {
+                return back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
+            }
 
             $cart = session()->get('cart', []);
 
             if (isset($cart[$id])) {
-                $cart[$id]['quantity']++;
+                // Jika produk sudah ada di keranjang, tambahkan quantity
+                $newQuantity = $cart[$id]['quantity'] + $quantity;
+                if ($newQuantity > $product->stok) {
+                    return back()->with('error', 'Total jumlah di keranjang melebihi stok yang tersedia.');
+                }
+                $cart[$id]['quantity'] = $newQuantity;
             } else {
+                // Jika produk belum ada di keranjang
                 $cart[$id] = [
                     'nama' => $product->nama,
                     'harga' => $product->harga,
                     'foto' => $product->foto,
-                    'quantity' => 1
+                    'quantity' => $quantity
                 ];
             }
 
             session()->put('cart', $cart);
 
-            // Kembali ke halaman sebelumnya dengan pesan sukses
-            return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+            // Hitung total item di keranjang
+            $totalItems = $this->getTotalItems();
+
+            return back()->with([
+                'success' => 'Produk berhasil ditambahkan ke keranjang!',
+                'cartCount' => $totalItems
+            ]);
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menambahkan produk ke keranjang.');
         }
@@ -40,7 +57,8 @@ class CartController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
-        return view('ecatalog.cart', compact('cart'));  // Sesuaikan folder view-nya
+        $totalItems = $this->getTotalItems();
+        return view('ecatalog.cart', compact('cart', 'totalItems'));
     }
 
     // Hapus produk dari keranjang
@@ -52,7 +70,11 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
-        return redirect()->route('cart.index')->with('success', 'Produk berhasil dihapus dari keranjang.');
+        $totalItems = $this->getTotalItems();
+        return redirect()->route('cart.index')->with([
+            'success' => 'Produk berhasil dihapus dari keranjang.',
+            'cartCount' => $totalItems
+        ]);
     }
 
     // Checkout dari keranjang
@@ -79,9 +101,22 @@ class CartController extends Controller
             ];
         }
 
+        $totalItems = $this->getTotalItems();
         return view('ecatalog.checkout-cart', [
             'items' => $items,
-            'total' => $total
+            'total' => $total,
+            'totalItems' => $totalItems
         ]);
+    }
+
+    // Helper method untuk menghitung total item di keranjang
+    private function getTotalItems()
+    {
+        $cart = session()->get('cart', []);
+        $totalItems = 0;
+        foreach ($cart as $item) {
+            $totalItems += $item['quantity'];
+        }
+        return $totalItems;
     }
 }

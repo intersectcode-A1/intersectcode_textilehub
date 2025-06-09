@@ -25,6 +25,7 @@ use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CatalogController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\Admin\UnitController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -86,7 +87,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
 
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -107,6 +107,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+    Route::resource('units', UnitController::class);
 
     // Pesanan dari user
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -114,6 +115,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::get('/orders/filter', [OrderController::class, 'filter'])->name('orders.filter');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::post('/orders/{id}/verify-payment', [OrderController::class, 'verifyPayment'])->name('orders.verifyPayment');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     // Pelacakan
