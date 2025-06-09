@@ -19,14 +19,14 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'order_number',
         'user_name',
         'email',
         'alamat',
         'telepon',
         'status',
-        'total',
-        'order_number',
         'payment_status',
+        'total',
         'payment_proof'
     ];
 
@@ -39,8 +39,11 @@ class Order extends Model
         parent::boot();
         
         static::creating(function ($order) {
-            $order->order_number = 'ORD-' . strtoupper(uniqid());
+            if (!$order->order_number) {
+                $order->order_number = 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
+            }
             $order->status = $order->status ?? self::STATUS_PENDING;
+            $order->payment_status = $order->payment_status ?? 'unpaid';
         });
     }
 
@@ -84,7 +87,7 @@ class Order extends Model
      */
     public function getStatusLabelAttribute()
     {
-        return self::getStatuses()[$this->status] ?? 'Tidak Diketahui';
+        return self::getStatuses()[$this->status] ?? $this->status;
     }
 
     /**
@@ -108,10 +111,6 @@ class Order extends Model
      */
     public function canBeCancelled()
     {
-        return in_array($this->status, [
-            self::STATUS_PENDING,
-            self::STATUS_PAID,
-            self::STATUS_PROCESSING
-        ]);
+        return in_array($this->status, [self::STATUS_PENDING, self::STATUS_PROCESSING]);
     }
 }
