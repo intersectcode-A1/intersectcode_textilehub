@@ -27,35 +27,6 @@
             </a>
         </div>
 
-        {{-- Filter Section --}}
-        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
-            <form action="{{ route('order.status') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <select name="status" class="w-full border rounded-lg px-3 py-2">
-                        <option value="">Semua Status</option>
-                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
-                        <option value="processing" {{ request('status') === 'processing' ? 'selected' : '' }}>Sedang Diproses</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Dari Tanggal</label>
-                    <input type="date" name="start_date" value="{{ request('start_date') }}" 
-                           class="w-full border rounded-lg px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Sampai Tanggal</label>
-                    <input type="date" name="end_date" value="{{ request('end_date') }}" 
-                           class="w-full border rounded-lg px-3 py-2">
-                </div>
-                <div class="md:col-span-3 flex justify-end">
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                        Filter
-                    </button>
-                </div>
-            </form>
-        </div>
-
         {{-- Orders List --}}
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
             <div class="overflow-x-auto">
