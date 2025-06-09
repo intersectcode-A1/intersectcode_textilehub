@@ -6,7 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['nama', 'harga', 'stok', 'deskripsi', 'foto', 'category_id'];
+    protected $fillable = [
+        'nama', 
+        'harga', 
+        'stok', 
+        'deskripsi', 
+        'foto', 
+        'category_id',
+        'satuan'
+    ];
 
     // Relasi ke kategori
     public function category()

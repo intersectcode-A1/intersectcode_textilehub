@@ -8,6 +8,19 @@
             <p class="mt-2 text-lg text-gray-400">Isi form berikut untuk menambahkan produk baru ke katalog</p>
         </div>
 
+        @if($errors->any())
+            <div class="mb-6">
+                <div class="bg-rose-500/10 border-l-4 border-rose-500 text-rose-200 p-4 rounded-r-xl" role="alert">
+                    <p class="font-semibold">Terjadi Kesalahan</p>
+                    <ul class="mt-2 list-disc list-inside">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
         <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
             <div class="p-8">
                 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
@@ -32,6 +45,29 @@
                         @enderror
                     </div>
 
+                    <!-- Kategori -->
+                    <div>
+                        <label for="category_id" class="block text-base font-medium text-gray-300">
+                            Kategori <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="mt-2">
+                            <select name="category_id" 
+                                    id="category_id" 
+                                    class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200" 
+                                    required>
+                                <option value="">-- Pilih Kategori --</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('category_id')
+                            <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Harga -->
                         <div>
@@ -48,6 +84,8 @@
                                        value="{{ old('harga') }}" 
                                        class="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200" 
                                        placeholder="0"
+                                       min="0"
+                                       step="1000"
                                        required>
                             </div>
                             @error('harga')
@@ -67,6 +105,8 @@
                                        value="{{ old('stok') }}" 
                                        class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200" 
                                        placeholder="0"
+                                       min="0"
+                                       step="1"
                                        required>
                             </div>
                             @error('stok')
@@ -83,37 +123,15 @@
                                 <input type="text" 
                                        name="satuan" 
                                        id="satuan" 
-                                       value="{{ old('satuan') }}"
+                                       value="{{ old('satuan') }}" 
                                        class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
-                                       placeholder="Contoh: pcs, kg, m, dll">
+                                       placeholder="Contoh: Pcs, Lusin, Kg"
+                                       required>
                             </div>
                             @error('satuan')
                                 <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
-
-                    <!-- Kategori -->
-                    <div>
-                        <label for="category_id" class="block text-base font-medium text-gray-300">
-                            Kategori <span class="text-rose-500">*</span>
-                        </label>
-                        <div class="mt-2">
-                            <select name="category_id" 
-                                    id="category_id" 
-                                    class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200" 
-                                    required>
-                                <option value="" disabled selected>-- Pilih Kategori --</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @error('category_id')
-                            <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Deskripsi -->
@@ -136,7 +154,7 @@
                     <!-- Foto -->
                     <div>
                         <label for="foto" class="block text-base font-medium text-gray-300">
-                            Foto Produk <span class="text-rose-500">*</span>
+                            Foto Produk
                         </label>
                         <div class="mt-2">
                             <div class="w-full flex flex-col items-center justify-center p-8 border-2 border-gray-600 border-dashed rounded-xl hover:border-indigo-500 hover:bg-gray-700/30 transition-all duration-300 cursor-pointer group" onclick="document.getElementById('foto').click()">

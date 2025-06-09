@@ -194,7 +194,7 @@
                                      class="w-full h-56 object-cover transform group-hover:scale-105 transition duration-300">
                                 <div class="absolute top-3 right-3">
                                     <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                        Stok: {{ $product->stok }}
+                                        Stok: {{ $product->stok }} {{ $product->satuan }}
                                     </span>
                                 </div>
                             </div>
@@ -217,7 +217,7 @@
                                     <span class="text-2xl font-bold text-blue-600">
                                         Rp {{ number_format($product->harga, 0, ',', '.') }}
                                     </span>
-                                    <span class="text-sm text-gray-500">/pcs</span>
+                                    <span class="text-sm text-gray-500">/{{ $product->satuan }}</span>
                                 </div>
 
                                 <div class="space-y-3">

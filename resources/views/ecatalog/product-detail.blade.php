@@ -64,9 +64,7 @@
                             {{ $product->stok > 0 ? 'Stok Tersedia' : 'Stok Habis' }}
                         </span>
                         @if($product->stok > 0)
-                            <span class="text-sm text-gray-500">
-                                ({{ $product->stok }} unit)
-                            </span>
+                            <span class="text-sm text-gray-500">/{{ $product->satuan }}</span>
                         @endif
                     </div>
 

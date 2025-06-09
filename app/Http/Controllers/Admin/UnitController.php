@@ -10,7 +10,7 @@ class UnitController extends Controller
 {
     public function index()
     {
-        $units = Unit::latest()->paginate(10);
+        $units = Unit::withCount('products')->paginate(10);
         return view('admin.units.index', compact('units'));
     }
 
@@ -54,14 +54,11 @@ class UnitController extends Controller
 
     public function destroy(Unit $unit)
     {
-        if($unit->products()->exists()) {
-            return redirect()->route('units.index')
-                ->with('error', 'Satuan tidak dapat dihapus karena masih digunakan oleh produk');
+        if ($unit->products()->count() > 0) {
+            return back()->with('error', 'Tidak dapat menghapus satuan yang masih digunakan oleh produk.');
         }
 
         $unit->delete();
-
-        return redirect()->route('units.index')
-            ->with('success', 'Satuan berhasil dihapus');
+        return back()->with('success', 'Satuan berhasil dihapus.');
     }
 } 

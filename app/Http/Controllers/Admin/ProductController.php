@@ -12,8 +12,8 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // Muat relasi category
-        $products = Product::with('category')->latest()->paginate(10);
+        // Muat relasi category dan unit
+        $products = Product::with(['category'])->latest()->paginate(10);
         $semuaKosong = $products->count() > 0 && $products->every(fn ($p) => $p->stok == 0);
         $categories = Category::all(); // Tambahkan ini untuk dropdown filter
         return view('admin.products.index', compact('products', 'semuaKosong', 'categories'));
@@ -32,6 +32,7 @@ class ProductController extends Controller
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
             'category_id' => 'required|exists:categories,id',
+            'satuan' => 'required|string|max:50',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -43,6 +44,7 @@ class ProductController extends Controller
             'harga' => $request->harga,
             'stok' => $request->stok,
             'category_id' => $request->category_id,
+            'satuan' => $request->satuan,
             'deskripsi' => $request->deskripsi,
             'foto' => $path,
         ]);
@@ -55,7 +57,7 @@ class ProductController extends Controller
         $categories = Category::all(); // untuk dropdown edit
         return view('admin.products.edit', [
             'data' => $product,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -66,6 +68,7 @@ class ProductController extends Controller
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
             'category_id' => 'required|exists:categories,id',
+            'satuan' => 'required|string|max:50',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);

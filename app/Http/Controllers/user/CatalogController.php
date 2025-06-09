@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CatalogController extends Controller
 {
@@ -26,78 +29,69 @@ class CatalogController extends Controller
         return view('user.catalog.show', compact('product'));
     }
 
-    public function purchaseHistory(Request $request)
+    /**
+     * Menampilkan riwayat pembelian user
+     */
+    public function purchaseHistory()
     {
-        $query = Order::where('user_id', auth()->id())
-            ->where('status', 'completed')
-            ->latest();
-
-        // Filter berdasarkan tanggal
-        if ($request->start_date) {
-            $query->whereDate('created_at', '>=', $request->start_date);
-        }
-        if ($request->end_date) {
-            $query->whereDate('created_at', '<=', $request->end_date);
-        }
-
-        $orders = $query->paginate(10);
+        $orders = Order::where('user_id', Auth::id())
+                      ->whereIn('status', ['completed', 'cancelled'])
+                      ->orderBy('created_at', 'desc')
+                      ->paginate(10);
 
         return view('ecatalog.purchase-history', compact('orders'));
     }
 
-    public function orderStatus(Request $request)
+    /**
+     * Menampilkan status pesanan yang sedang aktif
+     */
+    public function orderStatus()
     {
-        $query = Order::where('user_id', auth()->id())
-            ->whereIn('status', ['pending', 'processing'])
-            ->latest();
-
-        // Filter berdasarkan status
-        if ($request->status) {
-            $query->where('status', $request->status);
-        }
-
-        // Filter berdasarkan tanggal
-        if ($request->start_date) {
-            $query->whereDate('created_at', '>=', $request->start_date);
-        }
-        if ($request->end_date) {
-            $query->whereDate('created_at', '<=', $request->end_date);
-        }
-
-        $orders = $query->paginate(10);
-
+        $orders = Order::where('user_id', Auth::id())
+                      ->orderBy('created_at', 'desc')
+                      ->paginate(10);
         return view('ecatalog.order-status', compact('orders'));
     }
 
+    /**
+     * Menampilkan detail pesanan
+     */
     public function orderDetail($id)
     {
-        $order = Order::where('user_id', auth()->id())
-            ->with('items.product')
-            ->findOrFail($id);
-
+        $order = Order::with('items.product')->findOrFail($id);
+        if ($order->user_id !== Auth::id()) {
+            return back()->with('error', 'Anda tidak memiliki akses ke pesanan ini');
+        }
         return view('ecatalog.order-detail', compact('order'));
     }
 
+    /**
+     * Membatalkan pesanan
+     */
     public function cancel($id)
     {
-        $order = Order::where('user_id', auth()->id())->findOrFail($id);
-
-        if (!$order->canBeCancelled()) {
-            return back()->with('error', 'Pesanan ini tidak dapat dibatalkan.');
-        }
-
-        $order->status = Order::STATUS_CANCELLED;
-        $order->save();
-
-        // Kembalikan stok produk
-        foreach ($order->items as $item) {
-            $product = $item->product;
-            if ($product) {
-                $product->stok += $item->quantity;
-                $product->save();
+        try {
+            $order = Order::findOrFail($id);
+            
+            // Validasi apakah order milik user yang login
+            if ($order->user_id !== Auth::id()) {
+                return back()->with('error', 'Anda tidak memiliki akses untuk membatalkan pesanan ini');
             }
-        }
 
-        return back()->with('success', 'Pesanan berhasil dibatalkan.');
+            // Validasi apakah order masih bisa dibatalkan
+            if ($order->status !== 'pending') {
+                return back()->with('error', 'Pesanan tidak dapat dibatalkan karena status sudah berubah');
+            }
+
+            // Update status pesanan menjadi dibatalkan
+            $order->status = 'cancelled';
+            $order->save();
+
+            return back()->with('success', 'Pesanan berhasil dibatalkan');
+
+        } catch (\Exception $e) {
+            Log::error('Error saat membatalkan pesanan: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat membatalkan pesanan');
+        }
     }
 }
