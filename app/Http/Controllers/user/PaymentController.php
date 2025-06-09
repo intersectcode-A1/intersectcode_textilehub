@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -14,7 +15,7 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        $order = Order::where('user_id', auth()->id())
+        $order = Order::where('user_id', Auth::user()->id)
             ->findOrFail($id);
 
         if ($order->status !== 'completed') {
@@ -35,7 +36,7 @@ class PaymentController extends Controller
      */
     public function process(Request $request, $id)
     {
-        $order = Order::where('user_id', auth()->id())
+        $order = Order::where('user_id', Auth::user()->id)
             ->findOrFail($id);
 
         if ($order->status !== 'completed') {

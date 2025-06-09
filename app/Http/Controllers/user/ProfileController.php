@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class ProfileController extends Controller
@@ -17,7 +18,7 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        $user = auth()->user();
+        $user = User::find(Auth::id());
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -34,30 +35,28 @@ class ProfileController extends Controller
             'address' => $request->address,
         ];
 
-        // Handle profile photo upload
         if ($request->hasFile('profile_photo')) {
-            // Delete old photo if exists
             if ($user->profile_photo) {
                 Storage::disk('public')->delete($user->profile_photo);
             }
-
-            // Store new photo
             $path = $request->file('profile_photo')->store('profile-photos', 'public');
             $data['profile_photo'] = $path;
         }
 
-        $user->update($data);
+        $user->fill($data);
+        $user->save();
 
         return back()->with('success', 'Profil berhasil diperbarui!');
     }
 
     public function deletePhoto()
     {
-        $user = auth()->user();
+        $user = User::find(Auth::id());
         
         if ($user->profile_photo) {
             Storage::disk('public')->delete($user->profile_photo);
-            $user->update(['profile_photo' => null]);
+            $user->profile_photo = null;
+            $user->save();
         }
 
         return back()->with('success', 'Foto profil berhasil dihapus!');

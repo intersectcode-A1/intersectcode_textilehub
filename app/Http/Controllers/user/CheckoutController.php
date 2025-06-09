@@ -4,250 +4,160 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
+use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
-use App\Models\User;
-use App\Notifications\NewOrderNotification;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
     /**
-     * Tampilkan form checkout untuk pembelian langsung.
+     * Menampilkan form checkout untuk produk tunggal
      */
     public function showDirect($id)
     {
         try {
             $product = Product::findOrFail($id);
-            
-            // Buat array items seperti format cart untuk menggunakan view yang sama
-            $items = [[
-                'id' => $product->id,
-                'nama' => $product->nama,
-                'harga' => $product->harga,
-                'quantity' => 1,
-                'subtotal' => $product->harga
-            ]];
-            
-            $total = $product->harga;
+            $quantity = request('quantity', 1);
 
-            return view('ecatalog.checkout-cart', [
-                'items' => $items,
-                'total' => $total,
-                'is_direct' => true
+            // Validasi stok
+            if ($quantity > $product->stok) {
+                return redirect()->route('ecatalog.detail', $id)
+                    ->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
+            }
+
+            return view('ecatalog.checkout', [
+                'productId' => $product->id,
+                'productName' => $product->nama,
+                'price' => $product->harga * $quantity,
+                'quantity' => $quantity
             ]);
+
         } catch (\Exception $e) {
-            return redirect()->route('ecatalog.index')->with('error', 'Produk tidak ditemukan');
+            return redirect()->route('ecatalog.index')
+                ->with('error', 'Produk tidak ditemukan.');
         }
     }
 
     /**
-     * Tampilkan form checkout untuk single product.
-     */
-    public function show(Request $request)
-    {
-        $productId = $request->query('product_id');
-        
-        if (!$productId) {
-            return redirect()->route('ecatalog.index')->with('error', 'Produk tidak ditemukan');
-        }
-
-        $product = Product::findOrFail($productId);
-        return view('ecatalog.checkout', compact('product'));
-    }
-
-    /**
-     * Proses submit pesanan untuk single product.
+     * Submit order untuk checkout langsung
      */
     public function submit(Request $request)
     {
-        $request->validate([
-            'user_name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'alamat' => 'required|string',
-            'telepon' => 'required|string',
-            'product_id' => 'required|exists:products,id',
-        ]);
-
         try {
             DB::beginTransaction();
+
+            // Validasi input
+            $request->validate([
+                'product_id' => 'required|exists:products,id',
+                'quantity' => 'required|integer|min:1',
+                'name' => 'required|string|max:255',
+                'phone' => 'required|string|max:20',
+                'address' => 'required|string|max:500'
+            ]);
 
             $product = Product::findOrFail($request->product_id);
             
-            if ($product->stok < 1) {
-                throw new \Exception('Stok produk tidak mencukupi');
+            // Validasi stok
+            if ($request->quantity > $product->stok) {
+                return back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
             }
 
-            // Create order
-            $order = new Order();
-            $order->user_id = Auth::id();
-            $order->user_name = $request->user_name;
-            $order->email = $request->email;
-            $order->alamat = $request->alamat;
-            $order->telepon = $request->telepon;
-            $order->total = $product->harga;
-            $order->status = 'pending';
-            $order->save();
+            // Buat order baru
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'status' => 'pending',
+                'total' => $product->harga * $request->quantity,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'address' => $request->address
+            ]);
 
-            // Create order item
-            $orderItem = new OrderItem([
+            // Buat order item
+            OrderItem::create([
+                'order_id' => $order->id,
                 'product_id' => $product->id,
-                'product_name' => $product->nama,
-                'quantity' => 1,
+                'quantity' => $request->quantity,
                 'price' => $product->harga
             ]);
-            
-            $order->items()->save($orderItem);
 
-            // Update stock
-            $product->stok -= 1;
-            $product->save();
-
-            // Send notification to admin
-            $admins = User::where('role', 'admin')->get();
-            Notification::send($admins, new NewOrderNotification($order));
+            // Kurangi stok
+            $product->decrement('stok', $request->quantity);
 
             DB::commit();
 
-            return redirect()->route('order.status')->with('success', 'Pesanan berhasil dibuat!');
+            return redirect()->route('order.status')
+                ->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat memproses pesanan. Silakan coba lagi.');
         }
     }
 
     /**
-     * Proses submit pesanan dari cart.
+     * Submit order dari keranjang
      */
     public function submitFromCart(Request $request)
     {
-        $request->validate([
-            'user_name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'alamat' => 'required|string',
-            'telepon' => 'required|string',
-            'items' => 'required|array',
-            'total' => 'required|numeric'
-        ]);
-
         try {
             DB::beginTransaction();
 
-            // Create order
-            $order = new Order();
-            $order->user_id = Auth::id();
-            $order->user_name = $request->user_name;
-            $order->email = $request->email;
-            $order->alamat = $request->alamat;
-            $order->telepon = $request->telepon;
-            $order->total = $request->total;
-            $order->status = 'pending';
-            $order->save();
+            // Validasi input
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'phone' => 'required|string|max:20',
+                'address' => 'required|string|max:500'
+            ]);
 
-            // Process each item
-            foreach ($request->items as $itemData) {
-                $item = json_decode($itemData, true);
-                $product = Product::findOrFail($item['id']);
-                
-                if ($product->stok < $item['quantity']) {
-                    throw new \Exception("Stok tidak mencukupi untuk produk {$product->nama}");
-                }
-
-                // Create order item
-                $orderItem = new OrderItem([
-                    'product_id' => $product->id,
-                    'product_name' => $product->nama,
-                    'quantity' => $item['quantity'],
-                    'price' => $product->harga
-                ]);
-                
-                $order->items()->save($orderItem);
-
-                // Update stock
-                $product->stok -= $item['quantity'];
-                $product->save();
+            $cart = session()->get('cart', []);
+            if (empty($cart)) {
+                return back()->with('error', 'Keranjang belanja kosong.');
             }
 
-            // Clear cart session
-            session()->forget('cart');
+            $total = 0;
+            foreach ($cart as $id => $details) {
+                $product = Product::find($id);
+                if (!$product || $details['quantity'] > $product->stok) {
+                    return back()->with('error', 'Beberapa produk tidak tersedia atau stok tidak mencukupi.');
+                }
+                $total += $product->harga * $details['quantity'];
+            }
 
-            // Send notification to admin
-            $admins = User::where('role', 'admin')->get();
-            Notification::send($admins, new NewOrderNotification($order));
+            // Buat order baru
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'status' => 'pending',
+                'total' => $total,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'address' => $request->address
+            ]);
+
+            // Buat order items dan kurangi stok
+            foreach ($cart as $id => $details) {
+                $product = Product::find($id);
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $id,
+                    'quantity' => $details['quantity'],
+                    'price' => $product->harga
+                ]);
+                $product->decrement('stok', $details['quantity']);
+            }
+
+            // Kosongkan keranjang
+            session()->forget('cart');
 
             DB::commit();
 
-            return redirect()->route('order.status')->with('success', 'Pesanan berhasil dibuat!');
+            return redirect()->route('order.status')
+                ->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
-        }
-    }
-
-    /**
-     * Tampilkan status pesanan.
-     */
-    public function status()
-    {
-        $orders = Order::where('user_id', Auth::id())
-                      ->with('items.product')
-                      ->latest()
-                      ->paginate(10);
-
-        return view('ecatalog.status', compact('orders'));
-    }
-
-    /**
-     * Detail status pesanan.
-     */
-    public function statusDetail($id)
-    {
-        $order = Order::where('id', $id)
-                     ->where('user_id', Auth::id())
-                     ->with('items.product')
-                     ->firstOrFail();
-
-        return view('ecatalog.statusdetail', compact('order'));
-    }
-
-    /**
-     * Membatalkan pesanan
-     */
-    public function cancel($id)
-    {
-        try {
-            DB::beginTransaction();
-
-            $order = Order::where('id', $id)
-                         ->where('user_id', Auth::id())
-                         ->with('items')
-                         ->firstOrFail();
-
-            if ($order->status === 'pending') {
-                // Return stock for each item
-                foreach ($order->items as $item) {
-                    $product = Product::find($item->product_id);
-                    if ($product) {
-                        $product->stok += $item->quantity;
-                        $product->save();
-                    }
-                }
-
-                $order->status = 'cancelled';
-                $order->save();
-
-                DB::commit();
-                return redirect()->route('order.status')->with('success', 'Pesanan berhasil dibatalkan.');
-            }
-
-            DB::rollBack();
-            return redirect()->route('order.status')->with('error', 'Pesanan tidak dapat dibatalkan.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->route('order.status')->with('error', 'Terjadi kesalahan saat membatalkan pesanan.');
+            return back()->with('error', 'Terjadi kesalahan saat memproses pesanan. Silakan coba lagi.');
         }
     }
 }
