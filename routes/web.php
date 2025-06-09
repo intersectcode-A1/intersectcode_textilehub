@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
 
     // E-Catalog
     Route::get('/ecatalog', [PublicProductController::class, 'index'])->name('ecatalog.index');
-    Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.detail');
+    Route::get('/ecatalog/{id}', [PublicProductController::class, 'show'])->name('ecatalog.show');
     
     // Riwayat & Status Pesanan
     Route::get('/purchase-history', [CatalogController::class, 'purchaseHistory'])->name('purchase.history');
