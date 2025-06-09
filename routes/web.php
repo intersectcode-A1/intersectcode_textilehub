@@ -25,7 +25,6 @@ use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CatalogController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ProfileController;
-use App\Http\Controllers\Admin\UnitController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -108,7 +107,6 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('units', UnitController::class);
 
     // Pesanan dari user
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -116,7 +114,6 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::get('/orders/filter', [OrderController::class, 'filter'])->name('orders.filter');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
-    Route::post('/orders/{id}/verify-payment', [OrderController::class, 'verifyPayment'])->name('orders.verifyPayment');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     // Pelacakan

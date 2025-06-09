@@ -1,4 +1,4 @@
-@extends('components.layouts.admin')
+@extends('components.layouts.dashboard')
 
 @section('content')
 <div class="min-h-screen bg-gray-900 py-8">

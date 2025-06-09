@@ -184,63 +184,91 @@
                 </div>
 
                 {{-- Products Grid --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @forelse($products as $product)
                         {{-- Product Card --}}
-                        <article class="bg-white rounded-lg shadow-sm overflow-hidden">
-                            <div class="relative">
-                                <img src="{{ asset('storage/' . $product->foto) }}" 
-                                     alt="{{ $product->nama }}"
-                                     class="w-full h-48 object-cover">
+                        <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+                            {{-- Product Image --}}
+                            <div class="relative pt-[75%]">
+                                @if($product->foto)
+                                    <img src="{{ asset('storage/' . $product->foto) }}" 
+                                         alt="{{ $product->nama }}"
+                                         class="absolute inset-0 w-full h-full object-cover"/>
+                                @else
+                                    <div class="absolute inset-0 bg-gray-100 flex items-center justify-center">
+                                        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                @endif
+                                
+                                {{-- Stock Badge --}}
                                 <div class="absolute top-2 right-2">
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Stok: {{ $product->stok }}
-                                    </span>
+                                    @if($product->stok > 10)
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full">
+                                            Stok: {{ $product->stok }}
+                                        </span>
+                                    @elseif($product->stok > 0)
+                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-1 rounded-full">
+                                            Sisa: {{ $product->stok }}
+                                        </span>
+                                    @else
+                                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full">
+                                            Stok Habis
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
+                            {{-- Product Info --}}
                             <div class="p-4">
-                                @if($product->category)
-                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full mb-2">
-                                        {{ $product->category->name }}
-                                    </span>
-                                @endif
-
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">
-                                    {{ $product->nama }}
-                                </h3>
-                                <p class="text-sm text-gray-500 mb-4">
-                                    {{ Str::limit($product->deskripsi, 60) }}
-                                </p>
-
-                                <div class="mb-4">
-                                    <span class="text-xl font-bold text-blue-600">
-                                        Rp {{ number_format($product->harga, 0, ',', '.') }}/pcs
-                                    </span>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $product->nama }}</h3>
+                                <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ $product->deskripsi ?: 'Tidak ada deskripsi' }}</p>
+                                <div class="text-xl font-bold text-green-600 mb-4">
+                                    Rp {{ number_format($product->harga, 0, ',', '.') }}
                                 </div>
 
-                                @if($product->stok > 0)
-                                    <x-quantity-modal :product="$product" />
-                                @else
-                                    <div class="bg-gray-100 text-gray-500 text-sm text-center py-2 rounded">
-                                        Stok Habis
-                                    </div>
-                                @endif
+                                {{-- Action Buttons --}}
+                                <div class="grid grid-cols-2 gap-2">
+                                    @if($product->stok > 0)
+                                        <a href="{{ route('checkout.direct', $product->id) }}"
+                                           class="flex items-center justify-center bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                            Checkout
+                                        </a>
+                                        <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                    class="w-full flex items-center justify-center bg-yellow-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-200">
+                                                + Keranjang
+                                            </button>
+                                        </form>
+                                    @else
+                                        <div class="col-span-2">
+                                            <div class="bg-gray-100 text-gray-500 text-sm text-center py-2 rounded-lg">
+                                                Stok Tidak Tersedia
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <a href="{{ route('ecatalog.detail', $product->id) }}"
+                                   class="block text-center text-blue-600 hover:text-blue-800 text-sm font-medium mt-4">
+                                    Lihat Detail
+                                </a>
                             </div>
                         </article>
                     @empty
-                        <div class="col-span-full text-center py-12">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                                <i class="fas fa-box-open text-gray-400 text-2xl"></i>
-                            </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-1">Tidak ada produk</h3>
-                            <p class="text-gray-500">Tidak ada produk yang ditemukan dengan kriteria pencarian ini.</p>
+                        <div class="col-span-full flex flex-col items-center justify-center py-12">
+                            <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                            </svg>
+                            <p class="text-xl text-gray-600 font-medium">Tidak ada produk yang ditemukan</p>
                         </div>
                     @endforelse
                 </div>
 
                 {{-- Pagination --}}
-                <div class="mt-12">
+                <div class="mt-8">
                     {{ $products->links() }}
                 </div>
             </div>
