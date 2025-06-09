@@ -52,9 +52,10 @@ class CheckoutController extends Controller
             $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'quantity' => 'required|integer|min:1',
-                'name' => 'required|string|max:255',
-                'phone' => 'required|string|max:20',
-                'address' => 'required|string|max:500'
+                'user_name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'telepon' => 'required|string|max:20',
+                'alamat' => 'required|string|max:500'
             ]);
 
             $product = Product::findOrFail($request->product_id);
@@ -67,17 +68,21 @@ class CheckoutController extends Controller
             // Buat order baru
             $order = Order::create([
                 'user_id' => Auth::id(),
+                'order_number' => 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid()),
                 'status' => 'pending',
+                'payment_status' => 'unpaid',
                 'total' => $product->harga * $request->quantity,
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'address' => $request->address
+                'user_name' => $request->user_name,
+                'email' => $request->email,
+                'telepon' => $request->telepon,
+                'alamat' => $request->alamat
             ]);
 
             // Buat order item
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
+                'product_name' => $product->nama,
                 'quantity' => $request->quantity,
                 'price' => $product->harga
             ]);
@@ -92,6 +97,7 @@ class CheckoutController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('Checkout Error: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat memproses pesanan. Silakan coba lagi.');
         }
     }
