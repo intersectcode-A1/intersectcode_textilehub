@@ -15,7 +15,8 @@ class ProductController extends Controller
         // Muat relasi category
         $products = Product::with('category')->latest()->paginate(10);
         $semuaKosong = $products->count() > 0 && $products->every(fn ($p) => $p->stok == 0);
-        return view('admin.products.index', compact('products', 'semuaKosong'));
+        $categories = Category::all(); // Tambahkan ini untuk dropdown filter
+        return view('admin.products.index', compact('products', 'semuaKosong', 'categories'));
     }
 
     public function create()
