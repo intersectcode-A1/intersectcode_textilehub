@@ -63,6 +63,9 @@
                         {{-- Cart Icon --}}
                         <x-cart-icon />
 
+                        {{-- Order Status Icon --}}
+                        <x-order-status-icon />
+
                         {{-- User Menu --}}
                         <div class="relative" x-data="{ open: false }" x-cloak>
                             <button @click="open = !open" class="flex items-center text-white hover:text-blue-100 focus:outline-none">

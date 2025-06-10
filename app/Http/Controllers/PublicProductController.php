@@ -60,6 +60,7 @@ class PublicProductController extends Controller
         // Get related products from the same category, excluding current product
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
+            ->with(['category'])
             ->take(4)
             ->get();
 

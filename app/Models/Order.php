@@ -10,12 +10,10 @@ class Order extends Model
     use HasFactory;
 
     // Status Constants
-    const STATUS_PENDING = 'pending';
-    const STATUS_PAID = 'paid';
-    const STATUS_PROCESSING = 'processing';
-    const STATUS_SHIPPED = 'shipped';
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_CANCELLED = 'cancelled';
 
     protected $fillable = [
         'user_id',
@@ -27,34 +25,56 @@ class Order extends Model
         'status',
         'payment_status',
         'total',
-        'payment_proof'
+        'payment_proof',
+        'cancel_reason',
+        'cancelled_at'
     ];
 
     protected $casts = [
         'total' => 'decimal:2',
+        'cancelled_at' => 'datetime',
     ];
 
-    protected static function boot()
+    /**
+     * Cek apakah pesanan masih bisa dibatalkan
+     */
+    public function canBeCancelled()
     {
-        parent::boot();
-        
-        static::creating(function ($order) {
-            if (!$order->order_number) {
-                $order->order_number = 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
-            }
-            $order->status = $order->status ?? self::STATUS_PENDING;
-            $order->payment_status = $order->payment_status ?? 'unpaid';
-        });
+        return $this->status === self::STATUS_PENDING;
     }
 
+    /**
+     * Relasi dengan user
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Relasi dengan items pesanan
+     */
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Generate nomor order
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($order) {
+            if (!$order->order_number) {
+                $prefix = 'ORD-' . date('Y') . date('m') . date('d') . '-';
+                $unique = strtoupper(substr(uniqid(), -12));
+                $order->order_number = $prefix . $unique;
+            }
+            $order->status = $order->status ?? self::STATUS_PENDING;
+            $order->payment_status = $order->payment_status ?? 'unpaid';
+        });
     }
 
     /**
@@ -63,12 +83,10 @@ class Order extends Model
     public static function getStatuses()
     {
         return [
-            self::STATUS_PENDING => 'Menunggu Pembayaran',
-            self::STATUS_PAID => 'Sudah Dibayar',
-            self::STATUS_PROCESSING => 'Sedang Diproses',
-            self::STATUS_SHIPPED => 'Dikirim',
-            self::STATUS_COMPLETED => 'Selesai',
-            self::STATUS_CANCELLED => 'Dibatalkan'
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_PROCESSING => 'Processing',
+            self::STATUS_COMPLETED => 'Completed',
+            self::STATUS_CANCELLED => 'Cancelled'
         ];
     }
 
@@ -97,20 +115,10 @@ class Order extends Model
     {
         return match($this->status) {
             self::STATUS_PENDING => 'bg-yellow-100 text-yellow-800',
-            self::STATUS_PAID => 'bg-green-100 text-green-800',
             self::STATUS_PROCESSING => 'bg-blue-100 text-blue-800',
-            self::STATUS_SHIPPED => 'bg-indigo-100 text-indigo-800',
             self::STATUS_COMPLETED => 'bg-green-100 text-green-800',
             self::STATUS_CANCELLED => 'bg-red-100 text-red-800',
             default => 'bg-gray-100 text-gray-800'
         };
-    }
-
-    /**
-     * Check if order can be cancelled
-     */
-    public function canBeCancelled()
-    {
-        return in_array($this->status, [self::STATUS_PENDING, self::STATUS_PROCESSING]);
     }
 }

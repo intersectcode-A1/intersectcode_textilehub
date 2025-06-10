@@ -84,7 +84,7 @@
                         <span class="text-3xl font-bold text-primary-600">
                             Rp {{ number_format($product->harga, 0, ',', '.') }}
                         </span>
-                        <span class="text-lg text-gray-500">/pcs</span>
+                        <span class="text-lg text-gray-500">/{{ $product->unit->symbol ?? 'pcs' }}</span>
                     </div>
 
                     <div class="prose prose-blue max-w-none mb-8">
@@ -201,7 +201,7 @@
                                     <span class="text-2xl font-bold text-blue-600">
                                         Rp {{ number_format($product->harga, 0, ',', '.') }}
                                     </span>
-                                    <span class="text-sm text-gray-500">/pcs</span>
+                                    <span class="text-sm text-gray-500">/{{ $product->unit->symbol ?? 'pcs' }}</span>
                                 </div>
 
                                 <div class="space-y-3">

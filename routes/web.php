@@ -54,7 +54,7 @@ Route::middleware('guest')->group(function () {
 });
 
 // 🔐 Authenticated Routes (User Biasa)
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'web'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase-history', [CatalogController::class, 'purchaseHistory'])->name('purchase.history');
     Route::get('/order-status', [CatalogController::class, 'orderStatus'])->name('order.status');
     Route::get('/order/{id}', [CatalogController::class, 'orderDetail'])->name('order.detail');
-    Route::patch('/order/{id}/cancel', [CatalogController::class, 'cancel'])->name('order.cancel');
+    Route::patch('/order/{id}/cancel', [CatalogController::class, 'cancel'])->name('order.cancel')->middleware('web');
 
     // Pembayaran
     Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
@@ -107,7 +107,6 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('units', UnitController::class);
 
     // Pesanan dari user
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

@@ -27,7 +27,7 @@
             </a>
         </div>
 
-        {{-- Orders List --}}
+        {{-- Status Pesanan --}}
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -56,13 +56,21 @@
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                         @if($order->status === 'pending')
                                             bg-yellow-100 text-yellow-800
-                                        @else
+                                        @elseif($order->status === 'processing')
                                             bg-blue-100 text-blue-800
+                                        @elseif($order->status === 'cancelled')
+                                            bg-red-100 text-red-800
+                                        @else
+                                            bg-green-100 text-green-800
                                         @endif">
                                         @if($order->status === 'pending')
                                             Menunggu Konfirmasi
-                                        @else
+                                        @elseif($order->status === 'processing')
                                             Sedang Diproses
+                                        @elseif($order->status === 'cancelled')
+                                            Dibatalkan
+                                        @elseif($order->status === 'completed')
+                                            Selesai
                                         @endif
                                     </span>
                                 </td>
@@ -70,8 +78,8 @@
                                     <div class="flex items-center space-x-3">
                                         <a href="{{ route('order.detail', $order->id) }}" 
                                            class="text-blue-600 hover:text-blue-900">Detail</a>
-                                        @if($order->canBeCancelled())
-                                            <form action="{{ route('order.cancel', $order->id) }}" method="POST" class="inline">
+                                        @if($order->status === 'pending')
+                                            <form method="POST" action="{{ route('order.cancel', $order->id) }}" class="inline">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" 
@@ -87,7 +95,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                    Tidak ada pesanan yang sedang diproses
+                                    Tidak ada pesanan
                                 </td>
                             </tr>
                         @endforelse

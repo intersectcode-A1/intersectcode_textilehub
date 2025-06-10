@@ -145,15 +145,20 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-base font-medium text-gray-100">{{ $product->nama }}</div>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-300">{{ $product->nama }}</div>
+                                    <div class="text-xs text-gray-500">
+                                        {{ $product->category->name ?? 'Tanpa Kategori' }}
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-base font-medium text-indigo-400">Rp {{ number_format($product->harga, 0, ',', '.') }}</div>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-300">
+                                        Rp {{ number_format($product->harga, 0, ',', '.') }}
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-base text-gray-300">
-                                        {{ $product->satuan ?: '-' }}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-300">
+                                        {{ $product->satuan }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">

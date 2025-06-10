@@ -3,10 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    protected $fillable = ['nama', 'harga', 'stok', 'deskripsi', 'foto', 'category_id'];
+    use SoftDeletes;
+
+    protected $fillable = [
+        'nama', 
+        'harga', 
+        'stok', 
+        'deskripsi', 
+        'foto', 
+        'category_id',
+        'satuan'
+    ];
 
     // Relasi ke kategori
     public function category()

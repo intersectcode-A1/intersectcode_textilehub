@@ -124,16 +124,16 @@
                 </div>
 
                 <!-- Satuan -->
-                <div>
+                <div class="col-span-6 sm:col-span-3">
                     <label for="satuan" class="block text-sm font-medium text-gray-700 mb-1">
                         Satuan
                     </label>
-                    <input type="text" 
-                           name="satuan" 
-                           id="satuan" 
-                           value="{{ old('satuan', $product->satuan ?? '') }}"
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('satuan') border-red-300 @enderror"
-                           placeholder="Contoh: Pcs, Lusin, Meter, Kg">
+                    <input type="text"
+                        name="satuan"
+                        id="satuan"
+                        value="{{ old('satuan', $product->satuan ?? '') }}"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('satuan') border-red-300 @enderror"
+                        placeholder="Contoh: pcs, kg, meter">
                     @error('satuan')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror

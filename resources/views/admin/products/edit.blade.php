@@ -1,328 +1,196 @@
 @extends('components.layouts.admin')
 
+@section('title', 'Edit Produk')
+
 @section('content')
-<div class="min-h-screen bg-gray-900 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h1 class="text-3xl font-bold text-white">Edit Produk</h1>
-                <p class="mt-2 text-lg text-gray-400">Perbarui informasi produk yang ada</p>
-            </div>
-            <a href="{{ route('products.index') }}" 
-               class="inline-flex items-center px-6 py-3 text-base font-medium text-gray-300 bg-gray-800 border-2 border-gray-600 rounded-xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-500 transition-all duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Kembali ke Daftar
+    <div class="container mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-300">Edit Produk</h1>
+            <a href="{{ route('products.index') }}" class="btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Kembali
             </a>
         </div>
 
-        @if($errors->any())
-            <div class="mb-6">
-                <div class="bg-rose-500/10 border-l-4 border-rose-500 text-rose-200 p-4 rounded-r-xl" role="alert">
-                    <p class="font-semibold">Terjadi Kesalahan</p>
-                    <ul class="mt-2 list-disc list-inside">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+        @if(session('success'))
+            <div class="mb-6 p-4 bg-green-100 border border-green-200 text-green-700 rounded-lg">
+                {{ session('success') }}
             </div>
         @endif
 
-        <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
-            <div class="p-8">
-                <form action="{{ route('products.update', $product) }}" 
-                    method="POST" 
-                    enctype="multipart/form-data"
-                    class="space-y-8">
-                    @csrf
-                    @method('PUT')
+        @if(session('error'))
+            <div class="mb-6 p-4 bg-red-100 border border-red-200 text-red-700 rounded-lg">
+                {{ session('error') }}
+            </div>
+        @endif
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Nama Produk -->
-                        <div>
-                            <label for="nama" class="block text-base font-medium text-gray-300">
-                                Nama Produk <span class="text-rose-500">*</span>
-                            </label>
-                            <div class="mt-2">
-                                <input type="text" 
-                                    name="nama" 
-                                    id="nama" 
-                                    value="{{ old('nama', $product->nama) }}"
-                                    class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
-                                    required
-                                    placeholder="Masukkan nama produk">
-                            </div>
-                            @error('nama')
-                                <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
-                            @enderror
-                        </div>
+        <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+            <form action="{{ route('products.update', $data) }}" 
+                  method="POST" 
+                  enctype="multipart/form-data"
+                  class="space-y-6">
+                @csrf
+                @method('PUT')
 
-                        <!-- Kategori -->
-                        <div>
-                            <label for="category_id" class="block text-base font-medium text-gray-300">
-                                Kategori <span class="text-rose-500">*</span>
-                            </label>
-                            <div class="mt-2">
-                                <select name="category_id" 
-                                        id="category_id"
-                                        class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
-                                        required>
-                                    <option value="">Pilih Kategori</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('category_id')
-                                <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Harga -->
-                        <div>
-                            <label for="harga" class="block text-base font-medium text-gray-300">
-                                Harga <span class="text-rose-500">*</span>
-                            </label>
-                            <div class="mt-2 relative rounded-xl">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <span class="text-gray-400">Rp</span>
-                                </div>
-                                <input type="number" 
-                                    name="harga" 
-                                    id="harga" 
-                                    value="{{ old('harga', $product->harga) }}"
-                                    class="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
-                                    required
-                                    min="0"
-                                    step="1"
-                                    placeholder="0">
-                            </div>
-                            @error('harga')
-                                <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Stok -->
-                        <div>
-                            <label for="stok" class="block text-base font-medium text-gray-300">
-                                Stok <span class="text-rose-500">*</span>
-                            </label>
-                            <div class="mt-2">
-                                <input type="number" 
-                                    name="stok" 
-                                    id="stok" 
-                                    value="{{ old('stok', $product->stok) }}"
-                                    class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
-                                    required
-                                    min="0"
-                                    step="1"
-                                    placeholder="0">
-                            </div>
-                            @error('stok')
-                                <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Satuan -->
-                        <div>
-                            <label for="satuan" class="block text-base font-medium text-gray-300">
-                                Satuan <span class="text-rose-500">*</span>
-                            </label>
-                            <div class="mt-2">
-                                <input type="text" 
-                                    name="satuan" 
-                                    id="satuan" 
-                                    value="{{ old('satuan', $product->satuan) }}"
-                                    class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
-                                    placeholder="Contoh: pcs, kg, m, dll">
-                            </div>
-                            @error('satuan')
-                                <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Deskripsi -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Nama Produk -->
                     <div>
-                        <label for="deskripsi" class="block text-base font-medium text-gray-300">
-                            Deskripsi Produk
+                        <label for="nama" class="block text-base font-medium text-gray-300">
+                            Nama Produk <span class="text-rose-500">*</span>
                         </label>
                         <div class="mt-2">
-                            <textarea name="deskripsi" 
-                                    id="deskripsi" 
-                                    rows="4"
-                                    class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
-                                    placeholder="Masukkan deskripsi produk">{{ old('deskripsi', $product->deskripsi) }}</textarea>
+                            <input type="text" 
+                                name="nama" 
+                                id="nama" 
+                                value="{{ old('nama', $data->nama) }}"
+                                class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
+                                required
+                                placeholder="Masukkan nama produk">
                         </div>
-                        @error('deskripsi')
+                        @error('nama')
+                            <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Kategori -->
+                    <div>
+                        <label for="category_id" class="block text-base font-medium text-gray-300">
+                            Kategori <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="mt-2">
+                            <select name="category_id" 
+                                    id="category_id" 
+                                    class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
+                                    required>
+                                <option value="">Pilih Kategori</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" 
+                                            {{ old('category_id', $data->category_id) == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('category_id')
+                            <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Harga -->
+                    <div>
+                        <label for="harga" class="block text-base font-medium text-gray-300">
+                            Harga <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="mt-2">
+                            <input type="number" 
+                                name="harga" 
+                                id="harga" 
+                                value="{{ old('harga', $data->harga) }}"
+                                class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
+                                required
+                                min="0"
+                                step="1000"
+                                placeholder="0">
+                        </div>
+                        @error('harga')
+                            <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Stok -->
+                    <div>
+                        <label for="stok" class="block text-base font-medium text-gray-300">
+                            Stok <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="mt-2">
+                            <input type="number" 
+                                name="stok" 
+                                id="stok" 
+                                value="{{ old('stok', $data->stok) }}"
+                                class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
+                                required
+                                min="0"
+                                step="1"
+                                placeholder="0">
+                        </div>
+                        @error('stok')
+                            <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Satuan -->
+                    <div>
+                        <label for="satuan" class="block text-base font-medium text-gray-300">
+                            Satuan <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="mt-2">
+                            <input type="text" 
+                                   name="satuan" 
+                                   id="satuan" 
+                                   value="{{ old('satuan', $data->satuan) }}"
+                                   class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
+                                   required
+                                   placeholder="Contoh: Pcs, Lusin, Kg">
+                        </div>
+                        @error('satuan')
                             <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Foto -->
-                    <div>
+                    <div class="md:col-span-2">
                         <label for="foto" class="block text-base font-medium text-gray-300">
-                            Foto Produk <span class="text-rose-500">*</span>
+                            Foto Produk
                         </label>
                         <div class="mt-2">
-                            <div class="w-full flex flex-col items-center justify-center p-8 border-2 border-gray-600 border-dashed rounded-xl hover:border-indigo-500 hover:bg-gray-700/30 transition-all duration-300 cursor-pointer group" onclick="document.getElementById('foto').click()">
-                                <!-- Area Upload -->
-                                <div id="uploadIcon" class="text-center">
-                                    <svg class="mx-auto h-16 w-16 text-gray-400 group-hover:text-indigo-400 transition-colors duration-300" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    <div class="mt-4">
-                                        <span class="text-indigo-400 group-hover:text-indigo-300 text-lg font-medium transition-colors duration-300">Klik untuk upload gambar baru</span>
-                                        <p class="text-sm text-gray-400 mt-2">PNG, JPG, JPEG (Maks. 2MB)</p>
-                                    </div>
-                                </div>
-
-                                <input id="foto" 
-                                       name="foto" 
-                                       type="file" 
-                                       class="hidden" 
-                                       accept=".jpg,.jpeg,.png">
-                            </div>
+                            <input type="file" 
+                                name="foto" 
+                                id="foto" 
+                                accept="image/*"
+                                class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                         </div>
+                        @if($data->foto)
+                            <div class="mt-2">
+                                <img src="{{ asset('storage/' . $data->foto) }}" 
+                                     alt="Preview" 
+                                     class="w-32 h-32 object-cover rounded-lg">
+                            </div>
+                        @endif
                         @error('foto')
                             <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
                         @enderror
+                    </div>
 
-                        <!-- Preview Foto -->
-                        <div class="mt-6 space-y-6">
-                            @if($product->foto)
-                            <div>
-                                <p class="text-base font-medium text-gray-300 mb-3">Foto Saat Ini:</p>
-                                <div class="bg-gray-700/30 rounded-xl p-6 border-2 border-gray-600">
-                                    <div class="relative w-full max-w-md mx-auto">
-                                        <img src="{{ asset('storage/' . $product->foto) }}" 
-                                             alt="Foto Produk" 
-                                             class="w-full h-80 object-contain rounded-lg border-2 border-gray-600 bg-gray-800/50">
-                                    </div>
-                                    <div class="mt-4 text-center">
-                                        <p class="text-sm text-gray-400">Foto produk yang sedang digunakan</p>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-
-                            <div id="imagePreview" class="hidden">
-                                <p class="text-base font-medium text-gray-300 mb-3">Preview Foto Baru:</p>
-                                <div class="bg-gray-700/30 rounded-xl p-6 border-2 border-gray-600">
-                                    <div class="relative w-full max-w-md mx-auto">
-                                        <img id="preview" class="w-full h-80 object-contain rounded-lg border-2 border-gray-600 bg-gray-800/50">
-                                        <button type="button" 
-                                                onclick="clearImage(event)" 
-                                                class="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-2 hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-rose-500 transition-all duration-200">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <div class="mt-4 text-center">
-                                        <p class="text-sm text-gray-400" id="imageInfo"></p>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Deskripsi -->
+                    <div class="md:col-span-2">
+                        <label for="deskripsi" class="block text-base font-medium text-gray-300">
+                            Deskripsi
+                        </label>
+                        <div class="mt-2">
+                            <textarea name="deskripsi" 
+                                      id="deskripsi" 
+                                      rows="4" 
+                                      class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border-2 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-30 transition-all duration-200"
+                                      placeholder="Masukkan deskripsi produk">{{ old('deskripsi', $data->deskripsi) }}</textarea>
                         </div>
+                        @error('deskripsi')
+                            <p class="mt-2 text-sm text-rose-500">{{ $message }}</p>
+                        @enderror
                     </div>
+                </div>
 
-                    <!-- Buttons -->
-                    <div class="flex items-center justify-end space-x-4 pt-6">
-                        <a href="{{ route('products.index') }}" 
-                           class="inline-flex items-center justify-center px-6 py-3 border-2 border-gray-600 rounded-xl text-base font-medium text-gray-300 bg-transparent hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-500 transition-all duration-200">
-                            <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                            Batal
-                        </a>
-                        <button type="submit" 
-                                class="inline-flex items-center justify-center px-6 py-3 border-2 border-transparent rounded-xl text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500 transition-all duration-200">
-                            <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            Perbarui Produk
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <!-- Submit Button -->
+                <div class="flex justify-end space-x-4">
+                    <a href="{{ route('products.index') }}" 
+                       class="px-6 py-3 rounded-xl border-2 border-gray-600 text-gray-300 hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200">
+                        Batal
+                    </a>
+                    <button type="submit"
+                            class="px-6 py-3 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const fileInput = document.getElementById('foto');
-    fileInput.addEventListener('change', previewImage);
-});
-
-function previewImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    // Validasi ukuran file (maksimal 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-        alert('Ukuran file terlalu besar. Maksimal 2MB.');
-        event.target.value = '';
-        return;
-    }
-
-    // Validasi tipe file
-    if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-        alert('Tipe file tidak didukung. Gunakan JPG, JPEG, atau PNG.');
-        event.target.value = '';
-        return;
-    }
-
-    // Tampilkan preview
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const uploadIcon = document.getElementById('uploadIcon');
-        const imagePreview = document.getElementById('imagePreview');
-        const preview = document.getElementById('preview');
-        const imageInfo = document.getElementById('imageInfo');
-
-        // Sembunyikan icon upload dan tampilkan preview
-        uploadIcon.style.display = 'none';
-        imagePreview.style.display = 'block';
-        imagePreview.classList.remove('hidden');
-        
-        // Set gambar preview
-        preview.src = e.target.result;
-        
-        // Tampilkan informasi file
-        const fileSize = (file.size / 1024).toFixed(2);
-        imageInfo.textContent = `${file.name} (${fileSize} KB)`;
-    };
-    reader.readAsDataURL(file);
-}
-
-function clearImage(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const uploadIcon = document.getElementById('uploadIcon');
-    const imagePreview = document.getElementById('imagePreview');
-    const preview = document.getElementById('preview');
-    const imageInfo = document.getElementById('imageInfo');
-    const fileInput = document.getElementById('foto');
-
-    // Reset semua elemen
-    uploadIcon.style.display = 'block';
-    imagePreview.style.display = 'none';
-    imagePreview.classList.add('hidden');
-    preview.src = '';
-    imageInfo.textContent = '';
-    fileInput.value = '';
-}
-</script>
-@endpush
-
 @endsection
