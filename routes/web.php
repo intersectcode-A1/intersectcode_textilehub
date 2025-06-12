@@ -26,6 +26,7 @@ use App\Http\Controllers\User\CatalogController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\ProductVariantController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -77,11 +78,13 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::post('/laporan-keuangan/filter', [LaporanKeuanganController::class, 'filter'])->name('laporan.filter');
 
     // Checkout dan Submit Order
-    Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
-    Route::get('/checkout-direct/{id}', [CheckoutController::class, 'showDirect'])->name('checkout.direct');
-    Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
-    Route::post('/order/submit-cart', [CheckoutController::class, 'submitFromCart'])->name('order.submit.cart');
-    Route::get('/checkout-cart', [CartController::class, 'checkoutFromCart'])->name('checkout.cart');
+    Route::middleware(['throttle:6,1'])->group(function () {
+        Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+        Route::get('/checkout-direct/{id}', [CheckoutController::class, 'showDirect'])->name('checkout.direct');
+        Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
+        Route::post('/order/submit-cart', [CheckoutController::class, 'submitFromCart'])->name('order.submit.cart');
+        Route::get('/checkout-cart', [CartController::class, 'checkoutFromCart'])->name('checkout.cart');
+    });
 
     // 🛒 Keranjang (User)
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
@@ -129,4 +132,11 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
 
     // Store Order
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+
+    // Routes untuk varian produk
+    Route::get('/products/{product}/variants/create', [ProductVariantController::class, 'create'])->name('variants.create');
+    Route::post('/products/{product}/variants', [ProductVariantController::class, 'store'])->name('variants.store');
+    Route::get('/variants/{variant}/edit', [ProductVariantController::class, 'edit'])->name('variants.edit');
+    Route::put('/variants/{variant}', [ProductVariantController::class, 'update'])->name('variants.update');
+    Route::delete('/variants/{variant}', [ProductVariantController::class, 'destroy'])->name('variants.destroy');
 });

@@ -5,13 +5,43 @@
     quantity: 1,
     isCheckout: false,
     maxStock: {{ $product->stok }},
+    selectedVariants: {},
+    additionalPrice: 0,
+    variantStocks: {},
+    currentStock: {{ $product->stok }},
+    
     decrease() { if (this.quantity > 1) this.quantity--; },
-    increase() { if (this.quantity < this.maxStock) this.quantity++; },
+    increase() { if (this.quantity < this.currentStock) this.quantity++; },
+    
+    updatePrice() {
+        this.additionalPrice = Object.values(this.selectedVariants)
+            .reduce((sum, variant) => sum + parseFloat(variant.additional_price), 0);
+    },
+    
+    updateStock() {
+        if (Object.keys(this.selectedVariants).length > 0) {
+            this.currentStock = Math.min(...Object.values(this.variantStocks));
+        } else {
+            this.currentStock = this.maxStock;
+        }
+        // Pastikan quantity tidak melebihi stok yang tersedia
+        if (this.quantity > this.currentStock) {
+            this.quantity = this.currentStock;
+        }
+    },
+    
     submit() {
         const form = this.isCheckout ? 
             document.getElementById('checkout-form-' + {{ $product->id }}) : 
             document.getElementById('cart-form-' + {{ $product->id }});
+            
+        // Set quantity
         form.querySelector('input[name=quantity]').value = this.quantity;
+        
+        // Set selected variants
+        const selectedVariantIds = Object.values(this.selectedVariants).map(v => v.id);
+        form.querySelector('input[name=selected_variants]').value = selectedVariantIds.join(',');
+        
         form.submit();
     }
 }">
@@ -36,48 +66,86 @@
             <div class="fixed inset-0 bg-black opacity-40" @click="showModal = false"></div>
 
             <!-- Modal Content -->
-            <div class="relative bg-white rounded-lg shadow-xl w-full max-w-xs mx-auto">
-                <div class="p-4">
-                    <!-- Header -->
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-lock text-gray-600 mr-2"></i>
-                            <span class="text-base font-medium">{{ $product->nama }}</span>
-                        </div>
-                        <button @click="showModal = false" class="text-gray-400 hover:text-gray-500">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
+            <div class="relative bg-white rounded-lg max-w-md w-full p-6">
+                <div class="absolute top-4 right-4">
+                    <button @click="showModal = false" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
 
-                    <p class="text-sm text-gray-600 mb-4">Masukkan jumlah yang ingin dibeli</p>
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-center text-gray-900">
+                        {{ $product->nama }}
+                    </h3>
 
-                    <!-- Quantity Input -->
-                    <div class="flex items-center justify-center space-x-4 mb-3">
-                        <button @click="decrease()" 
-                                class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                            <i class="fas fa-minus text-gray-600"></i>
+                    <!-- Quantity Selector -->
+                    <div class="flex items-center justify-center space-x-4">
+                        <button @click="decrease()"
+                                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">
+                            <i class="fas fa-minus text-sm"></i>
                         </button>
-                        <input type="number" 
-                               x-model="quantity"
-                               class="w-16 text-center border-gray-300 rounded-lg"
-                               min="1"
-                               :max="maxStock">
+                        <span x-text="quantity" class="text-xl font-medium w-12 text-center"></span>
                         <button @click="increase()"
-                                class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                            <i class="fas fa-plus text-gray-600"></i>
+                                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">
+                            <i class="fas fa-plus text-sm"></i>
                         </button>
                     </div>
 
-                    <!-- Stock Info -->
-                    <p class="text-sm text-gray-500 text-center mb-3">
-                        Stok tersedia: {{ $product->stok }} pcs
-                    </p>
+                    <!-- Variants -->
+                    @if($product->variants->isNotEmpty())
+                        @php
+                            $groupedVariants = $product->variants->groupBy('type');
+                        @endphp
+
+                        @foreach($groupedVariants as $type => $variants)
+                            <div class="space-y-2">
+                                <p class="font-medium text-gray-700">
+                                    {{ $type === 'color' ? 'Pilih Warna' : 'Pilih Ukuran' }}
+                                </p>
+                                <div class="grid grid-cols-3 gap-2">
+                                    @foreach($variants as $variant)
+                                        <button type="button"
+                                                @click="
+                                                    if (selectedVariants['{{ $type }}']?.id === {{ $variant->id }}) {
+                                                        delete selectedVariants['{{ $type }}'];
+                                                    } else {
+                                                        selectedVariants['{{ $type }}'] = {
+                                                            id: {{ $variant->id }},
+                                                            name: '{{ $variant->name }}',
+                                                            type: '{{ $variant->type }}',
+                                                            additional_price: {{ $variant->additional_price }}
+                                                        };
+                                                        variantStocks['{{ $type }}'] = {{ $variant->stock }};
+                                                    }
+                                                    updatePrice();
+                                                    updateStock();
+                                                "
+                                                :class="{
+                                                    'ring-2 ring-blue-500': selectedVariants['{{ $type }}']?.id === {{ $variant->id }},
+                                                    'hover:border-blue-500': selectedVariants['{{ $type }}']?.id !== {{ $variant->id }}
+                                                }"
+                                                class="p-2 border rounded-lg text-center transition-all">
+                                            {{ $variant->name }}
+                                            @if($variant->additional_price > 0)
+                                                <div class="text-xs text-green-600">
+                                                    +{{ number_format($variant->additional_price, 0, ',', '.') }}
+                                                </div>
+                                            @endif
+                                            <div class="text-xs text-gray-500">
+                                                Stok: {{ $variant->stock }}
+                                            </div>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
 
                     <!-- Total -->
                     <div class="text-center mb-4">
                         <p class="text-sm text-gray-600">Total:</p>
                         <p class="text-xl font-bold text-gray-900">
-                            Rp <span x-text="(quantity * {{ $product->harga }}).toLocaleString('id-ID')"></span>
+                            Rp <span x-text="((quantity * {{ $product->harga }}) + (quantity * additionalPrice)).toLocaleString('id-ID')"></span>
                         </p>
                     </div>
 
@@ -103,6 +171,7 @@
           method="GET" 
           class="hidden">
         <input type="hidden" name="quantity" value="1">
+        <input type="hidden" name="selected_variants" value="">
     </form>
 
     <form id="cart-form-{{ $product->id }}"
@@ -111,5 +180,6 @@
           class="hidden">
         @csrf
         <input type="hidden" name="quantity" value="1">
+        <input type="hidden" name="selected_variants" value="">
     </form>
 </div> 

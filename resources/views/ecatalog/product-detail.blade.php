@@ -91,22 +91,117 @@
 
                     {{-- Action Buttons --}}
                     <div class="space-y-4 pt-6 border-t border-gray-200">
+                        {{-- Variant Selector --}}
+                        @if($product->variants && $product->variants->count() > 0)
+                            <div x-data="{ 
+                                selectedVariants: {},
+                                variantTypes: {{ json_encode($product->variants->pluck('type')->unique()) }},
+                                additionalPrice: 0,
+                                
+                                updatePrice() {
+                                    this.additionalPrice = Object.values(this.selectedVariants)
+                                        .reduce((sum, variant) => sum + parseFloat(variant.additional_price), 0);
+                                },
+                                
+                                isVariantAvailable(variantId) {
+                                    const variant = this.selectedVariants[variantId];
+                                    return variant ? variant.stock >= {{ $quantity ?? 1 }} : true;
+                                },
+                                
+                                allVariantsSelected() {
+                                    return this.variantTypes.every(type => 
+                                        Object.values(this.selectedVariants).some(v => v.type === type)
+                                    );
+                                }
+                            }" class="space-y-4">
+                                {{-- Group variants by type --}}
+                                @php
+                                    $groupedVariants = $product->variants->groupBy('type');
+                                @endphp
+
+                                @foreach($groupedVariants as $type => $variants)
+                                    <div class="space-y-2">
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            {{ $type === 'color' ? 'Pilih Warna' : 'Pilih Ukuran' }}:
+                                            <span class="text-rose-500">*</span>
+                                        </label>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach($variants as $variant)
+                                                <button type="button"
+                                                        @click="selectedVariants['{{ $type }}'] = {{ json_encode($variant) }}; updatePrice()"
+                                                        :class="{
+                                                            'ring-2 ring-blue-500 border-blue-500': selectedVariants['{{ $type }}']?.id === {{ $variant->id }},
+                                                            'ring-1 ring-gray-200 opacity-50 cursor-not-allowed': !isVariantAvailable({{ $variant->id }}),
+                                                            'ring-1 ring-gray-200 hover:border-blue-500': isVariantAvailable({{ $variant->id }}) && selectedVariants['{{ $type }}']?.id !== {{ $variant->id }}
+                                                        }"
+                                                        :disabled="!isVariantAvailable({{ $variant->id }})"
+                                                        class="px-4 py-2 rounded-lg bg-white border text-sm font-medium transition-all duration-200">
+                                                    <div class="flex items-center space-x-2">
+                                                        <span>{{ $variant->name }}</span>
+                                                        @if($variant->additional_price > 0)
+                                                            <span class="text-xs text-green-600">(+{{ number_format($variant->additional_price, 0, ',', '.') }})</span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="text-xs text-gray-500 mt-1">
+                                                        Stok: {{ $variant->stock }}
+                                                    </div>
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                {{-- Total Price Display --}}
+                                <div class="mt-4 text-lg font-semibold text-gray-900">
+                                    Total Harga: 
+                                    <span x-text="'Rp ' + new Intl.NumberFormat('id-ID').format({{ $product->harga }} + additionalPrice)"></span>
+                                </div>
+
+                                {{-- Error message for variants --}}
+                                <div x-show="!allVariantsSelected()" 
+                                     class="text-sm text-rose-500 mt-2">
+                                    Silakan pilih semua varian yang tersedia
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- Quantity Selector --}}
                         <div class="flex items-center space-x-4">
                             <label for="quantity" class="text-sm font-medium text-gray-700">Jumlah:</label>
                             <div class="flex items-center border border-gray-300 rounded-lg">
-                                <button type="button" class="p-2 text-gray-600 hover:text-gray-900" onclick="decrementQuantity()">-</button>
-                                <input type="number" id="quantity" name="quantity" min="1" max="{{ $product->stok }}" value="1"
-                                       class="w-16 text-center border-0 focus:ring-0">
-                                <button type="button" class="p-2 text-gray-600 hover:text-gray-900" onclick="incrementQuantity()">+</button>
+                                <button type="button" 
+                                        class="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50" 
+                                        onclick="decrementQuantity()"
+                                        :disabled="!allVariantsSelected()">
+                                    -
+                                </button>
+                                <input type="number" 
+                                       id="quantity" 
+                                       name="quantity" 
+                                       min="1" 
+                                       max="{{ $product->stok }}" 
+                                       value="1"
+                                       :disabled="!allVariantsSelected()"
+                                       class="w-16 text-center border-0 focus:ring-0 disabled:opacity-50">
+                                <button type="button" 
+                                        class="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50" 
+                                        onclick="incrementQuantity()"
+                                        :disabled="!allVariantsSelected()">
+                                    +
+                                </button>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
-                            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="flex-1">
+                            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="flex-1" x-data>
                                 @csrf
                                 <input type="hidden" name="quantity" id="cart-quantity" value="1">
+                                <template x-if="selectedVariants">
+                                    <input type="hidden" name="variants" :value="JSON.stringify(Object.values(selectedVariants))">
+                                </template>
                                 <button type="submit"
+                                        :disabled="!allVariantsSelected()"
+                                        :class="{'opacity-50 cursor-not-allowed': !allVariantsSelected()}"
                                         class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-3 rounded-lg transition duration-200 flex items-center justify-center space-x-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -115,9 +210,14 @@
                                 </button>
                             </form>
 
-                            <form action="{{ route('checkout.direct', $product->id) }}" method="GET" class="flex-1">
+                            <form action="{{ route('checkout.direct', $product->id) }}" method="GET" class="flex-1" x-data>
                                 <input type="hidden" name="quantity" id="buy-quantity" value="1">
+                                <template x-if="selectedVariants">
+                                    <input type="hidden" name="variants" :value="JSON.stringify(Object.values(selectedVariants))">
+                                </template>
                                 <button type="submit"
+                                        :disabled="!allVariantsSelected()"
+                                        :class="{'opacity-50 cursor-not-allowed': !allVariantsSelected()}"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-200">
                                     Beli Sekarang
                                 </button>

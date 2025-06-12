@@ -192,6 +192,170 @@
                 </div>
             </div>
 
+            <!-- Variants Section -->
+            <div class="border-t border-gray-300 mt-8 pt-8">
+                <h3 class="text-lg font-medium text-gray-700 mb-4">Varian Produk</h3>
+                <div x-data="{ variants: [] }">
+                    <div class="mb-4">
+                        <button type="button" 
+                                @click="variants.push({type: '', name: '', stock: 0, additional_price: 0})"
+                                class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            Tambah Varian
+                        </button>
+                    </div>
+
+                    <template x-for="(variant, index) in variants" :key="index">
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                    <label :for="'variants['+index+'][type]'" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Tipe Varian
+                                    </label>
+                                    <select :name="'variants['+index+'][type]'" 
+                                            :id="'variants['+index+'][type]'"
+                                            x-model="variant.type"
+                                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <option value="">Pilih Tipe</option>
+                                        <option value="color">Warna</option>
+                                        <option value="size">Ukuran</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label :for="'variants['+index+'][name]'" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Nama Varian
+                                    </label>
+                                    <input type="text" 
+                                           :name="'variants['+index+'][name]'"
+                                           :id="'variants['+index+'][name]'"
+                                           x-model="variant.name"
+                                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                           placeholder="Contoh: Merah, XL, dll">
+                                </div>
+
+                                <div>
+                                    <label :for="'variants['+index+'][stock]'" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Stok
+                                    </label>
+                                    <input type="number" 
+                                           :name="'variants['+index+'][stock]'"
+                                           :id="'variants['+index+'][stock]'"
+                                           x-model="variant.stock"
+                                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                           min="0">
+                                </div>
+
+                                <div>
+                                    <label :for="'variants['+index+'][additional_price]'" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Tambahan Harga
+                                    </label>
+                                    <div class="relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500 sm:text-sm">Rp</span>
+                                        </div>
+                                        <input type="number" 
+                                               :name="'variants['+index+'][additional_price]'"
+                                               :id="'variants['+index+'][additional_price]'"
+                                               x-model="variant.additional_price"
+                                               class="pl-12 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                               min="0">
+                                    </div>
+                                </div>
+
+                                <div class="md:col-span-4 flex justify-end">
+                                    <button type="button" 
+                                            @click="variants.splice(index, 1)"
+                                            class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                        Hapus Varian
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Existing Variants -->
+                    @if(isset($product) && $product->variants)
+                        @foreach($product->variants as $variant)
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Tipe Varian
+                                        </label>
+                                        <input type="text" 
+                                               name="existing_variants[{{ $variant->id }}][type]" 
+                                               value="{{ $variant->type }}"
+                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                               readonly>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Nama Varian
+                                        </label>
+                                        <input type="text" 
+                                               name="existing_variants[{{ $variant->id }}][name]"
+                                               value="{{ $variant->name }}"
+                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Stok
+                                        </label>
+                                        <input type="number" 
+                                               name="existing_variants[{{ $variant->id }}][stock]"
+                                               value="{{ $variant->stock }}"
+                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                               min="0">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            Tambahan Harga
+                                        </label>
+                                        <div class="relative rounded-md shadow-sm">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-gray-500 sm:text-sm">Rp</span>
+                                            </div>
+                                            <input type="number" 
+                                                   name="existing_variants[{{ $variant->id }}][additional_price]"
+                                                   value="{{ $variant->additional_price }}"
+                                                   class="pl-12 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                                   min="0">
+                                        </div>
+                                    </div>
+
+                                    <div class="md:col-span-4 flex justify-end">
+                                        <button type="button" 
+                                                onclick="if(confirm('Apakah Anda yakin ingin menghapus varian ini?')) document.getElementById('delete-variant-{{ $variant->id }}').submit()"
+                                                class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                            Hapus Varian
+                                        </button>
+                                        <form id="delete-variant-{{ $variant->id }}" 
+                                              action="{{ route('product-variants.destroy', $variant) }}" 
+                                              method="POST" 
+                                              class="hidden">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+
             <div class="flex justify-end space-x-3">
                 <a href="{{ route('products.index') }}" 
                    class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
