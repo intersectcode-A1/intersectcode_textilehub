@@ -26,6 +26,7 @@ use App\Http\Controllers\User\CatalogController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\HargaStrategiController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -129,4 +130,9 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
 
     // Store Order
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+
+    // Strategi Harga
+    Route::get('/harga-strategi', [HargaStrategiController::class, 'index'])->name('admin.harga-strategi.index');
+    Route::get('/harga-strategi/{id}/analisis', [HargaStrategiController::class, 'analisisProduk'])->name('admin.harga-strategi.analisis');
+    Route::post('/harga-strategi/{product}/update', [HargaStrategiController::class, 'updateHarga'])->name('admin.harga-strategi.update');
 });
