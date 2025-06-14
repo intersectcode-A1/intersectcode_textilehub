@@ -9,6 +9,7 @@
         @csrf
         @method('PUT')
         <div>
+
             <label class="block font-semibold">Nama Kategori</label>
             <input type="text" name="name" class="w-full border border-gray-300 px-3 py-2 rounded px-3 py-2 text-black bg-white" required>
         </div>

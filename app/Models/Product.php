@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'nama', 
         'harga', 
@@ -29,9 +31,8 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // Relasi ke varian produk
-    public function variants(): HasMany
+    public function priceHistory()
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(PriceHistory::class);
     }
 }
