@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('stok')->default(0);
             $table->string('foto')->nullable();
             $table->integer('berat')->default(0)->comment('Berat dalam gram');
+            $table->string('satuan')->nullable();
             $table->timestamps();
         });
     }

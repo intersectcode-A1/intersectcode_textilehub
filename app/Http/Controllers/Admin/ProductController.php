@@ -35,11 +35,16 @@ class ProductController extends Controller
             'satuan' => 'required|string|max:50',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'variants' => 'nullable|array',
+            'variants.*.type' => 'required_with:variants|in:color,size',
+            'variants.*.name' => 'required_with:variants|string|max:255',
+            'variants.*.stock' => 'required_with:variants|integer|min:0',
+            'variants.*.additional_price' => 'required_with:variants|numeric|min:0',
         ]);
 
         $path = $request->file('foto')?->store('produk', 'public');
 
-        Product::create([
+        $product = Product::create([
             'nama' => $request->nama,
             'harga' => $request->harga,
             'stok' => $request->stok,
@@ -48,6 +53,18 @@ class ProductController extends Controller
             'deskripsi' => $request->deskripsi,
             'foto' => $path,
         ]);
+
+        // Simpan varian jika ada
+        if ($request->has('variants')) {
+            foreach ($request->variants as $variantData) {
+                $product->variants()->create([
+                    'type' => $variantData['type'],
+                    'name' => $variantData['name'],
+                    'stock' => $variantData['stock'],
+                    'additional_price' => $variantData['additional_price']
+                ]);
+            }
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
     }
@@ -71,6 +88,11 @@ class ProductController extends Controller
             'satuan' => 'required|string|max:50',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'variants' => 'nullable|array',
+            'variants.*.type' => 'required_with:variants|in:color,size',
+            'variants.*.name' => 'required_with:variants|string|max:255',
+            'variants.*.stock' => 'required_with:variants|integer|min:0',
+            'variants.*.additional_price' => 'required_with:variants|numeric|min:0',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -79,6 +101,22 @@ class ProductController extends Controller
         }
 
         $product->update($data);
+
+        // Update varian
+        if ($request->has('variants')) {
+            // Hapus varian yang ada
+            $product->variants()->delete();
+            
+            // Tambah varian baru
+            foreach ($request->variants as $variantData) {
+                $product->variants()->create([
+                    'type' => $variantData['type'],
+                    'name' => $variantData['name'],
+                    'stock' => $variantData['stock'],
+                    'additional_price' => $variantData['additional_price']
+                ]);
+            }
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
     }

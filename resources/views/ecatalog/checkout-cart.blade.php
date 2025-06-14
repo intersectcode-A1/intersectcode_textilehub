@@ -1,149 +1,188 @@
 <x-layouts.catalog>
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Back Button -->
-        <div class="mb-6">
-            <a href="{{ route('cart.index') }}" class="inline-flex items-center text-sm text-gray-600 hover:text-gray-900">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Kembali ke Keranjang
-            </a>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    @php
+        $subtotal = 0;
+        foreach($items as $item) {
+            $itemAdditionalPrice = !empty($item['variants']) ? collect($item['variants'])->sum('additional_price') : 0;
+            $subtotal += ($item['harga'] + $itemAdditionalPrice) * $item['quantity'];
+        }
+    @endphp
+    <h1 class="text-2xl font-bold text-gray-900 mb-8">Checkout</h1>
+
+    @if(session('error'))
+        <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
         </div>
+    @endif
 
-        <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
-            <!-- Header -->
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-900">Checkout Keranjang</h1>
-                <p class="mt-2 text-sm text-gray-600">Silakan lengkapi data pemesanan Anda</p>
-            </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {{-- Form Checkout --}}
+        <div>
+            <div class="bg-white p-6 rounded-xl shadow">
+                <h2 class="text-lg font-semibold text-gray-900 mb-6">Informasi Pengiriman</h2>
 
-            {{-- Notifikasi --}}
-            @if(session('success'))
-                <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-600 rounded-md">
-                    {{ session('success') }}
-                </div>
-            @endif
+                <form action="{{ route('order.submit.cart') }}" method="POST" class="space-y-6">
+                    @csrf
 
-            @if(session('error'))
-                <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-600 rounded-md">
-                    {{ session('error') }}
-                </div>
-            @endif
-
-            {{-- Daftar Item --}}
-            <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Detail Pesanan</h2>
-                <div class="space-y-4">
-                    @foreach($items as $item)
-                        <div class="flex justify-between items-center border-b border-gray-200 pb-4">
-                            <div class="flex-1">
-                                <h4 class="font-medium text-gray-900">{{ $item['nama'] }}</h4>
-                                <div class="mt-1 flex items-center text-sm text-gray-600">
-                                    <span>{{ $item['quantity'] }} x </span>
-                                    <span class="mx-1">Rp {{ number_format($item['harga'], 0, ',', '.') }}</span>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-semibold text-gray-900">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</p>
-                            </div>
-                        </div>
-                    @endforeach
-                    
-                    <div class="flex justify-between items-center pt-4 font-bold">
-                        <span class="text-gray-900">Total Pembayaran</span>
-                        <span class="text-blue-600 text-lg">Rp {{ number_format($total, 0, ',', '.') }}</span>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Form Checkout --}}
-            <form action="{{ route('order.submit.cart') }}" method="POST" class="space-y-6">
-                @csrf
-                
-                {{-- Data tersembunyi untuk items --}}
-                <input type="hidden" name="total" value="{{ $total }}">
-                @foreach($items as $item)
-                    <input type="hidden" name="items[]" value="{{ json_encode($item) }}">
-                @endforeach
-
-                <!-- Informasi Pemesan -->
-                <div class="space-y-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Informasi Pemesan</h2>
-                    
-                    <!-- Nama -->
                     <div>
                         <label for="user_name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
                         <input type="text" 
                                name="user_name" 
                                id="user_name" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                               value="{{ old('user_name', auth()->user()->name ?? '') }}" 
+                               value="{{ old('user_name', auth()->user()->name ?? '') }}"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                required>
                         @error('user_name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <!-- Email -->
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                         <input type="email" 
                                name="email" 
                                id="email" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                               value="{{ old('email', auth()->user()->email ?? '') }}" 
+                               value="{{ old('email', auth()->user()->email ?? '') }}"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                required>
                         @error('email')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <!-- No. Telepon -->
                     <div>
-                        <label for="telepon" class="block text-sm font-medium text-gray-700">No. Telepon</label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-500 sm:text-sm">+62</span>
-                            </div>
-                            <input type="tel" 
-                                   name="telepon" 
-                                   id="telepon" 
-                                   class="pl-12 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                   value="{{ old('telepon', auth()->user()->phone ?? '') }}"
-                                   placeholder="8123456789"
-                                   required>
-                            @error('telepon')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        <label for="telepon" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
+                        <input type="tel" 
+                               name="telepon" 
+                               id="telepon" 
+                               value="{{ old('telepon', auth()->user()->phone ?? '') }}"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                               required>
+                        @error('telepon')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <!-- Alamat -->
                     <div>
-                        <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat Pengiriman</label>
+                        <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat Lengkap</label>
                         <textarea name="alamat" 
                                   id="alamat" 
-                                  rows="3" 
-                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                  rows="4"
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                   required>{{ old('alamat', auth()->user()->address ?? '') }}</textarea>
                         @error('alamat')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
 
-                <!-- Action Buttons -->
-                <div class="flex items-center justify-end space-x-3 pt-6 border-t">
-                    <a href="{{ route('cart.index') }}" 
-                       class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Batal
-                    </a>
-                    <button type="submit" 
-                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Proses Pesanan
-                    </button>
+                    {{-- Hidden inputs for cart items --}}
+                    @foreach($items as $item)
+                        <input type="hidden" name="items[]" value="{{ json_encode($item) }}">
+                    @endforeach
+                    <input type="hidden" name="total" value="{{ $total }}">
+
+                    <div class="flex justify-end space-x-4">
+                        <a href="{{ route('cart.index') }}" 
+                           class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Kembali ke Keranjang
+                        </a>
+                        <button type="submit" 
+                                class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Buat Pesanan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{-- Ringkasan Pesanan --}}
+        <div>
+            <div class="bg-white p-6 rounded-xl shadow">
+                <h2 class="text-lg font-semibold text-gray-900 mb-6">Ringkasan Pesanan</h2>
+
+                <div class="space-y-4">
+                    @foreach($items as $item)
+                        <div class="flex items-start space-x-4 pb-4 border-b border-gray-200 last:border-0 last:pb-0">
+                            @php
+                                $totalAdditionalPrice = 0; // Initialize with 0
+                            @endphp
+                            <div class="flex-1">
+                                <h3 class="text-sm font-medium text-gray-900">{{ $item['nama'] }}</h3>
+                                
+                                {{-- Tampilkan varian jika ada --}}
+                                @if(!empty($item['variants']))
+                                    <div class="mt-2 space-y-2">
+                                        {{-- Group variants by type --}}
+                                        @php
+                                            $groupedVariants = collect($item['variants'])->groupBy('type');
+                                            $totalAdditionalPrice = collect($item['variants'])->sum('additional_price');
+                                        @endphp
+
+                                        @foreach($groupedVariants as $type => $variants)
+                                            <div class="flex items-center gap-2">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $type === 'color' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+                                                    {{ $type === 'color' ? 'Warna' : 'Ukuran' }}
+                                                </span>
+                                                @foreach($variants as $variant)
+                                                    <div class="inline-flex items-center px-2.5 py-1 rounded-lg bg-gray-50">
+                                                        <span class="text-sm text-gray-700">{{ $variant['name'] }}</span>
+                                                        @if($variant['additional_price'] > 0)
+                                                            <span class="ml-2 text-xs text-green-600">
+                                                                +Rp {{ number_format($variant['additional_price'], 0, ',', '.') }}
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                {{-- Price breakdown --}}
+                                <div class="mt-3 space-y-1 text-sm">
+                                    <div class="text-gray-600">
+                                        Harga satuan: Rp {{ number_format($item['harga'], 0, ',', '.') }}
+                                    </div>
+                                    @if(!empty($item['variants']) && $totalAdditionalPrice > 0)
+                                        <div class="text-gray-600">
+                                            Harga tambahan varian: +Rp {{ number_format($totalAdditionalPrice, 0, ',', '.') }}
+                                        </div>
+                                    @endif
+                                    <div class="text-gray-600">
+                                        Jumlah: {{ $item['quantity'] }}
+                                    </div>
+                                    <div class="text-gray-900 font-medium">
+                                        Subtotal: Rp {{ number_format(($item['harga'] + ($totalAdditionalPrice ?? 0)) * $item['quantity'], 0, ',', '.') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    {{-- Order Summary --}}
+                    <div class="border-t border-gray-200 pt-4 mt-6">
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Subtotal Produk</span>
+                                <span>Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
+                            </div>
+                            @isset($shipping_cost)
+                                @if($shipping_cost > 0)
+                                    <div class="flex justify-between text-sm text-gray-600">
+                                        <span>Biaya Pengiriman</span>
+                                        <span>Rp {{ number_format($shipping_cost, 0, ',', '.') }}</span>
+                                    </div>
+                                @endif
+                            @endisset
+                            <div class="flex justify-between text-base font-semibold text-gray-900 pt-2">
+                                <span>Total</span>
+                                <span>Rp {{ number_format(($subtotal + ($shipping_cost ?? 0)), 0, ',', '.') }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
+</div>
 </x-layouts.catalog> 

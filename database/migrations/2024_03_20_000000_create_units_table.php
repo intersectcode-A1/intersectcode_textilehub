@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');        // Nama satuan (e.g., Lusin, Pcs, Meter)
-            $table->string('simbol');      // Simbol satuan (e.g., Lsn, Pcs, m)
-            $table->text('deskripsi')->nullable();
+            $table->string('name');        // Nama satuan (e.g., Lusin, Pcs, Meter)
+            $table->string('symbol');      // Simbol satuan (e.g., Lsn, Pcs, m)
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
