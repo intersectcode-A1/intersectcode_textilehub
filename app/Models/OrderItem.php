@@ -15,11 +15,13 @@ class OrderItem extends Model
         'product_name',
         'quantity',
         'price',
+        'variant_info'
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'quantity' => 'integer',
+        'variant_info' => 'json'
     ];
 
     /**

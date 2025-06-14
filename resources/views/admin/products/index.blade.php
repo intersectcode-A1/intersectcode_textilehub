@@ -119,63 +119,136 @@
                 <table class="min-w-full divide-y divide-gray-700">
                     <thead>
                         <tr class="bg-gray-900/50">
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Foto</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nama Produk</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Harga</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Satuan</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Stok</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Kategori</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Deskripsi</th>
-                            <th class="px-6 py-4 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Aksi</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-[100px]">Foto</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Info Produk</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Stok & Varian</th>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-gray-400 uppercase tracking-wider w-[150px]">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
                         @forelse($products as $product)
                             <tr class="hover:bg-gray-700/50 transition-all duration-200">
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <!-- Foto -->
+                                <td class="px-6 py-4">
                                     @if($product->foto)
                                         <img src="{{ asset('storage/' . $product->foto) }}" 
                                              alt="{{ $product->nama }}" 
-                                             class="w-16 h-16 object-cover rounded-xl shadow-sm ring-2 ring-gray-700">
+                                             class="w-20 h-20 object-cover rounded-xl shadow-sm ring-2 ring-gray-700">
                                     @else
-                                        <div class="w-16 h-16 bg-gray-700/50 rounded-xl flex items-center justify-center ring-2 ring-gray-600">
-                                            <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-20 h-20 bg-gray-700/50 rounded-xl flex items-center justify-center ring-2 ring-gray-600">
+                                            <svg class="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                             </svg>
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-300">{{ $product->nama }}</div>
-                                    <div class="text-xs text-gray-500">
-                                        {{ $product->category->name ?? 'Tanpa Kategori' }}
+
+                                <!-- Info Produk -->
+                                <td class="px-6 py-4">
+                                    <div class="space-y-2">
+                                        <div>
+                                            <h3 class="text-lg font-medium text-gray-200">{{ $product->nama }}</h3>
+                                            <div class="flex items-center space-x-2 mt-1">
+                                                <span class="text-gray-400">Kategori:</span>
+                                                <span class="px-2.5 py-0.5 rounded-full text-sm bg-gray-700/50 text-gray-300">
+                                                    {{ $product->category->name ?? 'Tanpa Kategori' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Harga:</span>
+                                                <span class="text-lg font-medium text-indigo-300 ml-1">
+                                                    Rp {{ number_format($product->harga, 0, ',', '.') }}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-400 text-sm">Satuan:</span>
+                                                <span class="text-gray-300 ml-1">{{ $product->satuan }}</span>
+                                            </div>
+                                        </div>
+                                        @if($product->deskripsi)
+                                            <div class="text-sm text-gray-400 max-w-xl">
+                                                {{ Str::limit($product->deskripsi, 100) }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-300">
-                                        Rp {{ number_format($product->harga, 0, ',', '.') }}
+
+                                <!-- Stok & Varian -->
+                                <td class="px-6 py-4">
+                                    <div class="space-y-3">
+                                        <!-- Stok -->
+                                        <div>
+                                            <span class="text-gray-400 text-sm">Stok Utama:</span>
+                                            <span class="px-4 py-1.5 ml-2 inline-flex text-sm leading-5 font-medium rounded-full {{ $product->stok > 0 ? 'bg-emerald-500/10 text-emerald-300' : 'bg-rose-500/10 text-rose-300' }}">
+                                                {{ $product->stok }}
+                                            </span>
+                                        </div>
+
+                                        <!-- Varian -->
+                                        <div>
+                                            <span class="text-gray-400 text-sm block mb-2">Varian Produk:</span>
+                                            @if($product->variants && $product->variants->count() > 0)
+                                                <div x-data="{ open: false }" class="relative">
+                                                    <button @click="open = !open" 
+                                                            class="inline-flex items-center px-3 py-1.5 bg-gray-700/50 text-gray-300 rounded-lg hover:bg-gray-600/50 transition-all duration-200">
+                                                        <span class="text-sm font-medium mr-2">{{ $product->variants->count() }} Varian</span>
+                                                        <svg class="w-4 h-4 transition-transform duration-200" 
+                                                             :class="{'rotate-180': open}"
+                                                             fill="none" 
+                                                             stroke="currentColor" 
+                                                             viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                        </svg>
+                                                    </button>
+                                                    
+                                                    <!-- Dropdown Panel -->
+                                                    <div x-show="open"
+                                                         x-transition:enter="transition ease-out duration-100"
+                                                         x-transition:enter-start="transform opacity-0 scale-95"
+                                                         x-transition:enter-end="transform opacity-100 scale-100"
+                                                         x-transition:leave="transition ease-in duration-75"
+                                                         x-transition:leave-start="transform opacity-100 scale-100"
+                                                         x-transition:leave-end="transform opacity-0 scale-95"
+                                                         @click.away="open = false"
+                                                         class="absolute left-0 z-50 mt-2 w-72 rounded-xl shadow-lg bg-gray-800 border-2 border-gray-700 divide-y divide-gray-700">
+                                                        <div class="py-2 max-h-60 overflow-y-auto">
+                                                            @foreach($product->variants as $variant)
+                                                                <div class="px-4 py-3 hover:bg-gray-700/50 transition-colors duration-150">
+                                                                    <div class="flex items-center justify-between">
+                                                                        <div class="flex items-center space-x-3">
+                                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $variant->type === 'color' ? 'bg-purple-500/10 text-purple-300' : 'bg-blue-500/10 text-blue-300' }}">
+                                                                                {{ $variant->type === 'color' ? 'Warna' : 'Ukuran' }}
+                                                                            </span>
+                                                                            <span class="text-gray-300 font-medium">{{ $variant->name }}</span>
+                                                                        </div>
+                                                                        <div class="text-right">
+                                                                            <div class="text-sm text-gray-300">Stok: {{ $variant->stock }}</div>
+                                                                            @if($variant->additional_price > 0)
+                                                                                <div class="text-xs text-indigo-300">+Rp {{ number_format($variant->additional_price, 0, ',', '.') }}</div>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <span class="inline-flex items-center px-3 py-1.5 bg-gray-700/30 text-gray-400 text-sm rounded-lg">
+                                                    Tidak ada varian
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-300">
-                                        {{ $product->satuan }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="px-4 py-1.5 inline-flex text-sm leading-5 font-medium rounded-full {{ $product->stok > 0 ? 'bg-emerald-500/10 text-emerald-300' : 'bg-rose-500/10 text-rose-300' }}">
-                                        {{ $product->stok }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-base text-gray-300">{{ $product->category->name ?? '-' }}</div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-base text-gray-400 max-w-xs truncate">{{ $product->deskripsi ?? '-' }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <div class="flex justify-end space-x-2">
+
+                                <!-- Aksi -->
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex flex-col space-y-2">
                                         <a href="{{ route('products.edit', $product) }}" 
-                                           class="inline-flex items-center px-4 py-2 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 rounded-xl transition-all duration-200">
+                                           class="inline-flex items-center justify-center px-4 py-2 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 rounded-xl transition-all duration-200">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
@@ -188,7 +261,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="inline-flex items-center px-4 py-2 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 rounded-xl transition-all duration-200">
+                                                    class="inline-flex items-center justify-center w-full px-4 py-2 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 rounded-xl transition-all duration-200">
                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
@@ -200,7 +273,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-4 text-center text-gray-400">
+                                <td colspan="4" class="px-6 py-4 text-center text-gray-400">
                                     <div class="flex flex-col items-center justify-center py-12">
                                         <svg class="w-20 h-20 text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>

@@ -1,40 +1,100 @@
-<p align="center"><img src="public/image/img_logo_tokousahamuda.png" width="400" alt="Toko Usaha Muda Logo"></p>
+# Textile Hub
 
-<h1 align="center">Toko Usaha Muda</h1>
+Sistem manajemen dan e-katalog untuk industri tekstil.
 
-<p align="center">
-Aplikasi e-commerce untuk Toko Usaha Muda yang memudahkan pelanggan dalam melakukan pembelian produk secara online.
-</p>
+## Fitur Utama
 
-## Fitur Aplikasi
+- Manajemen produk tekstil
+- E-katalog dengan fitur pencarian
+- Sistem pemesanan dan checkout
+- Dashboard admin
+- Manajemen pengguna dan hak akses
+- Sistem notifikasi
 
-- Manajemen Produk
-- Manajemen Kategori
-- Keranjang Belanja
-- Sistem Pemesanan
-- Riwayat Pembelian
-- Manajemen Pengguna
-- Dashboard Admin
-- Laporan Penjualan
+## Persyaratan Sistem
 
-## Teknologi yang Digunakan
-
-- Laravel 12
-- Livewire 3
-- Tailwind CSS
-- Alpine.js
-- MySQL
+- PHP >= 8.1
+- Node.js >= 16
+- MySQL >= 8.0
+- Composer
+- NPM
 
 ## Instalasi
 
-1. Clone repository ini
-2. Jalankan `composer install`
-3. Copy file `.env.example` ke `.env`
-4. Sesuaikan konfigurasi database di file `.env`
-5. Jalankan `php artisan key:generate`
-6. Jalankan `php artisan migrate --seed`
-7. Jalankan `php artisan serve`
+1. Clone repository:
+```bash
+git clone https://github.com/yourusername/textile-hub.git
+cd textile-hub
+```
 
-## Lisensi
+2. Install dependencies:
+```bash
+composer install
+npm install
+```
 
-Aplikasi ini dilindungi hak cipta. Hak cipta © 2024 Toko Usaha Muda.
+3. Setup environment:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+4. Konfigurasi database di file `.env`
+
+5. Jalankan migrasi:
+```bash
+php artisan migrate --seed
+```
+
+6. Link storage:
+```bash
+php artisan storage:link
+```
+
+7. Compile assets:
+```bash
+npm run dev
+```
+
+## Development
+
+- `npm run dev` - Start Vite development server
+- `php artisan serve` - Start Laravel development server
+- `php artisan test` - Run tests
+- `php artisan migrate:fresh --seed` - Reset database dengan data dummy
+
+## Deployment
+
+1. Set environment ke production di `.env`:
+```
+APP_ENV=production
+APP_DEBUG=false
+```
+
+2. Optimize Laravel:
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+3. Build assets:
+```bash
+npm run build
+```
+
+## Kontribusi
+
+1. Fork repository
+2. Buat branch fitur (`git checkout -b feature/AmazingFeature`)
+3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
+
+## Security
+
+Jika Anda menemukan masalah keamanan, silakan kirim email ke security@textilehub.com
+
+## License
+
+[MIT License](LICENSE)
