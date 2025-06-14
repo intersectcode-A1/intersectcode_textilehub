@@ -6,13 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('unit_id')->nullable()->after('category_id')->constrained('units')->nullOnDelete();
+            $table->foreignId('unit_id')->nullable()->after('berat')->constrained('units')->nullOnDelete();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
