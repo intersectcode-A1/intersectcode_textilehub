@@ -1,146 +1,48 @@
-@extends('layouts.app')
+@extends('components.layouts.admin')
 
-@section('title', 'Edit Harga Strategi')
+@section('title', 'Edit Harga Produk')
 
 @section('content')
-<div class="container-fluid">
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Edit Harga Strategi</h1>
-        <a href="{{ route('admin.harga-strategi.analisis') }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
-            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali
-        </a>
-    </div>
-
-    <!-- Content Row -->
-    <div class="row">
-        <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Form Edit Harga</h6>
-                </div>
-                <div class="card-body">
-                    <form id="updatePriceForm" method="POST" action="{{ route('admin.harga-strategi.update') }}">
-                        @csrf
-                        @method('PUT')
-                        
-                        <div class="form-group">
-                            <label for="currentPrice">Harga Saat Ini</label>
-                            <input type="text" class="form-control" id="currentPrice" value="{{ $currentPrice ?? 0 }}" readonly>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="newPrice">Harga Baru</label>
-                            <input type="number" class="form-control" id="newPrice" name="new_price" min="0" required>
-                            <div id="priceError" class="invalid-feedback"></div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary" id="submitBtn">
-                            Simpan Perubahan
-                        </button>
-                    </form>
-                </div>
+<div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-xl shadow-sm p-8 mt-8">
+        <h1 class="text-2xl font-bold mb-6 text-gray-900">Edit Harga Produk</h1>
+        @if(session('success'))
+            <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('success') }}</div>
+        @endif
+        @if($errors->any())
+            <div class="mb-4 p-3 bg-red-100 text-red-800 rounded">
+                @foreach($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
             </div>
-        </div>
-
-        <!-- Info Card -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Informasi</h6>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <h5>Panduan Update Harga:</h5>
-                        <ul>
-                            <li>Harga minimum yang diperbolehkan adalah Rp 0</li>
-                            <li>Masukkan harga baru tanpa tanda titik atau koma</li>
-                            <li>Sistem akan memvalidasi input secara otomatis</li>
-                            <li>Pastikan harga yang dimasukkan sudah benar</li>
-                        </ul>
-                    </div>
-                </div>
+        @endif
+        <form method="POST" action="{{ route('admin.harga-strategi.update', $product->id) }}">
+            @csrf
+            <div class="mb-4">
+                <label class="block text-base font-semibold text-gray-900 mb-1">Nama Produk</label>
+                <input type="text" value="{{ $product->nama }}" class="block w-full border-gray-300 rounded-md bg-gray-100 text-gray-900 font-medium" readonly>
             </div>
-        </div>
+            <div class="mb-4">
+                <label class="block text-base font-semibold text-gray-900 mb-1">Kategori</label>
+                <input type="text" value="{{ $product->category->nama ?? '-' }}" class="block w-full border-gray-300 rounded-md bg-gray-100 text-gray-900 font-medium" readonly>
+            </div>
+            <div class="mb-4">
+                <label class="block text-base font-semibold text-gray-900 mb-1">Harga Lama</label>
+                <input type="text" value="Rp {{ number_format($product->harga, 0, ',', '.') }}" class="block w-full border-gray-300 rounded-md bg-gray-100 text-gray-900 font-medium" readonly>
+            </div>
+            <div class="mb-4">
+                <label for="harga" class="block text-base font-semibold text-gray-900 mb-1">Harga Baru</label>
+                <input type="number" name="new_price" id="harga" value="{{ old('new_price', $product->harga) }}" maxlength="19" min="0" class="block w-full border-gray-300 rounded-md text-gray-900 font-medium" required>
+                <small class="text-gray-500">Maksimal 19 digit angka</small>
+                @error('new_price')
+                    <div class="text-red-600 mt-1 text-sm font-semibold">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="flex justify-end gap-2">
+                <a href="{{ route('admin.harga-strategi.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Batal</a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Simpan</button>
+            </div>
+        </form>
     </div>
 </div>
-
-<!-- Success Alert -->
-<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
-    <div id="successToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
-        <div class="toast-header bg-success text-white">
-            <strong class="mr-auto">Sukses</strong>
-            <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="toast-body">
-            Harga berhasil diperbarui!
-        </div>
-    </div>
-</div>
-
-@endsection
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('updatePriceForm');
-    const newPriceInput = document.getElementById('newPrice');
-    const priceError = document.getElementById('priceError');
-    const submitBtn = document.getElementById('submitBtn');
-    const successToast = document.getElementById('successToast');
-
-    // Validasi real-time
-    newPriceInput.addEventListener('input', function() {
-        const price = parseInt(this.value);
-        if (price < 0) {
-            this.classList.add('is-invalid');
-            priceError.textContent = 'Harga tidak boleh kurang dari 0';
-            submitBtn.disabled = true;
-        } else {
-            this.classList.remove('is-invalid');
-            priceError.textContent = '';
-            submitBtn.disabled = false;
-        }
-    });
-
-    // Handle form submission
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const price = parseInt(newPriceInput.value);
-        if (price < 0) {
-            return;
-        }
-
-        // Submit form menggunakan AJAX
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({
-                new_price: price
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Tampilkan toast
-                $(successToast).toast('show');
-                
-                // Redirect setelah 2 detik
-                setTimeout(() => {
-                    window.location.href = "{{ route('admin.harga-strategi.analisis') }}";
-                }, 2000);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-});
-</script>
-@endpush
+@endsection 

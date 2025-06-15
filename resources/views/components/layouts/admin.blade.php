@@ -35,6 +35,10 @@
         <i data-lucide="package"></i>
         <span class="sidebar-label">Produk</span>
     </a>
+    <a href="{{ route('admin.harga-strategi.index') }}" class="flex items-center gap-2 hover:text-blue-600">
+        <i data-lucide="trending-up"></i>
+        <span class="sidebar-label">Strategi Harga</span>
+    </a>
     <a href="{{ route('categories.index') }}" class="flex items-center gap-2 hover:text-blue-600">
         <i data-lucide="layers"></i>
         <span class="sidebar-label">Kategori</span>
@@ -46,10 +50,6 @@
     <a href="{{ route('admin.sales.analysis') }}" class="flex items-center gap-2 hover:text-blue-600">
         <i data-lucide="bar-chart-3"></i>
         <span class="sidebar-label">Analisis Penjualan</span>
-    </a>
-    <a href="{{ route('admin.harga-strategi.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-        <i data-lucide="trending-up"></i>
-        <span class="sidebar-label">Strategi Harga</span>
     </a>
     <a href="{{ route('tracking.index') }}" class="flex items-center gap-2 hover:text-blue-600">
     <i data-lucide="map-pin"></i>
@@ -121,6 +121,8 @@
         lucide.createIcons();
     }
 </script>
+
+@stack('scripts')
 
 </body>
 </html>
