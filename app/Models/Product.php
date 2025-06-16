@@ -16,13 +16,20 @@ class Product extends Model
         'deskripsi', 
         'foto', 
         'category_id',
-        'satuan'
+        'satuan',
+        'unit_id'
     ];
 
     // Relasi ke kategori
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    // Relasi ke unit
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
     }
 
     // Relasi ke order items

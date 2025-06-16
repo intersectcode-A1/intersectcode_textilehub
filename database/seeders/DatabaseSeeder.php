@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\ProductSeeder;
+use Database\Seeders\UnitSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
     // Panggil seeder kategori dulu
     $this->call([
         CategorySeeder::class,
+        UnitSeeder::class,
         ProductSeeder::class,
     ]);
 }

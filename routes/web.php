@@ -136,4 +136,6 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::post('/harga-strategi/{product}/update', [HargaStrategiController::class, 'updateHarga'])->name('admin.harga-strategi.update');
     Route::get('/harga-strategi/{product}/history', [HargaStrategiController::class, 'getPriceHistory'])->name('admin.harga-strategi.history');
     Route::get('/harga-strategi/{product}/edit', [HargaStrategiController::class, 'edit'])->name('admin.harga-strategi.edit');
+    Route::get('/harga-strategi/export', [HargaStrategiController::class, 'exportExcel'])->name('admin.harga-strategi.export');
+    Route::post('/harga-strategi/bulk-update', [HargaStrategiController::class, 'bulkUpdate'])->name('admin.harga-strategi.bulkUpdate');
 });
