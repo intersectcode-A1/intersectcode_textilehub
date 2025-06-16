@@ -11,34 +11,34 @@ class UnitSeeder extends Seeder
     {
         $units = [
             [
-                'nama' => 'Lusin',
-                'simbol' => 'Lsn',
-                'deskripsi' => '1 Lusin = 12 Pcs'
+                'name' => 'Lusin',
+                'symbol' => 'Lsn',
+                'description' => '1 Lusin = 12 Pcs'
             ],
             [
-                'nama' => 'Kodi',
-                'simbol' => 'Kd',
-                'deskripsi' => '1 Kodi = 20 Pcs'
+                'name' => 'Kodi',
+                'symbol' => 'Kd',
+                'description' => '1 Kodi = 20 Pcs'
             ],
             [
-                'nama' => 'Pieces',
-                'simbol' => 'Pcs',
-                'deskripsi' => 'Satuan per item'
+                'name' => 'Pieces',
+                'symbol' => 'Pcs',
+                'description' => 'Satuan per item'
             ],
             [
-                'nama' => 'Meter',
-                'simbol' => 'm',
-                'deskripsi' => 'Satuan panjang'
+                'name' => 'Meter',
+                'symbol' => 'm',
+                'description' => 'Satuan panjang'
             ],
             [
-                'nama' => 'Roll',
-                'simbol' => 'Rol',
-                'deskripsi' => 'Satuan dalam bentuk gulungan'
+                'name' => 'Roll',
+                'symbol' => 'Rol',
+                'description' => 'Satuan dalam bentuk gulungan'
             ],
             [
-                'nama' => 'Pack',
-                'simbol' => 'Pak',
-                'deskripsi' => 'Satuan dalam bentuk kemasan'
+                'name' => 'Pack',
+                'symbol' => 'Pak',
+                'description' => 'Satuan dalam bentuk kemasan'
             ],
         ];
 

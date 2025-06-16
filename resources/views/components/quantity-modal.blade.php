@@ -142,11 +142,10 @@
                     </div>
 
                     <!-- Variants -->
-                    @if($product->variants->isNotEmpty())
+                    @if($product->variants && $product->variants->isNotEmpty())
                         @php
                             $groupedVariants = $product->variants->groupBy('type');
                         @endphp
-
                         @foreach($groupedVariants as $type => $variants)
                             <div class="space-y-3">
                                 <p class="font-medium text-gray-800 flex items-center">
