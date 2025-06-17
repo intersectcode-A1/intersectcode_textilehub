@@ -39,6 +39,12 @@
         
         // Set selected variants
         const selectedVariantIds = Object.values(this.selectedVariants).map(v => v.id);
+        // Jumlah varian yang harus dipilih
+        const requiredVariants = {{ isset($groupedVariants) ? $groupedVariants->count() : 0 }};
+        if (Object.keys(this.selectedVariants).length < requiredVariants) {
+            alert('Pilih semua varian terlebih dahulu!');
+            return;
+        }
         form.querySelector('input[name=selected_variants]').value = selectedVariantIds.join(',');
         
         form.submit();

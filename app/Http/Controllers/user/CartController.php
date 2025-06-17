@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductVariant;
 
 class CartController extends Controller
 {
@@ -16,26 +17,66 @@ class CartController extends Controller
             
             // Validasi jumlah yang diminta
             $quantity = $request->input('quantity', 1);
-            if ($quantity > $product->stok) {
-                return back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
+            
+            // Validasi varian yang dipilih
+            $selectedVariants = [];
+            $additionalPrice = 0;
+            if ($request->has('selected_variants')) {
+                $variantIds = explode(',', $request->selected_variants);
+                foreach ($variantIds as $variantId) {
+                    $variant = ProductVariant::findOrFail($variantId);
+                    if ($variant->product_id !== $product->id) {
+                        return back()->with('error', 'Varian yang dipilih tidak valid.');
+                    }
+                    if ($variant->stock < $quantity) {
+                        return back()->with('error', 'Stok varian ' . $variant->name . ' tidak mencukupi.');
+                    }
+                    $selectedVariants[] = $variant;
+                    $additionalPrice += $variant->additional_price;
+                }
             }
 
-            $cart = session()->get('cart', []);
+            // Hitung total harga dengan varian
+            $totalPrice = $product->harga + $additionalPrice;
 
-            if (isset($cart[$id])) {
-                // Jika produk sudah ada di keranjang, tambahkan quantity
-                $newQuantity = $cart[$id]['quantity'] + $quantity;
-                if ($newQuantity > $product->stok) {
-                    return back()->with('error', 'Total jumlah di keranjang melebihi stok yang tersedia.');
+            $cart = session()->get('cart', []);
+            $cartKey = $id;
+            
+            // Jika ada varian, tambahkan ke cart key
+            if (!empty($selectedVariants)) {
+                $variantKey = implode('-', array_map(fn($v) => $v->id, $selectedVariants));
+                $cartKey .= '-' . $variantKey;
+            }
+
+            if (isset($cart[$cartKey])) {
+                // Jika produk dengan varian yang sama sudah ada di keranjang
+                $newQuantity = $cart[$cartKey]['quantity'] + $quantity;
+                
+                // Cek stok untuk setiap varian
+                foreach ($selectedVariants as $variant) {
+                    if ($newQuantity > $variant->stock) {
+                        return back()->with('error', 'Total jumlah di keranjang melebihi stok yang tersedia untuk varian ' . $variant->name);
+                    }
                 }
-                $cart[$id]['quantity'] = $newQuantity;
+                
+                $cart[$cartKey]['quantity'] = $newQuantity;
             } else {
-                // Jika produk belum ada di keranjang
-                $cart[$id] = [
+                // Jika produk dengan varian belum ada di keranjang
+                $cart[$cartKey] = [
                     'nama' => $product->nama,
                     'harga' => $product->harga,
+                    'additional_price' => $additionalPrice,
                     'foto' => $product->foto,
-                    'quantity' => $quantity
+                    'quantity' => $quantity,
+                    'variants' => array_map(function($variant) {
+                        return [
+                            'id' => $variant->id,
+                            'name' => $variant->name,
+                            'type' => $variant->type,
+                            'additional_price' => $variant->additional_price,
+                            'stock' => $variant->stock,
+                        ];
+                    }, $selectedVariants)
                 ];
             }
 
@@ -49,7 +90,7 @@ class CartController extends Controller
                 'cartCount' => $totalItems
             ]);
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menambahkan produk ke keranjang.');
+            return back()->with('error', 'Gagal menambahkan produk ke keranjang: ' . $e->getMessage());
         }
     }
 
@@ -62,11 +103,11 @@ class CartController extends Controller
     }
 
     // Hapus produk dari keranjang
-    public function remove($id) 
+    public function remove($cartKey) 
     {
         $cart = session()->get('cart', []);
-        if (isset($cart[$id])) {
-            unset($cart[$id]);
+        if (isset($cart[$cartKey])) {
+            unset($cart[$cartKey]);
             session()->put('cart', $cart);
         }
 
@@ -89,14 +130,15 @@ class CartController extends Controller
         // Hitung total harga
         $total = 0;
         $items = [];
-        foreach ($cart as $id => $item) {
+        foreach ($cart as $cartKey => $item) {
             $subtotal = $item['harga'] * $item['quantity'];
             $total += $subtotal;
             $items[] = [
-                'id' => $id,
+                'id' => explode('-', $cartKey)[0], // Ambil ID produk dari cart key
                 'nama' => $item['nama'],
                 'harga' => $item['harga'],
                 'quantity' => $item['quantity'],
+                'variants' => $item['variants'] ?? [],
                 'subtotal' => $subtotal
             ];
         }

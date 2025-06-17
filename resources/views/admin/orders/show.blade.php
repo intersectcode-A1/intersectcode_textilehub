@@ -128,6 +128,7 @@
                     <thead class="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 uppercase">
                         <tr>
                             <th class="px-6 py-3">Produk</th>
+                            <th class="px-6 py-3">Varian</th>
                             <th class="px-6 py-3">Harga Satuan</th>
                             <th class="px-6 py-3">Jumlah</th>
                             <th class="px-6 py-3">Subtotal</th>
@@ -137,6 +138,20 @@
                         @foreach ($order->items as $item)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                 <td class="px-6 py-4">{{ $item->product_name }}</td>
+                                <td class="px-6 py-4">
+                                    @if(!empty($item->variant_info) && count((array)$item->variant_info) > 0)
+                                        @foreach((array)$item->variant_info as $variant)
+                                            <div>
+                                                {{ ucfirst($variant['type'] ?? '') }}: {{ $variant['name'] ?? '' }}
+                                                @if(!empty($variant['additional_price']) && $variant['additional_price'] > 0)
+                                                    (+Rp {{ number_format($variant['additional_price'], 0, ',', '.') }})
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
                                 <td class="px-6 py-4">{{ $item->quantity }}</td>
                                 <td class="px-6 py-4">Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
@@ -145,7 +160,7 @@
                     </tbody>
                     <tfoot class="bg-gray-50 dark:bg-gray-700 font-semibold text-gray-900 dark:text-white">
                         <tr>
-                            <td colspan="3" class="px-6 py-4 text-right">Total Keseluruhan:</td>
+                            <td colspan="4" class="px-6 py-4 text-right">Total Keseluruhan:</td>
                             <td class="px-6 py-4">Rp{{ number_format($total, 0, ',', '.') }}</td>
                         </tr>
                     </tfoot>

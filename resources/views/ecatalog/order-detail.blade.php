@@ -54,6 +54,17 @@
                         <div class="py-4 flex justify-between items-center">
                             <div class="flex-1">
                                 <h4 class="font-medium text-gray-900">{{ $item->product_name }}</h4>
+                                @if(!empty($item->variant_info) && count((array)$item->variant_info) > 0)
+                                    <div class="mt-2 text-sm text-gray-700">
+                                        @foreach((array)$item->variant_info as $variant)
+                                            <div>{{ ucfirst($variant['type'] ?? '') }}: {{ $variant['name'] ?? '' }}
+                                                @if(!empty($variant['additional_price']) && $variant['additional_price'] > 0)
+                                                    (+Rp {{ number_format($variant['additional_price'], 0, ',', '.') }})
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                                 <p class="text-sm text-gray-600">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                             </div>
                             <div class="text-right">
