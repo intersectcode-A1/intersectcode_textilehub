@@ -27,7 +27,6 @@ use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\HargaStrategiController;
-use App\Http\Controllers\Admin\AnalisisPenjualanController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -124,7 +123,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::post('/pelacakan', [TrackingController::class, 'search'])->name('tracking.search');
 
     // Analisis Penjualan
-    Route::get('/analisis-penjualan', [AnalisisPenjualanController::class, 'index'])->name('admin.sales.analysis');
+    Route::get('/analisis-penjualan', [SalesAnalysisController::class, 'index'])->name('admin.sales.analysis');
 
     // Supplier
     Route::resource('supplier', SupplierController::class);
