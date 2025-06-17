@@ -80,11 +80,6 @@
                         @error('password_confirmation') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Tambahkan widget reCAPTCHA v2 -->
-                    <div id="recaptcha-container" class="g-recaptcha" data-sitekey="6LeYxmMrAAAAAOFaNfgR7BM5Lum2gZ71SegTyZlX"></div>
-                    <input type="hidden" wire:model="g-recaptcha-response" id="g-recaptcha-response">
-                    @error('g-recaptcha-response') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
-
                     <button type="submit"
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300shadow">
                         Daftar Sekarang
@@ -139,19 +134,6 @@
                 this.querySelector('i').classList.toggle('fa-eye');
                 this.querySelector('i').classList.toggle('fa-eye-slash');
             });
-
-            // Tambahkan callback reCAPTCHA
-            window.onloadCallback = function() {
-                grecaptcha.render('recaptcha-container', {
-                    'sitekey': '6LeYxmMrAAAAAOFaNfgR7BM5Lum2gZ71SegTyZlX',
-                    'callback': function(response) {
-                        document.getElementById('g-recaptcha-response').value = response;
-                    }
-                });
-            };
         });
     </script>
-
-    <!-- Tambahkan script reCAPTCHA -->
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 </components.layouts.app>

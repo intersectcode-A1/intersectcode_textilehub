@@ -13,11 +13,59 @@ class LaporanKeuanganController extends Controller
 {
     public function index()
     {
-        // Default periode 30 hari jika tidak ada request
-        $endDate = Carbon::now();
-        $startDate = Carbon::now()->subDays(30);
+        // Data untuk analisis penjualan
+        $totalPenjualan = Order::where('status', 'completed')->sum('total');
+        $jumlahTransaksi = Order::where('status', 'completed')->count();
+        $rataRataTransaksi = $jumlahTransaksi > 0 ? $totalPenjualan / $jumlahTransaksi : 0;
 
-        return $this->getLaporanData($startDate, $endDate);
+        // Data untuk grafik penjualan harian (7 hari terakhir)
+        $penjualanHarian = Order::where('status', 'completed')
+            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->select(
+                DB::raw('DATE(created_at) as tanggal'),
+                DB::raw('SUM(total) as total_penjualan')
+            )
+            ->groupBy('tanggal')
+            ->orderBy('tanggal')
+            ->get();
+
+        $labelsHarian = $penjualanHarian->map(function($item) {
+            return Carbon::parse($item->tanggal)->format('d M');
+        });
+        $dataHarian = $penjualanHarian->pluck('total_penjualan');
+
+        // Data untuk grafik kategori produk
+        $kategoriProduk = DB::table('order_items')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->where('order_items.order_id', function($query) {
+                $query->select('id')
+                    ->from('orders')
+                    ->where('status', 'completed')
+                    ->where('created_at', '>=', Carbon::now()->subDays(30));
+            })
+            ->select(
+                'categories.nama as kategori',
+                DB::raw('SUM(order_items.quantity * order_items.price) as total_penjualan')
+            )
+            ->groupBy('categories.id', 'categories.nama')
+            ->orderBy('total_penjualan', 'desc')
+            ->limit(5)
+            ->get();
+
+        $labelsKategori = $kategoriProduk->pluck('kategori');
+        $dataKategori = $kategoriProduk->pluck('total_penjualan');
+
+        return view('admin.laporan_keuangan.index', [
+            'laporan' => null,
+            'totalPenjualan' => $totalPenjualan,
+            'jumlahTransaksi' => $jumlahTransaksi,
+            'rataRataTransaksi' => $rataRataTransaksi,
+            'labelsHarian' => $labelsHarian,
+            'dataHarian' => $dataHarian,
+            'labelsKategori' => $labelsKategori,
+            'dataKategori' => $dataKategori
+        ]);
     }
 
     public function filter(Request $request)
@@ -25,95 +73,77 @@ class LaporanKeuanganController extends Controller
         $request->validate([
             'tanggal_mulai' => 'required|date',
             'tanggal_akhir' => 'required|date|after_or_equal:tanggal_mulai',
-        ], [
-            'tanggal_mulai.required' => 'Tanggal mulai harus diisi',
-            'tanggal_mulai.date' => 'Format tanggal mulai tidak valid',
-            'tanggal_akhir.required' => 'Tanggal akhir harus diisi',
-            'tanggal_akhir.date' => 'Format tanggal akhir tidak valid',
-            'tanggal_akhir.after_or_equal' => 'Tanggal akhir harus sama dengan atau setelah tanggal mulai'
         ]);
 
-        $startDate = Carbon::parse($request->tanggal_mulai);
-        $endDate = Carbon::parse($request->tanggal_akhir);
-
-        return $this->getLaporanData($startDate, $endDate);
-    }
-
-    private function getLaporanData($startDate, $endDate)
-    {
         try {
-            // Data transaksi keuangan
             $laporan = DB::table('transaksis')
-                ->whereBetween('tanggal', [$startDate, $endDate])
+                ->whereBetween('tanggal', [$request->tanggal_mulai, $request->tanggal_akhir])
                 ->orderBy('tanggal')
                 ->get();
 
-            // Hitung total pendapatan dan pengeluaran
-            $totalPendapatan = $laporan->where('jumlah', '>', 0)->sum('jumlah');
-            $totalPengeluaran = abs($laporan->where('jumlah', '<', 0)->sum('jumlah'));
-            $saldo = $totalPendapatan - $totalPengeluaran;
+            // Data untuk analisis penjualan
+            $totalPenjualan = Order::where('status', 'completed')
+                ->whereBetween('created_at', [$request->tanggal_mulai, $request->tanggal_akhir])
+                ->sum('total');
+            
+            $jumlahTransaksi = Order::where('status', 'completed')
+                ->whereBetween('created_at', [$request->tanggal_mulai, $request->tanggal_akhir])
+                ->count();
+            
+            $rataRataTransaksi = $jumlahTransaksi > 0 ? $totalPenjualan / $jumlahTransaksi : 0;
 
-            // Data untuk grafik pendapatan dan pengeluaran
-            $dataGrafik = DB::table('transaksis')
-                ->whereBetween('tanggal', [$startDate, $endDate])
+            // Data untuk grafik penjualan harian
+            $penjualanHarian = Order::where('status', 'completed')
+                ->whereBetween('created_at', [$request->tanggal_mulai, $request->tanggal_akhir])
                 ->select(
-                    DB::raw('DATE(tanggal) as tanggal'),
-                    DB::raw('SUM(CASE WHEN jumlah > 0 THEN jumlah ELSE 0 END) as pendapatan'),
-                    DB::raw('SUM(CASE WHEN jumlah < 0 THEN ABS(jumlah) ELSE 0 END) as pengeluaran')
+                    DB::raw('DATE(created_at) as tanggal'),
+                    DB::raw('SUM(total) as total_penjualan')
                 )
                 ->groupBy('tanggal')
                 ->orderBy('tanggal')
                 ->get();
 
-            $labelsGrafik = $dataGrafik->map(function($item) {
+            $labelsHarian = $penjualanHarian->map(function($item) {
                 return Carbon::parse($item->tanggal)->format('d M');
             });
-            $dataPendapatan = $dataGrafik->pluck('pendapatan');
-            $dataPengeluaran = $dataGrafik->pluck('pengeluaran');
+            $dataHarian = $penjualanHarian->pluck('total_penjualan');
 
-            // Data untuk ringkasan periode
-            $periodeSebelumnya = [
-                'start' => $startDate->copy()->subDays($endDate->diffInDays($startDate)),
-                'end' => $startDate->copy()->subDay()
-            ];
-
-            $laporanSebelumnya = DB::table('transaksis')
-                ->whereBetween('tanggal', [$periodeSebelumnya['start'], $periodeSebelumnya['end']])
+            // Data untuk grafik kategori produk
+            $kategoriProduk = DB::table('order_items')
+                ->join('products', 'order_items.product_id', '=', 'products.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->where('order_items.order_id', function($query) use ($request) {
+                    $query->select('id')
+                        ->from('orders')
+                        ->where('status', 'completed')
+                        ->whereBetween('created_at', [$request->tanggal_mulai, $request->tanggal_akhir]);
+                })
+                ->select(
+                    'categories.nama as kategori',
+                    DB::raw('SUM(order_items.quantity * order_items.price) as total_penjualan')
+                )
+                ->groupBy('categories.id', 'categories.nama')
+                ->orderBy('total_penjualan', 'desc')
+                ->limit(5)
                 ->get();
 
-            $totalPendapatanSebelumnya = $laporanSebelumnya->where('jumlah', '>', 0)->sum('jumlah');
-            $totalPengeluaranSebelumnya = abs($laporanSebelumnya->where('jumlah', '<', 0)->sum('jumlah'));
-            $saldoSebelumnya = $totalPendapatanSebelumnya - $totalPengeluaranSebelumnya;
-
-            // Hitung persentase perubahan
-            $persentasePendapatan = $this->hitungPersentasePerubahan($totalPendapatan, $totalPendapatanSebelumnya);
-            $persentasePengeluaran = $this->hitungPersentasePerubahan($totalPengeluaran, $totalPengeluaranSebelumnya);
-            $persentaseSaldo = $this->hitungPersentasePerubahan($saldo, $saldoSebelumnya);
+            $labelsKategori = $kategoriProduk->pluck('kategori');
+            $dataKategori = $kategoriProduk->pluck('total_penjualan');
 
             return view('admin.laporan_keuangan.index', [
                 'laporan' => $laporan,
-                'startDate' => $startDate->format('Y-m-d'),
-                'endDate' => $endDate->format('Y-m-d'),
-                'totalPendapatan' => $totalPendapatan,
-                'totalPengeluaran' => $totalPengeluaran,
-                'saldo' => $saldo,
-                'persentasePendapatan' => $persentasePendapatan,
-                'persentasePengeluaran' => $persentasePengeluaran,
-                'persentaseSaldo' => $persentaseSaldo,
-                'labelsGrafik' => $labelsGrafik,
-                'dataPendapatan' => $dataPendapatan,
-                'dataPengeluaran' => $dataPengeluaran
+                'mulai' => $request->tanggal_mulai,
+                'akhir' => $request->tanggal_akhir,
+                'totalPenjualan' => $totalPenjualan,
+                'jumlahTransaksi' => $jumlahTransaksi,
+                'rataRataTransaksi' => $rataRataTransaksi,
+                'labelsHarian' => $labelsHarian,
+                'dataHarian' => $dataHarian,
+                'labelsKategori' => $labelsKategori,
+                'dataKategori' => $dataKategori
             ]);
         } catch (\Exception $e) {
             return back()->withErrors('Terjadi kesalahan sistem. Silakan coba lagi.');
         }
-    }
-
-    private function hitungPersentasePerubahan($nilaiSekarang, $nilaiSebelumnya)
-    {
-        if ($nilaiSebelumnya == 0) {
-            return $nilaiSekarang > 0 ? 100 : 0;
-        }
-        return (($nilaiSekarang - $nilaiSebelumnya) / $nilaiSebelumnya) * 100;
     }
 }
