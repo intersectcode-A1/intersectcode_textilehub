@@ -23,6 +23,28 @@
         </nav>
     </div>
 
+     <!-- Statistik Utama -->
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Total Pesanan -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-transparent hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300 p-6 group hover:shadow-2xl hover:-translate-y-1">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-gray-600 dark:text-gray-200 font-semibold text-lg">Total Pesanan</span>
+                <span class="w-4 h-4 rounded-full bg-green-100 dark:bg-green-300/20 group-hover:scale-110 transition-transform"></span>
+            </div>
+            <div class="text-4xl font-extrabold text-green-600 mb-1 group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">{{ number_format($totalOrders) }}</div>
+            <div class="text-gray-500 dark:text-gray-300 text-base">Total pesanan masuk</div>
+        </div>
+        <!-- Total Produk -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-transparent hover:border-purple-400 dark:hover:border-purple-500 transition-all duration-300 p-6 group hover:shadow-2xl hover:-translate-y-1">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-gray-600 dark:text-gray-200 font-semibold text-lg">Total Produk</span>
+                <span class="w-4 h-4 rounded-full bg-purple-100 dark:bg-purple-300/20 group-hover:scale-110 transition-transform"></span>
+            </div>
+            <div class="text-4xl font-extrabold text-purple-600 mb-1 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors">{{ number_format($totalProducts) }}</div>
+            <div class="text-gray-500 dark:text-gray-300 text-base">Total produk tersedia</div>
+        </div>
+    </div>
+    
     <!-- Sales Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <!-- Daily Sales -->
@@ -71,67 +93,6 @@
             </div>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-3">
                 <div class="bg-gradient-to-r from-teal-400 to-blue-500 h-2 rounded-full" style="width: 80%"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Social Media Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-        <!-- Facebook -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="flex items-center mb-4">
-                <div class="text-4xl text-blue-600 mr-4">
-                    <i class="fab fa-facebook-f"></i>
-                </div>
-                <div>
-                    <div class="text-2xl font-bold text-gray-800 dark:text-white">12,281</div>
-                    <div class="text-green-500 text-sm font-semibold">+7.2% Total Suka</div>
-                </div>
-            </div>
-            <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                <span>Target: 35,098</span>
-                <span>Durasi: 350</span>
-            </div>
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
-                <div class="bg-blue-400 h-2 rounded-full" style="width: 45%"></div>
-            </div>
-        </div>
-        <!-- Twitter -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="flex items-center mb-4">
-                <div class="text-4xl text-blue-400 mr-4">
-                    <i class="fab fa-twitter"></i>
-                </div>
-                <div>
-                    <div class="text-2xl font-bold text-gray-800 dark:text-white">11,200</div>
-                    <div class="text-green-500 text-sm font-semibold">+6.2% Total Suka</div>
-                </div>
-            </div>
-            <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                <span>Target: 34,185</span>
-                <span>Durasi: 800</span>
-            </div>
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
-                <div class="bg-purple-400 h-2 rounded-full" style="width: 60%"></div>
-            </div>
-        </div>
-        <!-- Google+ -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="flex items-center mb-4">
-                <div class="text-4xl text-red-500 mr-4">
-                    <i class="fab fa-google-plus-g"></i>
-                </div>
-                <div>
-                    <div class="text-2xl font-bold text-gray-800 dark:text-white">10,500</div>
-                    <div class="text-green-500 text-sm font-semibold">+5.9% Total Suka</div>
-                </div>
-            </div>
-            <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                <span>Target: 25,998</span>
-                <span>Durasi: 900</span>
-            </div>
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
-                <div class="bg-indigo-400 h-2 rounded-full" style="width: 75%"></div>
             </div>
         </div>
     </div>
