@@ -10,6 +10,8 @@ use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 
 class CheckoutController extends Controller
 {
@@ -105,6 +107,12 @@ class CheckoutController extends Controller
             // Kurangi stok
             $product->decrement('stok', $request->quantity);
 
+            // Kirim notifikasi ke semua admin
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderNotification($order));
+            }
+
             DB::commit();
             Log::info('Order process completed successfully');
 
@@ -198,6 +206,12 @@ class CheckoutController extends Controller
                 Log::info('Cart order item created', ['orderItem' => $orderItem->toArray()]);
 
                 $product->decrement('stok', $item['quantity']);
+            }
+
+            // Kirim notifikasi ke semua admin
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderNotification($order));
             }
 
             // Kosongkan keranjang

@@ -28,7 +28,7 @@ class Login extends Component
                 return redirect()->route('admin.dashboard');
             }
 
-            return redirect()->route('home');
+            return redirect()->route('ecatalog.index');
         }
 
         session()->flash('error', 'Email atau password salah.');
