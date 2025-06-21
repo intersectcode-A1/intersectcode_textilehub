@@ -60,8 +60,15 @@
             </div>
         </div>
 
-        <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none" title="Profil">
-            <i data-lucide="user" class="w-5 h-5"></i>
-        </button>
+        <!-- Sapaan Personal -->
+        <div class="hidden md:flex items-center gap-3 mr-2 px-3 py-1 rounded-lg bg-gradient-to-r from-blue-50/80 via-white/80 to-purple-50/80 dark:from-gray-700 dark:via-gray-800 dark:to-gray-700 shadow-sm">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-400 text-white font-bold text-lg shadow">
+                {{ \Illuminate\Support\Str::limit(Auth::user()->name, 2, '') }}
+            </div>
+            <div class="flex flex-col items-start">
+                <span class="text-sm font-semibold text-gray-800 dark:text-gray-100 leading-tight">Halo, {{ Auth::user()->name }}!</span>
+                <span class="text-xs text-gray-500 dark:text-gray-300">Admin</span>
+            </div>
+        </div>
     </div>
 </div>
