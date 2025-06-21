@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -43,5 +44,12 @@ class OrderController extends Controller
         }
 
         return redirect()->route('purchase.history')->with('error', 'Pesanan tidak dapat dibatalkan karena sudah diproses atau selesai.');
+    }
+
+    public function invoicePdf($orderId)
+    {
+        $order = Order::with('items')->findOrFail($orderId);
+        $pdf = Pdf::loadView('ecatalog.invoice-pdf', compact('order'));
+        return $pdf->download('invoice-' . $order->order_number . '.pdf');
     }
 }

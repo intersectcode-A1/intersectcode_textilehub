@@ -82,6 +82,18 @@
                     </div>
                 </div>
 
+                @if($order->payment_status === 'paid' && $order->status !== 'waiting')
+                    <div class="mt-6 text-center">
+                        <a href="{{ route('order.invoice.pdf', $order->id) }}"
+                           class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Download Invoice (PDF)
+                        </a>
+                    </div>
+                @endif
+
                 {{-- Tombol Bayar (hanya muncul jika status completed) --}}
                 @if($order->status === 'completed')
                     <div class="mt-6 text-center">
