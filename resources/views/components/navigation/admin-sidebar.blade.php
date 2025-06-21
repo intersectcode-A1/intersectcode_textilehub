@@ -2,7 +2,7 @@
     <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700/50 scrollbar-track-transparent">
         <div class="flex items-center gap-3 p-2 mb-4 border-b border-gray-700 pb-4">
             <img src="{{ asset('image/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda" class="h-10 w-auto rounded-full">
-            <span class="font-bold text-xl text-white sidebar-label tracking-wide">Usaha Muda</span>
+            <span class="font-bold text-xl text-white sidebar-label tracking-wide">Toko Usaha Muda</span>
         </div>
         <div>
             <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
