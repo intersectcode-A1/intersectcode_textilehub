@@ -28,6 +28,9 @@ use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\HargaStrategiController;
 use App\Http\Controllers\Admin\AnalisisPenjualanController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\user\WishlistController;
+use App\Http\Controllers\NotificationController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -106,6 +109,9 @@ Route::middleware(['auth', 'web'])->group(function () {
 
 // 🛠️ Admin Panel Routes
 Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
     // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
@@ -139,4 +145,8 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::get('/harga-strategi/{product}/edit', [HargaStrategiController::class, 'edit'])->name('admin.harga-strategi.edit');
     Route::get('/harga-strategi/export', [HargaStrategiController::class, 'exportExcel'])->name('admin.harga-strategi.export');
     Route::post('/harga-strategi/bulk-update', [HargaStrategiController::class, 'bulkUpdate'])->name('admin.harga-strategi.bulkUpdate');
+
+    // Notifications
+    Route::get('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
 });

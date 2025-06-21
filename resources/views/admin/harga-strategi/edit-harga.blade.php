@@ -3,50 +3,95 @@
 @section('title', 'Edit Harga Produk')
 
 @section('content')
-<div class="min-h-screen bg-gray-900 py-8">
-    <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 p-8 mt-8">
-            <h1 class="text-2xl font-bold mb-6 text-white">Edit Harga Produk</h1>
+<div class="mb-6">
+    <h1 class="text-2xl font-semibold text-gray-800 dark:text-white">Edit Harga Produk</h1>
+    <nav class="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+        <ol class="list-none p-0 inline-flex">
+            <li class="flex items-center">
+                <a href="{{ route('admin.dashboard') }}" class="text-gray-500 hover:text-gray-700">Home</a>
+                <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+            </li>
+            <li class="flex items-center">
+                <a href="{{ route('admin.harga-strategi.index') }}" class="text-gray-500 hover:text-gray-700">Strategi Harga</a>
+                <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+            </li>
+            <li>
+                <a href="#" class="text-gray-400" aria-current="page">Edit Harga</a>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+<div class="flex justify-between items-center mb-6">
+    <p class="text-lg text-gray-600 dark:text-gray-400">Perbarui harga produk untuk strategi yang lebih optimal.</p>
+</div>
+
             @if(session('success'))
-                <div class="mb-4 p-3 bg-emerald-500/10 border-l-4 border-emerald-500 text-emerald-200 rounded-r-xl">{{ session('success') }}</div>
-            @endif
-            @if($errors->any())
-                <div class="mb-4 p-3 bg-rose-500/10 border-l-4 border-rose-500 text-rose-200 rounded-r-xl">
-                    @foreach($errors->all() as $error)
-                        <div>{{ $error }}</div>
-                    @endforeach
-                </div>
-            @endif
-            <form method="POST" action="{{ route('admin.harga-strategi.update', $product->id) }}">
-                @csrf
-                <div class="mb-4">
-                    <label class="block text-base font-semibold text-gray-300 mb-1">Nama Produk</label>
-                    <input type="text" value="{{ $product->nama }}" class="block w-full border-gray-600 rounded-md bg-gray-700/50 text-gray-100 font-medium" readonly>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-base font-semibold text-gray-300 mb-1">Kategori</label>
-                    <input type="text" value="{{ $product->category->nama ?? '-' }}" class="block w-full border-gray-600 rounded-md bg-gray-700/50 text-gray-100 font-medium" readonly>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-base font-semibold text-gray-300 mb-1">Harga Lama</label>
-                    <div class="flex items-center gap-2">
-                        <input type="text" value="Rp {{ number_format($product->harga, 0, ',', '.') }}" class="block w-full border-gray-600 rounded-md bg-gray-700/50 text-indigo-300 font-semibold" readonly>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label for="harga" class="block text-base font-semibold text-gray-300 mb-1">Harga Baru</label>
-                    <input type="number" name="new_price" id="harga" value="{{ old('new_price', $product->harga) }}" maxlength="19" min="0" class="block w-full border-gray-600 rounded-md bg-gray-700/50 text-gray-100 font-medium" required>
-                    <small class="text-gray-400">Maksimal 19 digit angka</small>
-                    @error('new_price')
-                        <div class="text-rose-400 mt-1 text-sm font-semibold">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="flex justify-end gap-2 mt-6">
-                    <a href="{{ route('admin.harga-strategi.index') }}" class="px-4 py-2 bg-gray-700/50 text-gray-300 rounded-xl border-2 border-gray-600 hover:bg-gray-600/50 transition-all duration-200">Batal</a>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl border-2 border-transparent hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500 transition-all duration-200">Simpan</button>
-                </div>
-            </form>
+    <div class="mb-6 animate-fade-in-down">
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-r-lg" role="alert">
+            <p class="font-medium">Sukses!</p>
+            <p>{{ session('success') }}</p>
         </div>
     </div>
+            @endif
+
+            @if($errors->any())
+    <div class="mb-6">
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg" role="alert">
+            <p class="font-semibold">Terjadi Kesalahan</p>
+            <ul class="mt-2 list-disc list-inside">
+                    @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+            </ul>
+        </div>
+                </div>
+            @endif
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+    <form method="POST" action="{{ route('admin.harga-strategi.update', $product->id) }}" class="space-y-6">
+                @csrf
+        <div>
+            <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Produk</label>
+            <input type="text" value="{{ $product->nama }}" class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 font-medium" readonly>
+                </div>
+        
+        <div>
+            <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Kategori</label>
+            <input type="text" value="{{ $product->category->nama ?? '-' }}" class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 font-medium" readonly>
+                </div>
+        
+        <div>
+            <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Harga Lama</label>
+            <input type="text" value="Rp {{ number_format($product->harga, 0, ',', '.') }}" class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-blue-600 dark:text-blue-400 font-semibold" readonly>
+                    </div>
+        
+        <div>
+            <label for="harga" class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Harga Baru <span class="text-red-500">*</span>
+            </label>
+            <input type="number" 
+                   name="new_price" 
+                   id="harga" 
+                   value="{{ old('new_price', $product->harga) }}" 
+                   maxlength="19" 
+                   min="0" 
+                   class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200" 
+                   required>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Maksimal 19 digit angka</p>
+                    @error('new_price')
+                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+        
+        <div class="flex justify-end gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <a href="{{ route('admin.harga-strategi.index') }}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200">
+                Batal
+            </a>
+            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200">
+                Simpan Perubahan
+            </button>
+        </div>
+    </form>
 </div>
 @endsection 

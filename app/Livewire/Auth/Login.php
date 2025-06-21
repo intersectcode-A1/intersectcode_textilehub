@@ -22,8 +22,13 @@ class Login extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
             session()->regenerate();
 
-            // Semua user diarahkan ke /dashboard (nanti dibedakan view-nya di controller)
-            return redirect()->route('dashboard');
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->route('ecatalog.index');
         }
 
         session()->flash('error', 'Email atau password salah.');

@@ -1,154 +1,153 @@
 @extends('components.layouts.admin')
 
-@section('title', 'Admin')
+@section('title', 'Admin Dashboard')
 
 @section('content')
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow p-6">
-            <div class="flex items-center justify-between mb-4">
-                <p class="text-sm text-gray-500">Total Pengguna</p>
-                <span class="p-2 bg-blue-100 rounded-lg">
-                    <i class="fas fa-users text-blue-600"></i>
-                </span>
+    <!-- Breadcrumb -->
+    <div class="mb-6">
+        <h1 class="text-2xl font-semibold text-gray-800 dark:text-white">Default</h1>
+        <nav class="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex">
+                <li class="flex items-center">
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Home</a>
+                    <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Dashboard</a>
+                    <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-400" aria-current="page">Default</a>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Sales Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Daily Sales -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h5 class="text-gray-500 dark:text-gray-400 font-semibold mb-3">Penjualan Harian</h5>
+            <div class="flex justify-between items-center">
+                <div class="flex items-center text-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                    </svg>
+                    <span class="text-2xl font-bold text-gray-800 dark:text-white">Rp {{ number_format($dailySales, 0, ',', '.') }}</span>
+                </div>
+                <span class="font-semibold text-gray-600 dark:text-gray-300">67%</span>
             </div>
-            <p class="text-2xl font-bold text-blue-600">{{ $totalUsers }}</p>
-            <p class="text-xs text-gray-500 mt-2">Total pengguna terdaftar</p>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-3">
+                <div class="bg-gradient-to-r from-cyan-400 to-green-500 h-2 rounded-full" style="width: 67%"></div>
+            </div>
         </div>
-        <div class="bg-white rounded-xl shadow p-6">
-            <div class="flex items-center justify-between mb-4">
-                <p class="text-sm text-gray-500">Total Pesanan</p>
-                <span class="p-2 bg-green-100 rounded-lg">
-                    <i class="fas fa-shopping-cart text-green-600"></i>
-                </span>
+        <!-- Monthly Sales -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h5 class="text-gray-500 dark:text-gray-400 font-semibold mb-3">Penjualan Bulanan</h5>
+            <div class="flex justify-between items-center">
+                <div class="flex items-center text-red-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                    <span class="text-2xl font-bold text-gray-800 dark:text-white">Rp {{ number_format($monthlySalesTotal, 0, ',', '.') }}</span>
+                </div>
+                <span class="font-semibold text-gray-600 dark:text-gray-300">36%</span>
             </div>
-            <p class="text-2xl font-bold text-green-600">{{ $totalOrders }}</p>
-            <p class="text-xs text-gray-500 mt-2">Total pesanan masuk</p>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-3">
+                <div class="bg-purple-500 h-2 rounded-full" style="width: 36%"></div>
+            </div>
         </div>
-        <div class="bg-white rounded-xl shadow p-6">
-            <div class="flex items-center justify-between mb-4">
-                <p class="text-sm text-gray-500">Total Produk</p>
-                <span class="p-2 bg-purple-100 rounded-lg">
-                    <i class="fas fa-box text-purple-600"></i>
-                </span>
+        <!-- Yearly Sales -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h5 class="text-gray-500 dark:text-gray-400 font-semibold mb-3">Penjualan Tahunan</h5>
+            <div class="flex justify-between items-center">
+                <div class="flex items-center text-green-500">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                    </svg>
+                    <span class="text-2xl font-bold text-gray-800 dark:text-white">Rp {{ number_format($yearlySales, 0, ',', '.') }}</span>
+                </div>
+                <span class="font-semibold text-gray-600 dark:text-gray-300">80%</span>
             </div>
-            <p class="text-2xl font-bold text-purple-600">{{ $totalProducts }}</p>
-            <p class="text-xs text-gray-500 mt-2">Total produk tersedia</p>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-3">
+                <div class="bg-gradient-to-r from-teal-400 to-blue-500 h-2 rounded-full" style="width: 80%"></div>
+            </div>
         </div>
     </div>
 
-    <!-- Grafik Penjualan -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Grafik Penjualan Bulanan -->
-        <div class="bg-white rounded-xl shadow p-6">
-            <h3 class="text-lg font-semibold mb-4">Grafik Penjualan Bulanan</h3>
-            <canvas id="monthlySalesChart" height="300"></canvas>
+    <!-- Social Media Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Facebook -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="flex items-center mb-4">
+                <div class="text-4xl text-blue-600 mr-4">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800 dark:text-white">12,281</div>
+                    <div class="text-green-500 text-sm font-semibold">+7.2% Total Suka</div>
+                </div>
+            </div>
+            <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                <span>Target: 35,098</span>
+                <span>Durasi: 350</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
+                <div class="bg-blue-400 h-2 rounded-full" style="width: 45%"></div>
+            </div>
         </div>
+        <!-- Twitter -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="flex items-center mb-4">
+                <div class="text-4xl text-blue-400 mr-4">
+                    <i class="fab fa-twitter"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800 dark:text-white">11,200</div>
+                    <div class="text-green-500 text-sm font-semibold">+6.2% Total Suka</div>
+                </div>
+            </div>
+            <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                <span>Target: 34,185</span>
+                <span>Durasi: 800</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
+                <div class="bg-purple-400 h-2 rounded-full" style="width: 60%"></div>
+            </div>
+        </div>
+        <!-- Google+ -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="flex items-center mb-4">
+                <div class="text-4xl text-red-500 mr-4">
+                    <i class="fab fa-google-plus-g"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800 dark:text-white">10,500</div>
+                    <div class="text-green-500 text-sm font-semibold">+5.9% Total Suka</div>
+                </div>
+            </div>
+            <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                <span>Target: 25,998</span>
+                <span>Durasi: 900</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
+                <div class="bg-indigo-400 h-2 rounded-full" style="width: 75%"></div>
+            </div>
+        </div>
+    </div>
 
-        <!-- Grafik Penjualan Mingguan -->
-        <div class="bg-white rounded-xl shadow p-6">
-            <h3 class="text-lg font-semibold mb-4">Grafik Penjualan Mingguan</h3>
-            <canvas id="weeklySalesChart" height="300"></canvas>
+    <!-- Rating and Recent Users -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Rating -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 min-h-[150px]">
+            <h5 class="text-gray-600 dark:text-gray-300 font-semibold">Penilaian</h5>
+            <!-- Placeholder for rating content -->
+        </div>
+        <!-- Recent Users -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 min-h-[150px]">
+            <h5 class="text-gray-600 dark:text-gray-300 font-semibold">Pengguna Terbaru</h5>
+            <!-- Placeholder for recent users content -->
         </div>
     </div>
 @endsection
 
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Data untuk grafik bulanan
-    const monthlyData = {
-        labels: @json($monthlyLabels),
-        datasets: [{
-            label: 'Penjualan Bulanan (Rp)',
-            data: @json($monthlyData),
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 2,
-            tension: 0.4
-        }]
-    };
-
-    // Data untuk grafik mingguan
-    const weeklyData = {
-        labels: @json($weeklyLabels),
-        datasets: [{
-            label: 'Penjualan Mingguan (Rp)',
-            data: @json($weeklyData),
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 2,
-            tension: 0.4
-        }]
-    };
-
-    // Konfigurasi umum untuk grafik
-    const chartConfig = {
-        type: 'line',
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(context.parsed.y);
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        drawBorder: false
-                    },
-                    ticks: {
-                        callback: function(value, index, values) {
-                            return new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR',
-                                maximumSignificantDigits: 3
-                            }).format(value);
-                        }
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    };
-
-    // Inisialisasi grafik bulanan
-    new Chart(
-        document.getElementById('monthlySalesChart'),
-        {
-            ...chartConfig,
-            data: monthlyData
-        }
-    );
-
-    // Inisialisasi grafik mingguan
-    new Chart(
-        document.getElementById('weeklySalesChart'),
-        {
-            ...chartConfig,
-            data: weeklyData
-        }
-    );
-</script>
-@endsection
