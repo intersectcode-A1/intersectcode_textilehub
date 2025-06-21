@@ -63,6 +63,22 @@ class DashboardController extends Controller
                 $weeklyData[] = $sale->total_sales;
             }
 
+            // Data penjualan harian
+            $dailySales = Order::where('status', 'completed')
+                ->whereDate('created_at', Carbon::today())
+                ->sum('total');
+
+            // Data penjualan bulanan
+            $monthlySalesTotal = Order::where('status', 'completed')
+                ->whereYear('created_at', Carbon::now()->year)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->sum('total');
+
+            // Data penjualan tahunan
+            $yearlySales = Order::where('status', 'completed')
+                ->whereYear('created_at', Carbon::now()->year)
+                ->sum('total');
+
             return view('admin.dashboard', compact(
                 'totalUsers',
                 'totalOrders',
@@ -70,7 +86,10 @@ class DashboardController extends Controller
                 'monthlyLabels',
                 'monthlyData',
                 'weeklyLabels',
-                'weeklyData'
+                'weeklyData',
+                'dailySales',
+                'monthlySalesTotal',
+                'yearlySales'
             ));
         }
 

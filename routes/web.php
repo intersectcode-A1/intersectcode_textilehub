@@ -106,6 +106,9 @@ Route::middleware(['auth', 'web'])->group(function () {
 
 // 🛠️ Admin Panel Routes
 Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
     // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);

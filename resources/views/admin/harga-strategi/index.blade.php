@@ -3,17 +3,65 @@
 @section('title', 'Strategi Harga')
 
 @section('content')
-<div class="min-h-screen bg-gray-900 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-white">Strategi Harga</h1>
+<div class="mb-6">
+    <h1 class="text-2xl font-semibold text-gray-800 dark:text-white">Strategi Harga</h1>
+    <nav class="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+        <ol class="list-none p-0 inline-flex">
+            <li class="flex items-center">
+                <a href="{{ route('admin.dashboard') }}" class="text-gray-500 hover:text-gray-700">Home</a>
+                <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+            </li>
+            <li class="flex items-center">
+                <a href="#" class="text-gray-500 hover:text-gray-700">Strategi</a>
+                <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+            </li>
+            <li>
+                <a href="#" class="text-gray-400" aria-current="page">Strategi Harga</a>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+<div class="flex justify-between items-center mb-6">
+    <p class="text-lg text-gray-600 dark:text-gray-400">Kelola strategi harga dan margin produk.</p>
             <div class="flex gap-2">
-                <a href="{{ route('admin.harga-strategi.export') }}" class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-xl border-2 border-transparent hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-emerald-500 transition-all duration-200 shadow-sm">
-                    <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <a href="{{ route('admin.harga-strategi.export') }}" class="inline-flex items-center px-6 py-3 bg-green-600 text-white text-base font-medium rounded-xl hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 shadow-sm">
+            <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
                     Export
                 </a>
-                <input type="text" id="searchInput" placeholder="Cari produk..." class="border border-gray-600 rounded-xl px-3 py-2 bg-gray-700/50 text-gray-100 placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500" />
-                <select id="filterKategori" class="border border-gray-600 rounded-xl px-3 py-2 bg-gray-700/50 text-gray-100 focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+</div>
+
+@if(session('success'))
+    <div class="mb-6 animate-fade-in-down">
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-r-lg" role="alert">
+            <p class="font-medium">Sukses!</p>
+            <p>{{ session('success') }}</p>
+        </div>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="mb-6 animate-fade-in-down">
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg" role="alert">
+            <p class="font-medium">Error!</p>
+            <p>{{ session('error') }}</p>
+        </div>
+    </div>
+@endif
+
+<!-- Filter dan Pencarian -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cari Produk</label>
+            <input type="text" id="searchInput" placeholder="Cari produk..." class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200" />
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Filter Kategori</label>
+            <select id="filterKategori" class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200">
                     <option value="">Semua Kategori</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->nama }}">{{ $cat->nama }}</option>
@@ -21,68 +69,73 @@
                 </select>
             </div>
         </div>
-        <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-700">
-                <thead class="bg-gray-900/50">
-                    <tr>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Produk</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Harga</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Margin</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Rekomendasi Harga</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Aksi</th>
+</div>
+
+<!-- Tabel Produk -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-700/50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Harga</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Margin</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Rekomendasi Harga</th>
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
-                <tbody id="productTableBody" class="divide-y divide-gray-700">
+            <tbody id="productTableBody" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     @foreach($products as $product)
-                    <tr class="hover:bg-gray-700/50 transition-all duration-200">
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-100 font-medium">{{ $product->nama }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-indigo-300 font-semibold">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{{ $product->nama }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-blue-600 dark:text-blue-400">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="font-semibold {{ $product->margin >= 30 ? 'text-emerald-400' : 'text-rose-400' }}">
+                        <span class="font-semibold {{ $product->margin >= 30 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
                                 {{ number_format($product->margin, 1) }}%
                             </span>
                             @if($product->margin < 30)
-                                <span class="ml-2 px-2 py-1 bg-rose-500/10 text-rose-400 rounded-full text-xs">Perlu Optimasi</span>
+                            <span class="ml-2 px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-full text-xs">Perlu Optimasi</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-indigo-300 font-semibold">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-blue-600 dark:text-blue-400">
                             Rp {{ number_format($product->recommended_price, 0, ',', '.') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <a href="{{ route('admin.harga-strategi.edit', $product->id) }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none transition-all duration-200" title="Edit harga produk">
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div class="flex items-center justify-end space-x-2">
+                            <a href="{{ route('admin.harga-strategi.edit', $product->id) }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition-all duration-200" title="Edit harga produk">
                                 Edit Harga
                             </a>
-                            <button class="history-btn inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-xl text-white bg-gray-700 hover:bg-gray-600 focus:outline-none ml-2 transition-all duration-200"
+                            <button class="history-btn inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-all duration-200"
                                 data-id="{{ $product->id }}" data-nama="{{ $product->nama }}" title="Lihat riwayat harga">
                                 Riwayat
                             </button>
+                        </div>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-        </div>
     </div>
 </div>
 
 <!-- Modal Riwayat Harga -->
 <div id="historyModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
-        <button id="closeHistoryModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">&times;</button>
-        <h2 class="text-xl font-semibold mb-4">Riwayat Harga <span id="historyProductName"></span></h2>
-        <div id="historyLoading" class="text-center text-gray-500">Memuat...</div>
-        <table id="historyTable" class="min-w-full divide-y divide-gray-200 hidden">
-            <thead class="bg-gray-50">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+        <button id="closeHistoryModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">&times;</button>
+        <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Riwayat Harga <span id="historyProductName"></span></h2>
+        <div id="historyLoading" class="text-center text-gray-500 dark:text-gray-400">Memuat...</div>
+        <table id="historyTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 hidden">
+            <thead class="bg-gray-50 dark:bg-gray-700/50">
                 <tr>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Tanggal</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Harga Lama</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Harga Baru</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">User</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Tanggal</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Harga Lama</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Harga Baru</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">User</th>
                 </tr>
             </thead>
-            <tbody id="historyTableBody" class="bg-white divide-y divide-gray-200 text-gray-700"></tbody>
+            <tbody id="historyTableBody" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 text-gray-700 dark:text-gray-300"></tbody>
         </table>
-        <div id="historyEmpty" class="text-center text-gray-500 hidden">Belum ada riwayat perubahan harga.</div>
+        <div id="historyEmpty" class="text-center text-gray-500 dark:text-gray-400 hidden">Belum ada riwayat perubahan harga.</div>
     </div>
 </div>
 
@@ -108,18 +161,18 @@
 @endif
 
 {{-- Grafik Tren Harga --}}
-<div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 mt-8 p-6">
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md mt-8 p-6">
     <div class="flex items-center gap-4 mb-4">
-        <label for="selectChartProduct" class="text-gray-300 font-semibold">Pilih Produk untuk Grafik Tren Harga:</label>
-        <select id="selectChartProduct" class="border border-gray-600 rounded-xl px-3 py-2 bg-gray-700/50 text-gray-100">
+        <label for="selectChartProduct" class="text-gray-700 dark:text-gray-300 font-semibold">Pilih Produk untuk Grafik Tren Harga:</label>
+        <select id="selectChartProduct" class="px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200">
             @foreach($products as $product)
                 <option value="{{ $product->id }}">{{ $product->nama }}</option>
             @endforeach
         </select>
     </div>
     <canvas id="priceChart" height="120"></canvas>
-    <div id="chartLoading" class="text-center text-gray-500 mt-4">Memuat grafik...</div>
-    <div id="chartEmpty" class="text-center text-gray-500 mt-4 hidden">Belum ada data riwayat harga.</div>
+    <div id="chartLoading" class="text-center text-gray-500 dark:text-gray-400 mt-4">Memuat grafik...</div>
+    <div id="chartEmpty" class="text-center text-gray-500 dark:text-gray-400 mt-4 hidden">Belum ada data riwayat harga.</div>
 </div>
 @endsection
 
@@ -234,12 +287,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         datasets: [{
                             label: 'Harga',
                             data: prices,
-                            borderColor: '#6366f1',
-                            backgroundColor: 'rgba(99,102,241,0.1)',
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37,99,235,0.1)',
                             fill: true,
                             tension: 0.3,
                             pointRadius: 4,
-                            pointBackgroundColor: '#6366f1',
+                            pointBackgroundColor: '#2563eb',
                             pointBorderColor: '#fff',
                         }]
                     },
@@ -262,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     callback: function(value) {
                                         return 'Rp ' + value.toLocaleString('id-ID');
                                     },
-                                    color: '#6366f1',
+                                    color: '#6b7280',
                                 },
                                 grid: { color: '#e5e7eb' }
                             },

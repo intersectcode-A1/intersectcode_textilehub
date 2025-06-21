@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\ProductVariant;
 
 class Product extends Model
 {
@@ -41,5 +42,10 @@ class Product extends Model
     public function priceHistory()
     {
         return $this->hasMany(PriceHistory::class);
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
     }
 }
