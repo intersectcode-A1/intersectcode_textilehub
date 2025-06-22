@@ -44,7 +44,7 @@ class NewOrderNotification extends Notification
             ->line('Detail Pesanan:')
             ->line('Nama: ' . $this->order->user_name)
             ->line('Email: ' . $this->order->email)
-            ->line('Total: Rp ' . number_format($this->order->total, 0, ',', '.'))
+            ->line('Total: Rp ' . number_format($this->order->getRawOriginal('total'), 0, ',', '.'))
             ->action('Lihat Pesanan', route('orders.show', $this->order->id))
             ->line('Terima kasih telah menggunakan aplikasi kami!');
     }
@@ -61,7 +61,7 @@ class NewOrderNotification extends Notification
             'order_number' => $this->order->order_number,
             'user_name' => $this->order->user_name,
             'email' => $this->order->email,
-            'total' => $this->order->total,
+            'total' => $this->order->getRawOriginal('total'),
             'status' => $this->order->status,
         ];
     }
