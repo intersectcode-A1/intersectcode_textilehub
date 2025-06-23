@@ -15,6 +15,9 @@
 
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+    <!-- LeafletJS CSS (Dipindahkan ke Head) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 
 <body class="bg-gradient-to-br from-white to-blue-50 text-gray-800 font-sans scroll-smooth">
@@ -206,29 +209,15 @@
   </div>
 </section>
 
-
-
-{{-- <!-- Hubungi Kami Compact -->
-<section id="hubungi" class="max-w-3xl mx-auto py-12 px-6" data-aos="fade-up" data-aos-duration="900" data-aos-easing="ease-out-cubic">
-  <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-8">
-    <h2 class="text-3xl font-semibold text-blue-700 mb-4 text-center">Hubungi Kami</h2>
-    <p class="text-center text-gray-600 mb-6">
-      Ada pertanyaan? Isi form singkat di bawah, kami siap membantu Anda.
-    </p>
-    <form class="space-y-6 max-w-xl mx-auto" action="#" method="POST">
-      <input type="text" name="nama" required placeholder="Nama Lengkap"
-        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition" />
-      <input type="email" name="email" required placeholder="Email"
-        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition" />
-      <textarea name="pesan" rows="3" required placeholder="Pesan Anda"
-        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"></textarea>
-      <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300">
-        Kirim
-      </button>
-    </form>
-  </div>
-</section> --}}
-
+<!-- Section Peta LeafletJS -->
+<section id="lokasi" class="max-w-7xl mx-auto py-12 px-6">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-blue-600 mb-2">Lokasi Toko Kami</h2>
+        <p class="text-gray-500 text-lg">Temukan kami di Sumatera Barat.</p>
+    </div>
+    <!-- Leaflet Map Container -->
+    <div id="map" style="height: 400px; width: 100%; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+</section>
 
 <!-- Footer -->
 <section class="w-full bg-blue-800 text-white pt-12 pb-6">
@@ -270,14 +259,26 @@
     © {{ date('Y') }} Toko Usaha Muda. All rights reserved.
 </div>
 
-
-
     <!-- AOS Script -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
         AOS.init({
             once: true,
             duration: 1000,
+        });
+    </script>
+
+    <!-- LeafletJS JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var map = L.map('map').setView([-0.947083, 100.417181], 9);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            var marker = L.marker([-0.947083, 100.417181]).addTo(map)
+                .bindPopup('Ini adalah pusat Sumatera Barat (Padang).')
+                .openPopup();
         });
     </script>
 
