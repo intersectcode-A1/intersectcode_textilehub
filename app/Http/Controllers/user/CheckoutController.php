@@ -7,24 +7,20 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\User;
-use App\Notifications\NewOrderNotification;
 
 class CheckoutController extends Controller
 {
-    /**
-     * Menampilkan form checkout untuk produk tunggal
-     */
     public function showDirect($id)
     {
         try {
             $product = Product::findOrFail($id);
             $quantity = request('quantity', 1);
 
-            // Validasi stok
             if ($quantity > $product->stok) {
                 return redirect()->route('ecatalog.detail', $id)
                     ->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
@@ -36,7 +32,6 @@ class CheckoutController extends Controller
                 'price' => $product->harga * $quantity,
                 'quantity' => $quantity
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error in showDirect: ' . $e->getMessage());
             return redirect()->route('ecatalog.index')
@@ -44,196 +39,147 @@ class CheckoutController extends Controller
         }
     }
 
-    /**
-     * Submit order untuk checkout langsung
-     */
     public function submit(Request $request)
     {
         try {
             DB::beginTransaction();
 
-            Log::info('Starting order submission process', ['request' => $request->all()]);
-
-            // Validasi input
-            $validated = $request->validate([
+            $data = $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'quantity' => 'required|integer|min:1',
                 'user_name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'telepon' => 'required|string|max:20',
-                'alamat' => 'required|string|max:500'
+                'alamat' => 'required|string|max:500',
             ]);
 
-            Log::info('Validation passed', ['validated' => $validated]);
+            $product = Product::findOrFail($data['product_id']);
+            $this->validateStock($product, $data['quantity']);
 
-            $product = Product::findOrFail($request->product_id);
-            
-            // Validasi stok
-            if ($request->quantity > $product->stok) {
-                throw new \Exception('Jumlah yang diminta melebihi stok yang tersedia.');
-            }
+            $order = $this->createOrder($data, $product->harga * $data['quantity']);
+            $this->createOrderItems($order, [[
+                'product' => $product,
+                'quantity' => $data['quantity'],
+                'price' => $product->harga,
+            ]]);
 
-            Log::info('Stock validation passed', ['product' => $product->toArray()]);
-
-            // Generate nomor pesanan
-            $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
-
-            // Buat order baru
-            $order = Order::create([
-                'user_id' => Auth::id(),
-                'order_number' => $orderNumber,
-                'status' => 'pending',
-                'payment_status' => 'unpaid',
-                'total' => $product->harga * $request->quantity,
-                'user_name' => $request->user_name,
-                'email' => $request->email,
-                'telepon' => $request->telepon,
-                'alamat' => $request->alamat
-            ]);
-
-            Log::info('Order created', ['order' => $order->toArray()]);
-
-            // Buat order item
-            $orderItem = OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'product_name' => $product->nama,
-                'quantity' => $request->quantity,
-                'price' => $product->harga
-            ]);
-
-            Log::info('Order item created', ['orderItem' => $orderItem->toArray()]);
-
-            // Kurangi stok
-            $product->decrement('stok', $request->quantity);
-
-            // Kirim notifikasi ke semua admin
-            $admins = User::where('role', 'admin')->get();
-            foreach ($admins as $admin) {
-                $admin->notify(new NewOrderNotification($order));
-            }
+            $this->notifyAdmins($order);
 
             DB::commit();
-            Log::info('Order process completed successfully');
 
             return redirect()->route('order.status')
                 ->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
-            Log::error('Validation error in submit:', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error in submit: ' . $e->getMessage(), [
-                'exception' => $e,
-                'request' => $request->all()
-            ]);
+            Log::error('Error in submit: ' . $e->getMessage(), ['exception' => $e]);
             return back()->with('error', 'Terjadi kesalahan saat memproses pesanan: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Submit order dari keranjang
-     */
     public function submitFromCart(Request $request)
     {
         try {
             DB::beginTransaction();
 
-            Log::info('Starting cart order submission process', ['request' => $request->all()]);
-
-            // Validasi input
-            $validated = $request->validate([
+            $data = $request->validate([
                 'user_name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'telepon' => 'required|string|max:20',
                 'alamat' => 'required|string|max:500',
                 'items' => 'required|array',
-                'total' => 'required|numeric|min:0'
+                'total' => 'required|numeric|min:0',
             ]);
-
-            Log::info('Cart validation passed', ['validated' => $validated]);
 
             $cart = session()->get('cart', []);
             if (empty($cart)) {
                 throw new \Exception('Keranjang belanja kosong.');
             }
 
-            // Generate nomor pesanan
-            $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
+            $items = collect($data['items'])->map(function ($itemJson) {
+                return json_decode($itemJson, true);
+            });
 
-            // Buat order baru
-            $order = Order::create([
-                'user_id' => Auth::id(),
-                'order_number' => $orderNumber,
-                'status' => 'pending',
-                'payment_status' => 'unpaid',
-                'total' => $request->total,
-                'user_name' => $request->user_name,
-                'email' => $request->email,
-                'telepon' => $request->telepon,
-                'alamat' => $request->alamat
-            ]);
-
-            Log::info('Cart order created', ['order' => $order->toArray()]);
-
-            // Decode items dari form
-            $items = array_map(function($item) {
-                return json_decode($item, true);
-            }, $request->items);
-
-            // Buat order items dan kurangi stok
+            // Validasi semua stok
             foreach ($items as $item) {
-                $product = Product::find($item['id']);
-                
-                if (!$product) {
-                    throw new \Exception('Produk tidak ditemukan.');
-                }
+                $product = Product::findOrFail($item['id']);
+                $this->validateStock($product, $item['quantity']);
+            }
 
-                if ($item['quantity'] > $product->stok) {
-                    throw new \Exception("Stok produk {$product->nama} tidak mencukupi.");
-                }
+            $order = $this->createOrder($data, $data['total']);
 
-                $orderItem = OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['id'],
-                    'product_name' => $item['nama'],
+            $formattedItems = $items->map(function ($item) {
+                $product = Product::findOrFail($item['id']);
+                return [
+                    'product' => $product,
                     'quantity' => $item['quantity'],
-                    'price' => $item['harga']
-                ]);
+                    'price' => $item['harga'],
+                    'product_name' => $item['nama'],
+                ];
+            })->toArray();
 
-                Log::info('Cart order item created', ['orderItem' => $orderItem->toArray()]);
+            $this->createOrderItems($order, $formattedItems);
+            $this->notifyAdmins($order);
 
-                $product->decrement('stok', $item['quantity']);
-            }
-
-            // Kirim notifikasi ke semua admin
-            $admins = User::where('role', 'admin')->get();
-            foreach ($admins as $admin) {
-                $admin->notify(new NewOrderNotification($order));
-            }
-
-            // Kosongkan keranjang
             session()->forget('cart');
-
             DB::commit();
-            Log::info('Cart order process completed successfully');
 
             return redirect()->route('order.status')
                 ->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
-            Log::error('Validation error in submitFromCart:', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error in submitFromCart: ' . $e->getMessage(), [
-                'exception' => $e,
-                'request' => $request->all()
-            ]);
+            Log::error('Error in submitFromCart: ' . $e->getMessage(), ['exception' => $e]);
             return back()->with('error', 'Terjadi kesalahan saat memproses pesanan: ' . $e->getMessage());
         }
+    }
+
+    // ===== 🔧 PRIVATE HELPERS =====
+
+    private function validateStock(Product $product, $quantity)
+    {
+        if ($quantity > $product->stok) {
+            throw new \Exception("Stok produk {$product->nama} tidak mencukupi.");
+        }
+    }
+
+    private function createOrder(array $data, float $total): Order
+    {
+        return Order::create([
+            'user_id' => Auth::id(),
+            'order_number' => 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid()),
+            'status' => 'pending',
+            'payment_status' => 'unpaid',
+            'total' => $total,
+            'user_name' => $data['user_name'],
+            'email' => $data['email'],
+            'telepon' => $data['telepon'],
+            'alamat' => $data['alamat'],
+        ]);
+    }
+
+    private function createOrderItems(Order $order, array $items)
+    {
+        foreach ($items as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item['product']->id,
+                'product_name' => $item['product_name'] ?? $item['product']->nama,
+                'quantity' => $item['quantity'],
+                'price' => $item['price']
+            ]);
+
+            $item['product']->decrement('stok', $item['quantity']);
+        }
+    }
+
+    private function notifyAdmins(Order $order)
+    {
+        User::where('role', 'admin')->get()
+            ->each(fn($admin) => $admin->notify(new NewOrderNotification($order)));
     }
 }
