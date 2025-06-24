@@ -23,18 +23,33 @@ class CheckoutController extends Controller
         try {
             $product = Product::findOrFail($id);
             $quantity = request('quantity', 1);
+            $variantIds = array_filter(explode(',', request('selected_variants', '')));
+            $variants = \App\Models\ProductVariant::whereIn('id', $variantIds)->get();
+            $additionalPrice = $variants->sum('additional_price');
+            $totalPrice = ($product->harga + $additionalPrice) * $quantity;
 
-            // Validasi stok
-            if ($quantity > $product->stok) {
-                return redirect()->route('ecatalog.detail', $id)
-                    ->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
+            // Validasi stok (jika ada varian, cek stok varian terendah)
+            if ($variants->count() > 0) {
+                foreach ($variants as $variant) {
+                    if ($quantity > $variant->stock) {
+                        return redirect()->route('ecatalog.show', $id)
+                            ->with('error', 'Jumlah yang diminta melebihi stok varian yang tersedia.');
+                    }
+                }
+            } else {
+                if ($quantity > $product->stok) {
+                    return redirect()->route('ecatalog.show', $id)
+                        ->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
+                }
             }
 
             return view('ecatalog.checkout', [
                 'productId' => $product->id,
                 'productName' => $product->nama,
-                'price' => $product->harga * $quantity,
-                'quantity' => $quantity
+                'price' => $totalPrice,
+                'quantity' => $quantity,
+                'variants' => $variants,
+                'additionalPrice' => $additionalPrice,
             ]);
 
         } catch (\Exception $e) {
@@ -61,19 +76,29 @@ class CheckoutController extends Controller
                 'user_name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'telepon' => 'required|string|max:20',
-                'alamat' => 'required|string|max:500'
+                'alamat' => 'required|string|max:500',
+                'selected_variants' => 'array',
+                'selected_variants.*' => 'exists:product_variants,id',
             ]);
 
-            Log::info('Validation passed', ['validated' => $validated]);
-
             $product = Product::findOrFail($request->product_id);
-            
-            // Validasi stok
-            if ($request->quantity > $product->stok) {
-                throw new \Exception('Jumlah yang diminta melebihi stok yang tersedia.');
-            }
+            $variantIds = $request->input('selected_variants', []);
+            $variants = \App\Models\ProductVariant::whereIn('id', $variantIds)->get();
+            $additionalPrice = $variants->sum('additional_price');
+            $totalPrice = ($product->harga + $additionalPrice) * $request->quantity;
 
-            Log::info('Stock validation passed', ['product' => $product->toArray()]);
+            // Validasi stok varian
+            if ($variants->count() > 0) {
+                foreach ($variants as $variant) {
+                    if ($request->quantity > $variant->stock) {
+                        throw new \Exception('Jumlah yang diminta melebihi stok varian yang tersedia.');
+                    }
+                }
+            } else {
+                if ($request->quantity > $product->stok) {
+                    throw new \Exception('Jumlah yang diminta melebihi stok yang tersedia.');
+                }
+            }
 
             // Generate nomor pesanan
             $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
@@ -84,14 +109,12 @@ class CheckoutController extends Controller
                 'order_number' => $orderNumber,
                 'status' => 'pending',
                 'payment_status' => 'unpaid',
-                'total' => $product->harga * $request->quantity,
+                'total' => $totalPrice,
                 'user_name' => $request->user_name,
                 'email' => $request->email,
                 'telepon' => $request->telepon,
                 'alamat' => $request->alamat
             ]);
-
-            Log::info('Order created', ['order' => $order->toArray()]);
 
             // Buat order item
             $orderItem = OrderItem::create([
@@ -99,13 +122,25 @@ class CheckoutController extends Controller
                 'product_id' => $product->id,
                 'product_name' => $product->nama,
                 'quantity' => $request->quantity,
-                'price' => $product->harga
+                'price' => $product->harga + $additionalPrice,
+                'variant_info' => $variants->map(function($variant) {
+                    return [
+                        'id' => $variant->id,
+                        'name' => $variant->name,
+                        'type' => $variant->type,
+                        'additional_price' => $variant->additional_price,
+                    ];
+                })->values()->toArray(),
             ]);
 
-            Log::info('Order item created', ['orderItem' => $orderItem->toArray()]);
-
-            // Kurangi stok
-            $product->decrement('stok', $request->quantity);
+            // Kurangi stok produk dan varian
+            if ($variants->count() > 0) {
+                foreach ($variants as $variant) {
+                    $variant->decrement('stock', $request->quantity);
+                }
+            } else {
+                $product->decrement('stok', $request->quantity);
+            }
 
             // Kirim notifikasi ke semua admin
             $admins = User::where('role', 'admin')->get();
