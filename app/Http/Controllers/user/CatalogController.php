@@ -72,7 +72,7 @@ class CatalogController extends Controller
     {
         try {
             $order = Order::findOrFail($id);
-            
+
             // Validasi apakah order milik user yang login
             if ($order->user_id !== Auth::id()) {
                 return back()->with('error', 'Anda tidak memiliki akses untuk membatalkan pesanan ini');

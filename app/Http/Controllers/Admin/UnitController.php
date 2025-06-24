@@ -61,4 +61,4 @@ class UnitController extends Controller
         $unit->delete();
         return back()->with('success', 'Satuan berhasil dihapus.');
     }
-} 
+}

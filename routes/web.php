@@ -26,7 +26,11 @@ use App\Http\Controllers\User\CatalogController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\UnitController;
-use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\HargaStrategiController;
+use App\Http\Controllers\Admin\AnalisisPenjualanController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\user\WishlistController;
+use App\Http\Controllers\NotificationController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -79,13 +83,11 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::post('/laporan-keuangan/filter', [LaporanKeuanganController::class, 'filter'])->name('laporan.filter');
 
     // Checkout dan Submit Order
-    Route::middleware(['throttle:6,1'])->group(function () {
-        Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
-        Route::get('/checkout-direct/{id}', [CheckoutController::class, 'showDirect'])->name('checkout.direct');
-        Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
-        Route::post('/order/submit-cart', [CheckoutController::class, 'submitFromCart'])->name('order.submit.cart');
-        Route::get('/checkout-cart', [CartController::class, 'checkoutFromCart'])->name('checkout.cart');
-    });
+    Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+    Route::get('/checkout-direct/{id}', [CheckoutController::class, 'showDirect'])->name('checkout.direct');
+    Route::post('/order/submit', [CheckoutController::class, 'submit'])->name('order.submit');
+    Route::post('/order/submit-cart', [CheckoutController::class, 'submitFromCart'])->name('order.submit.cart');
+    Route::get('/checkout-cart', [CartController::class, 'checkoutFromCart'])->name('checkout.cart');
 
     // 🛒 Keranjang (User)
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
@@ -108,6 +110,9 @@ Route::middleware(['auth', 'web'])->group(function () {
 
 // 🛠️ Admin Panel Routes
 Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
     // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
@@ -126,7 +131,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::post('/pelacakan', [TrackingController::class, 'search'])->name('tracking.search');
 
     // Analisis Penjualan
-    Route::get('/analisis-penjualan', [SalesAnalysisController::class, 'index'])->name('admin.sales.analysis');
+    Route::get('/analisis-penjualan', [AnalisisPenjualanController::class, 'index'])->name('admin.sales.analysis');
 
     // Supplier
     Route::resource('supplier', SupplierController::class);
@@ -134,10 +139,15 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     // Store Order
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
-    // Routes untuk varian produk
-    Route::get('/products/{product}/variants/create', [ProductVariantController::class, 'create'])->name('variants.create');
-    Route::post('/products/{product}/variants', [ProductVariantController::class, 'store'])->name('variants.store');
-    Route::get('/variants/{variant}/edit', [ProductVariantController::class, 'edit'])->name('variants.edit');
-    Route::put('/variants/{variant}', [ProductVariantController::class, 'update'])->name('variants.update');
-    Route::delete('/variants/{variant}', [ProductVariantController::class, 'destroy'])->name('variants.destroy');
+    // Strategi Harga
+    Route::get('/harga-strategi', [HargaStrategiController::class, 'index'])->name('admin.harga-strategi.index');
+    Route::post('/harga-strategi/{product}/update', [HargaStrategiController::class, 'updateHarga'])->name('admin.harga-strategi.update');
+    Route::get('/harga-strategi/{product}/history', [HargaStrategiController::class, 'getPriceHistory'])->name('admin.harga-strategi.history');
+    Route::get('/harga-strategi/{product}/edit', [HargaStrategiController::class, 'edit'])->name('admin.harga-strategi.edit');
+    Route::get('/harga-strategi/export', [HargaStrategiController::class, 'exportExcel'])->name('admin.harga-strategi.export');
+    Route::post('/harga-strategi/bulk-update', [HargaStrategiController::class, 'bulkUpdate'])->name('admin.harga-strategi.bulkUpdate');
+
+    // Notifications
+    Route::get('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
 });

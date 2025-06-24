@@ -1,3 +1,4 @@
+<!-- resources/views/auth/forgot-password.blade.php -->
 <x-layouts.app>
     <div class="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
 
@@ -48,4 +49,4 @@
             </p>
         </div>
     </div>
-</x-layouts.app>
+</x-layouts.app> 

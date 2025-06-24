@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,115 +8,95 @@
     {{-- Favicon --}}
     <link rel="icon" type="image/png" href="{{ asset('image/img_logo_tokousahamuda.png') }}">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite('resources/css/app.css')
+    
+    <script>
+        // Skrip ini ditempatkan di <head> untuk mencegah FOUC (Flash of Unstyled Content)
+        if (localStorage.getItem('color-theme') === 'dark' || 
+           (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen flex">
-
-<!-- Sidebar -->
-<aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 shadow-lg h-screen sticky top-0 transition-all duration-300 overflow-hidden">
-    <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
-        <div class="flex items-center gap-2">
-            <img src="{{ asset('image/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda" class="h-8 w-auto">
-            <span class="font-bold text-blue-600 dark:text-blue-400 sidebar-label">Toko Usaha Muda</span>
-        </div>
-        <button onclick="toggleSidebar()">
-            <i id="sidebar-icon" data-lucide="chevron-left"></i>
-        </button>
-    </div>
-    <nav class="px-4 py-4 space-y-3">
-    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 hover:text-blue-600">
-        <i data-lucide="layout-dashboard"></i>
-        <span class="sidebar-label">Dashboard</span>
-    </a>
-    <a href="{{ route('products.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-        <i data-lucide="package"></i>
-        <span class="sidebar-label">Produk</span>
-    </a>
-    <a href="{{ route('categories.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-        <i data-lucide="layers"></i>
-        <span class="sidebar-label">Kategori</span>
-    </a>
-    <a href="{{ route('orders.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-        <i data-lucide="shopping-cart"></i>
-        <span class="sidebar-label">Pesanan</span>
-    </a>
-    <a href="{{ route('admin.sales.analysis') }}" class="flex items-center gap-2 hover:text-blue-600">
-        <i data-lucide="bar-chart-3"></i>
-        <span class="sidebar-label">Analisis Penjualan</span>
-    </a>
-    <a href="{{ route('tracking.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-    <i data-lucide="map-pin"></i>
-    <span class="sidebar-label">Pelacakan</span>
-</a>
-    <a href="{{ route('supplier.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-        <i data-lucide="truck"></i>
-        <span class="sidebar-label">Kelola Data Supplier</span>
-    </a>
-
-    <a href="{{ route('laporan.index') }}" class="flex items-center gap-2 hover:text-blue-600">
-    <i data-lucide="bar-chart-2"></i>
-    <span class="sidebar-label">Laporan Keuangan</span>
-</a>
-
-
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="flex items-center gap-2 text-red-500 hover:underline">
-            <i data-lucide="log-out"></i>
-            <span class="sidebar-label">Logout</span>
-        </button>
-    </form>
-</nav>
-</aside>
-
-<!-- Main Content -->
-<main class="flex-1">
-    <div class="flex justify-between items-center px-6 py-4 bg-white dark:bg-gray-800 shadow">
-        <h1 class="text-2xl font-semibold">@yield('title', 'Dashboard')</h1>
-        <div class="flex gap-4 items-center">
-            <button onclick="toggleDarkMode()"><i data-lucide="moon"></i></button>
-            <button id="notifBtn" class="relative">
-                <i data-lucide="bell"></i>
-                <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div class="flex min-h-screen">
+        @include('components.navigation.admin-sidebar')
+        <div id="main-content" class="flex-1 flex flex-col transition-all duration-300">
+            @include('components.navigation.admin-topsider')
+            <main class="flex-1 p-6 overflow-y-auto">
+                @yield('content')
+            </main>
         </div>
     </div>
 
-    <div class="px-6 py-4">
-        @yield('content')
-    </div>
-</main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
 
-<script>
-    // Inisialisasi ikon
-    lucide.createIcons();
+            // THEME TOGGLE SCRIPT
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+                const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-    // Toggle Dark Mode
-    function toggleDarkMode() {
-        document.documentElement.classList.toggle('dark');
-        lucide.createIcons();
-    }
+                // Tampilkan ikon yang benar saat halaman dimuat
+                if (document.documentElement.classList.contains('dark')) {
+                    themeToggleLightIcon.classList.remove('hidden');
+                } else {
+                    themeToggleDarkIcon.classList.remove('hidden');
+                }
 
-    // Toggle Sidebar
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const labels = document.querySelectorAll('.sidebar-label');
-        const icon = document.getElementById('sidebar-icon');
+                themeToggleBtn.addEventListener('click', () => {
+                    // Toggle ikon
+                    themeToggleDarkIcon.classList.toggle('hidden');
+                    themeToggleLightIcon.classList.toggle('hidden');
 
-        const isCollapsed = sidebar.classList.contains('w-16');
+                    // Toggle kelas dark di <html>
+                    const isDark = document.documentElement.classList.toggle('dark');
+                    
+                    // Simpan preferensi ke localStorage
+                    localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+                });
+            }
 
-        sidebar.classList.toggle('w-64', isCollapsed);
-        sidebar.classList.toggle('w-16', !isCollapsed);
+            // SIDEBAR TOGGLE SCRIPT
+            const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+            const sidebar = document.getElementById('sidebar');
 
-        labels.forEach(label => label.classList.toggle('hidden', !isCollapsed));
+            const applySidebarState = (state) => {
+                const isCollapsed = state === 'collapsed';
+                if (sidebar) {
+                    sidebar.classList.toggle('w-64', !isCollapsed);
+                    sidebar.classList.toggle('w-20', isCollapsed);
 
-        icon.setAttribute('data-lucide', isCollapsed ? 'chevron-left' : 'chevron-right');
-        lucide.createIcons();
-    }
-</script>
+                    sidebar.querySelectorAll('.sidebar-label').forEach(label => {
+                        label.classList.toggle('hidden', isCollapsed);
+                    });
 
+                    const sidebarIcon = sidebarToggleBtn.querySelector('i');
+                    if (sidebarIcon) {
+                        sidebarIcon.setAttribute('data-lucide', isCollapsed ? 'menu' : 'panel-left-close');
+                        lucide.createIcons();
+                    }
+                }
+                localStorage.setItem('sidebar-state', state);
+            };
+
+            if (sidebarToggleBtn) {
+                sidebarToggleBtn.addEventListener('click', () => {
+                    applySidebarState(localStorage.getItem('sidebar-state') === 'collapsed' ? 'expanded' : 'collapsed');
+                });
+            }
+            
+            applySidebarState(localStorage.getItem('sidebar-state') || 'expanded');
+        });
+    </script>
+    @stack('scripts')
 </body>
 </html>

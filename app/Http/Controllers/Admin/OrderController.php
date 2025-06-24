@@ -32,7 +32,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $oldStatus = $order->status;
         $order->status = $request->status;
-        
+
         // Jika status berubah menjadi completed, update stok
         if ($oldStatus !== 'completed' && $request->status === 'completed') {
             foreach ($order->items as $item) {
@@ -42,7 +42,7 @@ class OrderController extends Controller
                 }
             }
         }
-        
+
         $order->save();
         return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
     }
@@ -56,7 +56,7 @@ class OrderController extends Controller
     public function export()
     {
         $orders = Order::with(['items', 'user'])->get();
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename=orders.csv',
@@ -64,7 +64,7 @@ class OrderController extends Controller
 
         $callback = function() use ($orders) {
             $file = fopen('php://output', 'w');
-            
+
             // Add headers
             fputcsv($file, [
                 'ID',
