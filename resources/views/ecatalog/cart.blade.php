@@ -85,7 +85,7 @@
                                     Jumlah: {{ $item['quantity'] }}
                                 </div>
                                 <div class="text-gray-900 font-bold text-base">
-                                    Subtotal: Rp {{ number_format(($item['harga'] + ($item['additional_price'] ?? 0)) * $item['quantity'], 0, ',', '.') }}
+                                    total: Rp {{ number_format(($item['harga'] + ($item['additional_price'] ?? 0)) * $item['quantity'], 0, ',', '.') }}
                                 </div>
                             </div>
                         </div>
@@ -106,13 +106,13 @@
                 <div class="flex justify-between items-center mb-4">
                     <span class="text-lg font-bold text-gray-900">Total Pembayaran</span>
                     @php
-                        $subtotal = collect($cart)->sum(function($item) {
+                        $total = collect($cart)->sum(function($item) {
                             $basePrice = $item['harga'];
                             $additionalPrice = $item['additional_price'] ?? 0;
                             return ($basePrice + $additionalPrice) * $item['quantity'];
                         });
                     @endphp
-                    <span class="text-xl font-bold text-green-600">Rp {{ number_format($subtotal + 10000, 0, ',', '.') }}</span>
+                    <span class="text-xl font-bold text-green-600">Rp {{ number_format($total, 0, ',', '.') }}</span>
                 </div>
                 <a href="{{ route('checkout.cart') }}" 
                    class="block w-full text-center py-3 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold text-base transition duration-150 shadow hover:shadow-md">

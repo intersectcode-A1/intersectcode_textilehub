@@ -155,8 +155,16 @@
                         @foreach($groupedVariants as $type => $variants)
                             <div class="space-y-3">
                                 <p class="font-medium text-gray-800 flex items-center">
-                                    <i class="fas fa-{{ $type === 'color' ? 'palette' : 'ruler' }} mr-2 text-blue-600"></i>
-                                    {{ $type === 'color' ? 'Pilih Warna' : 'Pilih Ukuran' }}
+                                    @if($type === 'color')
+                                        <i class="fas fa-palette mr-2 text-blue-600"></i>
+                                        Pilih Warna
+                                    @elseif($type === 'size')
+                                        <i class="fas fa-ruler mr-2 text-blue-600"></i>
+                                        Pilih Ukuran
+                                    @else
+                                        <i class="fas fa-tag mr-2 text-blue-600"></i>
+                                        Pilih {{ ucfirst($type) }}
+                                    @endif
                                 </p>
                                 <div class="grid grid-cols-3 gap-3">
                                     @foreach($variants as $variant)
