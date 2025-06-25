@@ -84,6 +84,38 @@
             @enderror
         </div>
 
+        <div class="mb-4">
+            <label for="harga_modal" class="block text-gray-700 font-bold mb-2">Harga Modal / Satuan</label>
+            <div class="mt-2 relative rounded-lg">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-gray-400">Rp</span>
+                </div>
+                <input type="number"
+                    name="harga_modal"
+                    id="harga_modal"
+                    value="{{ old('harga_modal', $supplier->harga_modal ?? '') }}"
+                    class="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-100 border-2 border-gray-200 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200"
+                    placeholder="0"
+                    min="0"
+                    step="1000"
+                    required>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="satuan" class="block text-gray-700 font-bold mb-2">Satuan</label>
+            <input type="text"
+                name="satuan"
+                id="satuan"
+                value="{{ old('satuan', $supplier->satuan ?? '') }}"
+                class="w-full px-4 py-3 rounded-lg bg-gray-100 border-2 border-gray-200 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200"
+                placeholder="Contoh: Pcs, Lusin, Kg"
+                required>
+        </div>
+        <div class="mb-4">
+            <label for="deskripsi" class="block text-gray-700 font-bold mb-2">Deskripsi</label>
+            <textarea name="deskripsi" id="deskripsi" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('deskripsi', $supplier->deskripsi ?? '') }}</textarea>
+        </div>
+
         <div class="flex justify-end gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ route('supplier.index') }}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200">
                 Batal

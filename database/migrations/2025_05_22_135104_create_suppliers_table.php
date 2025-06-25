@@ -14,6 +14,8 @@ class CreateSuppliersTable extends Migration
         $table->text('alamat');
         $table->string('kontak');
         $table->string('produk');
+        $table->decimal('harga_modal', 15, 2)->default(0);
+        $table->text('deskripsi')->nullable();
         $table->timestamps();
     });
 }

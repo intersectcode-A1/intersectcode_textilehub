@@ -41,61 +41,65 @@
         </div>
     @endif
 
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs md:text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-700/50">
+            <tr>
+                <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">No</th>
+                <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama</th>
+                <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider max-w-[120px] truncate">Alamat</th>
+                <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kontak</th>
+                <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
+                <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Harga Modal</th>
+                <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider max-w-[120px] truncate">Deskripsi</th>
+                <th scope="col" class="px-3 py-2 text-left font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Satuan</th>
+                <th scope="col" class="px-3 py-2 text-right font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            @forelse($suppliers as $supplier)
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">No</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Alamat</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kontak</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                @forelse($suppliers as $supplier)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{{ $loop->iteration }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $supplier->nama }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $supplier->alamat }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $supplier->kontak }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $supplier->produk }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div class="flex items-center justify-end space-x-2">
-                                <a href="{{ route('supplier.edit', $supplier) }}" class="p-2 text-gray-500 hover:text-blue-600 bg-gray-100 hover:bg-blue-100 rounded-lg transition-all duration-200">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"/>
-                                    </svg>
-                                </a>
-                                <form action="{{ route('supplier.destroy', $supplier) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus supplier ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="p-2 text-gray-500 hover:text-red-600 bg-gray-100 hover:bg-red-100 rounded-lg transition-all duration-200">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center py-12">
-                            <div class="text-gray-500 dark:text-gray-400">
-                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <td class="px-3 py-2 whitespace-nowrap font-medium text-gray-900 dark:text-white">{{ $loop->iteration }}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-gray-500 dark:text-gray-300">{{ $supplier->nama }}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-gray-500 dark:text-gray-300 max-w-[120px] truncate" title="{{ $supplier->alamat }}">{{ $supplier->alamat }}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-gray-500 dark:text-gray-300">{{ $supplier->kontak }}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-gray-500 dark:text-gray-300">{{ $supplier->produk }}</td>
+                    <td class="px-3 py-2 whitespace-nowrap">Rp {{ number_format($supplier->harga_modal, 2, ',', '.') }}</td>
+                    <td class="px-3 py-2 whitespace-nowrap max-w-[120px] truncate" title="{{ $supplier->deskripsi }}">{{ $supplier->deskripsi }}</td>
+                    <td class="px-3 py-2 whitespace-nowrap">{{ $supplier->satuan }}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-right">
+                        <div class="flex items-center justify-end space-x-2">
+                            <a href="{{ route('supplier.edit', $supplier) }}" class="p-2 text-gray-500 hover:text-blue-600 bg-gray-100 hover:bg-blue-100 rounded-lg transition-all duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"/>
                                 </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-800 dark:text-white">Tidak ada supplier</h3>
-                                <p class="mt-1 text-sm text-gray-500">Mulai dengan menambahkan data supplier baru.</p>
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                            </a>
+                            <form action="{{ route('supplier.destroy', $supplier) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus supplier ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="p-2 text-gray-500 hover:text-red-600 bg-gray-100 hover:bg-red-100 rounded-lg transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="9" class="text-center py-12">
+                        <div class="text-gray-500 dark:text-gray-400">
+                             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-800 dark:text-white">Tidak ada supplier</h3>
+                            <p class="mt-1 text-sm text-gray-500">Mulai dengan menambahkan data supplier baru.</p>
+                        </div>
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
 @endsection
