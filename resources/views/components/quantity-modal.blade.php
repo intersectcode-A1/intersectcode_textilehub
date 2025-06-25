@@ -58,7 +58,7 @@
         </button>
         <button @click="showModal = true; isCheckout = false"
                 class="flex-1 bg-yellow-500 text-white px-4 py-2.5 rounded-lg hover:bg-yellow-600 transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center">
-            <i class="fas fa-cart-plus mr-2"></i>Keranjang
+            <i class="fas fa-cart-plus mr-2"></i>
         </button>
     </div>
 
