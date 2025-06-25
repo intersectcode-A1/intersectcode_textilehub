@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class OrderController extends Controller
 {
@@ -135,5 +136,13 @@ class OrderController extends Controller
         }
 
         return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
+    }
+
+    public function invoice($id)
+    {
+        $order = Order::with(['items.product', 'user'])->findOrFail($id);
+        $total = $order->total;
+        $pdf = PDF::loadView('ecatalog.invoice-pdf', compact('order', 'total'));
+        return $pdf->download('invoice-order-' . $order->id . '.pdf');
     }
 }

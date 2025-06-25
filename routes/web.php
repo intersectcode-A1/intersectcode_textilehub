@@ -125,6 +125,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::post('/orders/{id}/verify-payment', [OrderController::class, 'verifyPayment'])->name('orders.verifyPayment');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::get('/orders/{id}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
 
     // Pelacakan
     Route::get('/pelacakan', [TrackingController::class, 'index'])->name('tracking.index');
