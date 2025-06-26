@@ -14,80 +14,37 @@ class CartController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
-            
+
             // Validasi jumlah yang diminta
             $quantity = $request->input('quantity', 1);
-            
-            // Validasi varian yang dipilih
-            $selectedVariants = [];
-            $additionalPrice = 0;
-            if ($request->has('selected_variants')) {
-                $variantIds = explode(',', $request->selected_variants);
-                foreach ($variantIds as $variantId) {
-                    $variant = ProductVariant::findOrFail($variantId);
-                    if ($variant->product_id !== $product->id) {
-                        return back()->with('error', 'Varian yang dipilih tidak valid.');
-                    }
-                    if ($variant->stock < $quantity) {
-                        return back()->with('error', 'Stok varian ' . $variant->name . ' tidak mencukupi.');
-                    }
-                    $selectedVariants[] = $variant;
-                    $additionalPrice += $variant->additional_price;
-                }
+            if ($quantity > $product->stok) {
+                return back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
             }
-
-            // Hitung total harga dengan varian
-            $totalPrice = $product->harga + $additionalPrice;
 
             $cart = session()->get('cart', []);
-            $cartKey = $id;
-            
-            // Jika ada varian, tambahkan ke cart key
-            if (!empty($selectedVariants)) {
-                $variantKey = implode('-', array_map(fn($v) => $v->id, $selectedVariants));
-                $cartKey .= '-' . $variantKey;
-            }
 
-            if (isset($cart[$cartKey])) {
-                // Jika produk dengan varian yang sama sudah ada di keranjang
-                $newQuantity = $cart[$cartKey]['quantity'] + $quantity;
-                
-                // Cek stok untuk setiap varian
-                foreach ($selectedVariants as $variant) {
-                    if ($newQuantity > $variant->stock) {
-                        return back()->with('error', 'Total jumlah di keranjang melebihi stok yang tersedia untuk varian ' . $variant->name);
-                    }
+            if (isset($cart[$id])) {
+                // Jika produk sudah ada di keranjang, tambahkan quantity
+                $newQuantity = $cart[$id]['quantity'] + $quantity;
+                if ($newQuantity > $product->stok) {
+                    return back()->with('error', 'Total jumlah di keranjang melebihi stok yang tersedia.');
                 }
-                
-                $cart[$cartKey]['quantity'] = $newQuantity;
+                $cart[$id]['quantity'] = $newQuantity;
             } else {
-                // Jika produk dengan varian belum ada di keranjang
-                $cart[$cartKey] = [
+                // Jika produk belum ada di keranjang
+                $cart[$id] = [
                     'nama' => $product->nama,
                     'harga' => $product->harga,
-                    'additional_price' => $additionalPrice,
                     'foto' => $product->foto,
-                    'quantity' => $quantity,
-                    'variants' => array_map(function($variant) {
-                        return [
-                            'id' => $variant->id,
-                            'name' => $variant->name,
-                            'type' => $variant->type,
-                            'additional_price' => $variant->additional_price,
-                            'stock' => $variant->stock,
-                        ];
-                    }, $selectedVariants)
+                    'quantity' => $quantity
                 ];
             }
 
             session()->put('cart', $cart);
 
-            // Hitung total item di keranjang
-            $totalItems = $this->getTotalItems();
-
             return back()->with([
                 'success' => 'Produk berhasil ditambahkan ke keranjang!',
-                'cartCount' => $totalItems
+                'cartCount' => $this->getTotalItems()
             ]);
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menambahkan produk ke keranjang: ' . $e->getMessage());
@@ -97,24 +54,24 @@ class CartController extends Controller
     // Tampilkan isi keranjang
     public function index()
     {
-        $cart = session()->get('cart', []);
-        $totalItems = $this->getTotalItems();
-        return view('ecatalog.cart', compact('cart', 'totalItems'));
+        return view('ecatalog.cart', [
+            'cart' => session()->get('cart', []),
+            'totalItems' => $this->getTotalItems()
+        ]);
     }
 
     // Hapus produk dari keranjang
-    public function remove($cartKey) 
+    public function remove($id)
     {
         $cart = session()->get('cart', []);
-        if (isset($cart[$cartKey])) {
-            unset($cart[$cartKey]);
+        if (isset($cart[$id])) {
+            unset($cart[$id]);
             session()->put('cart', $cart);
         }
 
-        $totalItems = $this->getTotalItems();
         return redirect()->route('cart.index')->with([
             'success' => 'Produk berhasil dihapus dari keranjang.',
-            'cartCount' => $totalItems
+            'cartCount' => $this->getTotalItems()
         ]);
     }
 
@@ -122,43 +79,54 @@ class CartController extends Controller
     public function checkoutFromCart()
     {
         $cart = session()->get('cart', []);
-        
+
         if (empty($cart)) {
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja kosong!');
         }
 
-        // Hitung total harga
-        $total = 0;
         $items = [];
-        foreach ($cart as $cartKey => $item) {
+        foreach ($cart as $id => $item) {
             $subtotal = $item['harga'] * $item['quantity'];
             $total += $subtotal;
             $items[] = [
-                'id' => explode('-', $cartKey)[0], // Ambil ID produk dari cart key
+                'id' => $id,
                 'nama' => $item['nama'],
                 'harga' => $item['harga'],
                 'quantity' => $item['quantity'],
-                'variants' => $item['variants'] ?? [],
                 'subtotal' => $subtotal
-            ];
+            ]);
+            $total += $subtotal;
         }
 
-        $totalItems = $this->getTotalItems();
         return view('ecatalog.checkout-cart', [
             'items' => $items,
             'total' => $total,
-            'totalItems' => $totalItems
+            'totalItems' => $this->getTotalItems()
         ]);
     }
 
-    // Helper method untuk menghitung total item di keranjang
+    // Hitung total item di keranjang
     private function getTotalItems()
     {
-        $cart = session()->get('cart', []);
-        $totalItems = 0;
-        foreach ($cart as $item) {
-            $totalItems += $item['quantity'];
+        return collect(session()->get('cart', []))
+            ->sum(fn($item) => $item['quantity']);
+    }
+
+    // Helper untuk mengupdate item dalam keranjang
+    private function updateCartItem(array $cart, Product $product, int $quantity)
+    {
+        $existingQty = $cart[$product->id]['quantity'] ?? 0;
+        $newQty = $existingQty + $quantity;
+
+        if ($newQty > $product->stok) {
+            abort(400, 'Total jumlah di keranjang melebihi stok yang tersedia.');
         }
-        return $totalItems;
+
+        return [
+            'nama' => $product->nama,
+            'harga' => $product->harga,
+            'foto' => $product->foto,
+            'quantity' => $newQty
+        ];
     }
 }
