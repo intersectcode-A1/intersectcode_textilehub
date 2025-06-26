@@ -54,6 +54,17 @@
                         <div class="py-4 flex justify-between items-center">
                             <div class="flex-1">
                                 <h4 class="font-medium text-gray-900">{{ $item->product_name }}</h4>
+                                @if(!empty($item->variant_info) && count((array)$item->variant_info) > 0)
+                                    <div class="mt-2 text-sm text-gray-700">
+                                        @foreach((array)$item->variant_info as $variant)
+                                            <div>{{ ucfirst($variant['type'] ?? '') }}: {{ $variant['name'] ?? '' }}
+                                                @if(!empty($variant['additional_price']) && $variant['additional_price'] > 0)
+                                                    (+Rp {{ number_format($variant['additional_price'], 0, ',', '.') }})
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                                 <p class="text-sm text-gray-600">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                             </div>
                             <div class="text-right">
@@ -70,6 +81,18 @@
                         <span class="text-2xl font-bold text-green-600">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
                     </div>
                 </div>
+
+                @if($order->payment_status === 'paid' && $order->status !== 'waiting')
+                    <div class="mt-6 text-center">
+                        <a href="{{ route('order.invoice.pdf', $order->id) }}"
+                           class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Download Invoice (PDF)
+                        </a>
+                    </div>
+                @endif
 
                 {{-- Tombol Bayar (hanya muncul jika status completed) --}}
                 @if($order->status === 'completed')

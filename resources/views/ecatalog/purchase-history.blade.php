@@ -83,6 +83,12 @@
                                             <a href="{{ route('payment.show', $order->id) }}" 
                                                class="text-green-600 hover:text-green-900">Bayar</a>
                                         @endif
+                                        @if($order->payment_status === 'paid')
+                                            <a href="{{ route('order.invoice.pdf', $order->id) }}" 
+                                               class="text-indigo-600 hover:text-indigo-900" target="_blank">
+                                                Download Invoice
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

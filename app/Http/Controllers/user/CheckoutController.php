@@ -21,6 +21,7 @@ class CheckoutController extends Controller
             $product = Product::findOrFail($id);
             $quantity = request('quantity', 1);
 
+            // Validasi stok
             if ($quantity > $product->stok) {
                 return redirect()->route('ecatalog.detail', $id)
                     ->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
@@ -29,8 +30,10 @@ class CheckoutController extends Controller
             return view('ecatalog.checkout', [
                 'productId' => $product->id,
                 'productName' => $product->nama,
-                'price' => $product->harga * $quantity,
-                'quantity' => $quantity
+                'price' => $totalPrice,
+                'quantity' => $quantity,
+                'variants' => $variants,
+                'additionalPrice' => $additionalPrice,
             ]);
         } catch (\Exception $e) {
             Log::error('Error in showDirect: ' . $e->getMessage());
@@ -50,20 +53,55 @@ class CheckoutController extends Controller
                 'user_name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'telepon' => 'required|string|max:20',
-                'alamat' => 'required|string|max:500',
+                'alamat' => 'required|string|max:500'
             ]);
 
-            $product = Product::findOrFail($data['product_id']);
-            $this->validateStock($product, $data['quantity']);
+            $product = Product::findOrFail($request->product_id);
 
-            $order = $this->createOrder($data, $product->harga * $data['quantity']);
-            $this->createOrderItems($order, [[
-                'product' => $product,
-                'quantity' => $data['quantity'],
-                'price' => $product->harga,
-            ]]);
+            // Validasi stok
+            if ($request->quantity > $product->stok) {
+                throw new \Exception('Jumlah yang diminta melebihi stok yang tersedia.');
+            }
 
-            $this->notifyAdmins($order);
+            Log::info('Stock validation passed', ['product' => $product->toArray()]);
+
+            // Generate nomor pesanan
+            $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
+
+            // Buat order baru
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'order_number' => $orderNumber,
+                'status' => 'pending',
+                'payment_status' => 'unpaid',
+                'total' => $product->harga * $request->quantity,
+                'user_name' => $request->user_name,
+                'email' => $request->email,
+                'telepon' => $request->telepon,
+                'alamat' => $request->alamat
+            ]);
+
+            Log::info('Order created', ['order' => $order->toArray()]);
+
+            // Buat order item
+            $orderItem = OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'product_name' => $product->nama,
+                'quantity' => $request->quantity,
+                'price' => $product->harga
+            ]);
+
+            Log::info('Order item created', ['orderItem' => $orderItem->toArray()]);
+
+            // Kurangi stok
+            $product->decrement('stok', $request->quantity);
+
+            // Kirim notifikasi ke semua admin
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderNotification($order));
+            }
 
             DB::commit();
 

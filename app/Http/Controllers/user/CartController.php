@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductVariant;
 
 class CartController extends Controller
 {
@@ -13,15 +14,31 @@ class CartController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
-            $quantity = (int) $request->input('quantity', 1);
 
+            // Validasi jumlah yang diminta
+            $quantity = $request->input('quantity', 1);
             if ($quantity > $product->stok) {
                 return back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
             }
 
             $cart = session()->get('cart', []);
 
-            $cart[$id] = $this->updateCartItem($cart, $product, $quantity);
+            if (isset($cart[$id])) {
+                // Jika produk sudah ada di keranjang, tambahkan quantity
+                $newQuantity = $cart[$id]['quantity'] + $quantity;
+                if ($newQuantity > $product->stok) {
+                    return back()->with('error', 'Total jumlah di keranjang melebihi stok yang tersedia.');
+                }
+                $cart[$id]['quantity'] = $newQuantity;
+            } else {
+                // Jika produk belum ada di keranjang
+                $cart[$id] = [
+                    'nama' => $product->nama,
+                    'harga' => $product->harga,
+                    'foto' => $product->foto,
+                    'quantity' => $quantity
+                ];
+            }
 
             session()->put('cart', $cart);
 
@@ -30,7 +47,7 @@ class CartController extends Controller
                 'cartCount' => $this->getTotalItems()
             ]);
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menambahkan produk ke keranjang.');
+            return back()->with('error', 'Gagal menambahkan produk ke keranjang: ' . $e->getMessage());
         }
     }
 
@@ -47,7 +64,6 @@ class CartController extends Controller
     public function remove($id)
     {
         $cart = session()->get('cart', []);
-
         if (isset($cart[$id])) {
             unset($cart[$id]);
             session()->put('cart', $cart);
@@ -69,12 +85,14 @@ class CartController extends Controller
         }
 
         $items = [];
-        $total = 0;
-
         foreach ($cart as $id => $item) {
             $subtotal = $item['harga'] * $item['quantity'];
-            $items[] = array_merge($item, [
+            $total += $subtotal;
+            $items[] = [
                 'id' => $id,
+                'nama' => $item['nama'],
+                'harga' => $item['harga'],
+                'quantity' => $item['quantity'],
                 'subtotal' => $subtotal
             ]);
             $total += $subtotal;

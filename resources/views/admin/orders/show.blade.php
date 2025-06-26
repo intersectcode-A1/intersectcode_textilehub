@@ -145,29 +145,48 @@
                 Daftar Produk
             </h2>
             <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Harga Satuan</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Jumlah</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Subtotal</th>
+
+                <table class="w-full table-auto text-sm text-left">
+                    <thead class="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 uppercase">
+                        <tr>
+                            <th class="px-6 py-3">Produk</th>
+                            <th class="px-6 py-3">Varian</th>
+                            <th class="px-6 py-3">Harga Satuan</th>
+                            <th class="px-6 py-3">Jumlah</th>
+                            <th class="px-6 py-3">Subtotal</th>
                         </tr>
                     </thead>
             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         @foreach ($order->items as $item)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ $item->product_name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $item->quantity }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
+
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                <td class="px-6 py-4">{{ $item->product_name }}</td>
+                                <td class="px-6 py-4">
+                                    @if(!empty($item->variant_info) && count((array)$item->variant_info) > 0)
+                                        @foreach((array)$item->variant_info as $variant)
+                                            <div>
+                                                {{ ucfirst($variant['type'] ?? '') }}: {{ $variant['name'] ?? '' }}
+                                                @if(!empty($variant['additional_price']) && $variant['additional_price'] > 0)
+                                                    (+Rp {{ number_format($variant['additional_price'], 0, ',', '.') }})
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+                                <td class="px-6 py-4">{{ $item->quantity }}</td>
+                                <td class="px-6 py-4">Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
+
                             </tr>
                         @endforeach
                     </tbody>
             <tfoot class="bg-gray-50 dark:bg-gray-700/50">
                         <tr>
-                    <td colspan="3" class="px-6 py-4 text-right text-sm font-medium text-gray-900 dark:text-white">Total Keseluruhan:</td>
-                    <td class="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">Rp{{ number_format($total, 0, ',', '.') }}</td>
+
+                            <td colspan="4" class="px-6 py-4 text-right">Total Keseluruhan:</td>
+                            <td class="px-6 py-4">Rp{{ number_format($total, 0, ',', '.') }}</td>
                         </tr>
                     </tfoot>
                 </table>
