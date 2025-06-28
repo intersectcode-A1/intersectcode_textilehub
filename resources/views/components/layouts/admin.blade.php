@@ -26,10 +26,18 @@
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
     <div class="flex min-h-screen">
-        @include('components.navigation.admin-sidebar')
-        <div id="main-content" class="flex-1 flex flex-col transition-all duration-300">
+        <!-- Mobile Overlay -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" onclick="closeMobileSidebar()"></div>
+        
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:relative lg:flex lg:flex-shrink-0 bg-gray-800 shadow-lg h-screen lg:sticky lg:top-0 transition-all duration-300 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 lg:w-64">
+            @include('components.navigation.admin-sidebar')
+        </aside>
+        
+        <!-- Main Content -->
+        <div id="main-content" class="flex-1 flex flex-col transition-all duration-300 w-full">
             @include('components.navigation.admin-topsider')
-            <main class="flex-1 p-6 overflow-y-auto">
+            <main class="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">
                 @yield('content')
             </main>
         </div>
@@ -68,33 +76,78 @@
             // SIDEBAR TOGGLE SCRIPT
             const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
             const sidebar = document.getElementById('sidebar');
+            const mobileOverlay = document.getElementById('mobile-overlay');
 
             const applySidebarState = (state) => {
                 const isCollapsed = state === 'collapsed';
+                const isMobile = window.innerWidth < 1024; // lg breakpoint
+                
                 if (sidebar) {
-                    sidebar.classList.toggle('w-64', !isCollapsed);
-                    sidebar.classList.toggle('w-20', isCollapsed);
+                    if (isMobile) {
+                        // Mobile behavior
+                        if (state === 'open') {
+                            sidebar.classList.remove('-translate-x-full');
+                            mobileOverlay.classList.remove('hidden');
+                        } else {
+                            sidebar.classList.add('-translate-x-full');
+                            mobileOverlay.classList.add('hidden');
+                        }
+                    } else {
+                        // Desktop behavior
+                        sidebar.classList.toggle('w-64', !isCollapsed);
+                        sidebar.classList.toggle('w-20', isCollapsed);
 
-                    sidebar.querySelectorAll('.sidebar-label').forEach(label => {
-                        label.classList.toggle('hidden', isCollapsed);
-                    });
+                        sidebar.querySelectorAll('.sidebar-label').forEach(label => {
+                            label.classList.toggle('hidden', isCollapsed);
+                        });
 
-                    const sidebarIcon = sidebarToggleBtn.querySelector('i');
-                    if (sidebarIcon) {
-                        sidebarIcon.setAttribute('data-lucide', isCollapsed ? 'menu' : 'panel-left-close');
-                        lucide.createIcons();
+                        const sidebarIcon = sidebarToggleBtn.querySelector('i');
+                        if (sidebarIcon) {
+                            sidebarIcon.setAttribute('data-lucide', isCollapsed ? 'menu' : 'panel-left-close');
+                            lucide.createIcons();
+                        }
                     }
                 }
-                localStorage.setItem('sidebar-state', state);
+                
+                if (!isMobile) {
+                    localStorage.setItem('sidebar-state', state);
+                }
+            };
+
+            // Close mobile sidebar function
+            window.closeMobileSidebar = function() {
+                applySidebarState('closed');
             };
 
             if (sidebarToggleBtn) {
                 sidebarToggleBtn.addEventListener('click', () => {
-                    applySidebarState(localStorage.getItem('sidebar-state') === 'collapsed' ? 'expanded' : 'collapsed');
+                    const isMobile = window.innerWidth < 1024;
+                    if (isMobile) {
+                        const isOpen = !sidebar.classList.contains('-translate-x-full');
+                        applySidebarState(isOpen ? 'closed' : 'open');
+                    } else {
+                        applySidebarState(localStorage.getItem('sidebar-state') === 'collapsed' ? 'expanded' : 'collapsed');
+                    }
                 });
             }
             
-            applySidebarState(localStorage.getItem('sidebar-state') || 'expanded');
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                const isMobile = window.innerWidth < 1024;
+                if (isMobile) {
+                    applySidebarState('closed');
+                } else {
+                    applySidebarState(localStorage.getItem('sidebar-state') || 'expanded');
+                }
+            });
+            
+            // Initialize sidebar state
+            const isMobile = window.innerWidth < 1024;
+            if (isMobile) {
+                applySidebarState('closed');
+            } else {
+                applySidebarState(localStorage.getItem('sidebar-state') || 'expanded');
+            }
         });
     </script>
     @stack('scripts')
