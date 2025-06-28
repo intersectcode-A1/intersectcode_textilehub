@@ -214,10 +214,53 @@
                                 </p>
 
                                 <div class="mb-6">
-                                    <span class="text-2xl font-bold text-blue-600">
-                                        Rp {{ number_format($product->harga, 0, ',', '.') }}
-                                    </span>
-                                    <span class="text-sm text-gray-500">/{{ $product->satuan }}</span>
+                                    <div x-data="{ 
+                                        selectedVariants: {},
+                                        additionalPrice: 0,
+                                        updatePrice() {
+                                            this.additionalPrice = Object.values(this.selectedVariants)
+                                                .reduce((sum, variant) => sum + parseFloat(variant.additional_price), 0);
+                                        }
+                                    }">
+                                        <span class="text-2xl font-bold text-blue-600">
+                                            Rp <span x-text="({{ $product->harga }} + additionalPrice).toLocaleString('id-ID')"></span>
+                                        </span>
+                                        <span class="text-sm text-gray-500">/{{ $product->satuan }}</span>
+                                        
+                                        @if($product->variants->isNotEmpty())
+                                            <div class="mt-2 space-y-2">
+                                                @foreach($product->variants->groupBy('type') as $type => $variants)
+                                                    <div class="flex flex-wrap gap-2">
+                                                        @foreach($variants as $variant)
+                                                            <button type="button"
+                                                                    @click="
+                                                                        if (selectedVariants['{{ $type }}']?.id === {{ $variant->id }}) {
+                                                                            delete selectedVariants['{{ $type }}'];
+                                                                        } else {
+                                                                            selectedVariants['{{ $type }}'] = {
+                                                                                id: {{ $variant->id }},
+                                                                                name: '{{ $variant->name }}',
+                                                                                additional_price: {{ $variant->additional_price }}
+                                                                            };
+                                                                        }
+                                                                        updatePrice();
+                                                                    "
+                                                                    :class="{
+                                                                        'ring-2 ring-blue-500 border-blue-300 bg-blue-50': selectedVariants['{{ $type }}']?.id === {{ $variant->id }},
+                                                                        'hover:border-blue-400 hover:bg-gray-50': selectedVariants['{{ $type }}']?.id !== {{ $variant->id }}
+                                                                    }"
+                                                                    class="px-2 py-1 text-xs border rounded-lg transition-all duration-200">
+                                                                {{ $variant->name }}
+                                                                @if($variant->additional_price > 0)
+                                                                    <span class="text-green-600">+{{ number_format($variant->additional_price, 0, ',', '.') }}</span>
+                                                                @endif
+                                                            </button>
+                                                        @endforeach
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <div class="space-y-3">

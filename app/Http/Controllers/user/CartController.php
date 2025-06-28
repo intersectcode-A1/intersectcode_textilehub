@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductVariant;
 
 class CartController extends Controller
 {
@@ -13,7 +14,7 @@ class CartController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
-            
+
             // Validasi jumlah yang diminta
             $quantity = $request->input('quantity', 1);
             if ($quantity > $product->stok) {
@@ -41,28 +42,26 @@ class CartController extends Controller
 
             session()->put('cart', $cart);
 
-            // Hitung total item di keranjang
-            $totalItems = $this->getTotalItems();
-
             return back()->with([
                 'success' => 'Produk berhasil ditambahkan ke keranjang!',
-                'cartCount' => $totalItems
+                'cartCount' => $this->getTotalItems()
             ]);
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menambahkan produk ke keranjang.');
+            return back()->with('error', 'Gagal menambahkan produk ke keranjang: ' . $e->getMessage());
         }
     }
 
     // Tampilkan isi keranjang
     public function index()
     {
-        $cart = session()->get('cart', []);
-        $totalItems = $this->getTotalItems();
-        return view('ecatalog.cart', compact('cart', 'totalItems'));
+        return view('ecatalog.cart', [
+            'cart' => session()->get('cart', []),
+            'totalItems' => $this->getTotalItems()
+        ]);
     }
 
     // Hapus produk dari keranjang
-    public function remove($id) 
+    public function remove($id)
     {
         $cart = session()->get('cart', []);
         if (isset($cart[$id])) {
@@ -70,10 +69,9 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
-        $totalItems = $this->getTotalItems();
         return redirect()->route('cart.index')->with([
             'success' => 'Produk berhasil dihapus dari keranjang.',
-            'cartCount' => $totalItems
+            'cartCount' => $this->getTotalItems()
         ]);
     }
 
@@ -81,13 +79,11 @@ class CartController extends Controller
     public function checkoutFromCart()
     {
         $cart = session()->get('cart', []);
-        
+
         if (empty($cart)) {
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja kosong!');
         }
 
-        // Hitung total harga
-        $total = 0;
         $items = [];
         foreach ($cart as $id => $item) {
             $subtotal = $item['harga'] * $item['quantity'];
@@ -98,25 +94,39 @@ class CartController extends Controller
                 'harga' => $item['harga'],
                 'quantity' => $item['quantity'],
                 'subtotal' => $subtotal
-            ];
+            ]);
+            $total += $subtotal;
         }
 
-        $totalItems = $this->getTotalItems();
         return view('ecatalog.checkout-cart', [
             'items' => $items,
             'total' => $total,
-            'totalItems' => $totalItems
+            'totalItems' => $this->getTotalItems()
         ]);
     }
 
-    // Helper method untuk menghitung total item di keranjang
+    // Hitung total item di keranjang
     private function getTotalItems()
     {
-        $cart = session()->get('cart', []);
-        $totalItems = 0;
-        foreach ($cart as $item) {
-            $totalItems += $item['quantity'];
+        return collect(session()->get('cart', []))
+            ->sum(fn($item) => $item['quantity']);
+    }
+
+    // Helper untuk mengupdate item dalam keranjang
+    private function updateCartItem(array $cart, Product $product, int $quantity)
+    {
+        $existingQty = $cart[$product->id]['quantity'] ?? 0;
+        $newQty = $existingQty + $quantity;
+
+        if ($newQty > $product->stok) {
+            abort(400, 'Total jumlah di keranjang melebihi stok yang tersedia.');
         }
-        return $totalItems;
+
+        return [
+            'nama' => $product->nama,
+            'harga' => $product->harga,
+            'foto' => $product->foto,
+            'quantity' => $newQty
+        ];
     }
 }
