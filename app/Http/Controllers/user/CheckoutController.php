@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\User;
-use App\Notifications\NewOrderNotification;
 
 class CheckoutController extends Controller
 {
@@ -23,11 +23,13 @@ class CheckoutController extends Controller
     /**
      * Menampilkan form checkout untuk produk tunggal
      */
+
     public function showDirect($id)
     {
         try {
             $product = Product::findOrFail($id);
             $quantity = request('quantity', 1);
+
             $variantIds = array_filter(explode(',', request('selected_variants', '')));
             $variants = \App\Models\ProductVariant::whereIn('id', $variantIds)->get();
             $additionalPrice = $variants->sum('additional_price');
@@ -38,6 +40,7 @@ class CheckoutController extends Controller
             if ($stockError) {
                 return redirect()->route('ecatalog.show', $id)
                     ->with('error', $stockError);
+
             }
 
             return view('ecatalog.checkout', [
@@ -48,7 +51,6 @@ class CheckoutController extends Controller
                 'variants' => $variants,
                 'additionalPrice' => $additionalPrice,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error in showDirect: ' . $e->getMessage());
             return redirect()->route('ecatalog.index')
@@ -56,29 +58,22 @@ class CheckoutController extends Controller
         }
     }
 
-    /**
-     * Submit order untuk checkout langsung
-     */
     public function submit(Request $request)
     {
         try {
             DB::beginTransaction();
 
-            Log::info('Starting order submission process', ['request' => $request->all()]);
-
-            // Validasi input
-            $validated = $request->validate([
+            $data = $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'quantity' => 'required|integer|min:1',
                 'user_name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'telepon' => 'required|string|max:20',
-                'alamat' => 'required|string|max:500',
-                'selected_variants' => 'array',
-                'selected_variants.*' => 'exists:product_variants,id',
+                'alamat' => 'required|string|max:500'
             ]);
 
             $product = Product::findOrFail($request->product_id);
+
             $variantIds = $request->input('selected_variants', []);
             $variants = \App\Models\ProductVariant::whereIn('id', $variantIds)->get();
             $additionalPrice = $variants->sum('additional_price');
@@ -88,7 +83,10 @@ class CheckoutController extends Controller
             $stockError = $this->validateStock($product, $variants, $request->quantity);
             if ($stockError) {
                 throw new \Exception($stockError);
+
             }
+
+            Log::info('Stock validation passed', ['product' => $product->toArray()]);
 
             // Generate nomor pesanan
             $orderNumber = $this->generateOrderNumber();
@@ -106,6 +104,8 @@ class CheckoutController extends Controller
                 'alamat' => $request->alamat
             ]);
 
+            Log::info('Order created', ['order' => $order->toArray()]);
+
             // Buat order item
             $this->createOrderItem($order, $product, $variants, $request->quantity, $product->harga + $additionalPrice);
 
@@ -116,46 +116,32 @@ class CheckoutController extends Controller
             $this->notifyAdmins($order);
 
             DB::commit();
-            Log::info('Order process completed successfully');
 
             return redirect()->route('order.status')
                 ->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
-            Log::error('Validation error in submit:', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error in submit: ' . $e->getMessage(), [
-                'exception' => $e,
-                'request' => $request->all()
-            ]);
+            Log::error('Error in submit: ' . $e->getMessage(), ['exception' => $e]);
             return back()->with('error', 'Terjadi kesalahan saat memproses pesanan: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Submit order dari keranjang
-     */
     public function submitFromCart(Request $request)
     {
         try {
             DB::beginTransaction();
 
-            Log::info('Starting cart order submission process', ['request' => $request->all()]);
-
-            // Validasi input
-            $validated = $request->validate([
+            $data = $request->validate([
                 'user_name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'telepon' => 'required|string|max:20',
                 'alamat' => 'required|string|max:500',
                 'items' => 'required|array',
-                'total' => 'required|numeric|min:0'
+                'total' => 'required|numeric|min:0',
             ]);
-
-            Log::info('Cart validation passed', ['validated' => $validated]);
 
             $cart = session()->get('cart', []);
             if (empty($cart)) {
@@ -185,7 +171,8 @@ class CheckoutController extends Controller
                 return json_decode($item, true);
             }, $request->items);
 
-            // Buat order items dan kurangi stok
+
+            // Validasi semua stok
             foreach ($items as $item) {
                 $product = Product::find($item['id']);
                 if (!$product) {
@@ -205,29 +192,19 @@ class CheckoutController extends Controller
                 Log::info('Cart order item created', ['orderItem' => $orderItem->toArray()]);
                 $product->decrement('stok', $item['quantity']);
             }
-
-            // Kirim notifikasi ke semua admin
             $this->notifyAdmins($order);
 
-            // Kosongkan keranjang
             session()->forget('cart');
-
             DB::commit();
-            Log::info('Cart order process completed successfully');
 
             return redirect()->route('order.status')
                 ->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
-            Log::error('Validation error in submitFromCart:', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error in submitFromCart: ' . $e->getMessage(), [
-                'exception' => $e,
-                'request' => $request->all()
-            ]);
+            Log::error('Error in submitFromCart: ' . $e->getMessage(), ['exception' => $e]);
             return back()->with('error', 'Terjadi kesalahan saat memproses pesanan: ' . $e->getMessage());
         }
     }
