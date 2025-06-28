@@ -214,14 +214,12 @@
                                 <label :for="'variants['+index+'][type]'" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                             Tipe Varian
                                         </label>
-                                        <select :name="'variants['+index+'][type]'" 
-                                                :id="'variants['+index+'][type]'"
-                                                x-model="variant.type"
-                                        class="w-full px-4 py-2 rounded-lg bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200">
-                                            <option value="">Pilih Tipe</option>
-                                            <option value="color">Warna</option>
-                                            <option value="size">Ukuran</option>
-                                        </select>
+                                        <input type="text" 
+                                               :name="'variants['+index+'][type]'"
+                                               :id="'variants['+index+'][type]'"
+                                               x-model="variant.type"
+                                               class="w-full px-4 py-2 rounded-lg bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200"
+                                               placeholder="Contoh: Merah, XL, dll">
                                     </div>
 
                                     <!-- Nama Varian -->

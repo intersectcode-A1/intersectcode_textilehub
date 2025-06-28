@@ -21,13 +21,13 @@
 
         <div>
             <label for="type" class="block text-sm font-medium text-gray-700">Tipe Varian</label>
-            <select name="type" 
-                    id="type" 
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
-                    required>
-                <option value="color" {{ (old('type', $variant->type ?? '') == 'color') ? 'selected' : '' }}>Warna</option>
-                <option value="size" {{ (old('type', $variant->type ?? '') == 'size') ? 'selected' : '' }}>Ukuran</option>
-            </select>
+            <input type="text" 
+                   name="type" 
+                   id="type" 
+                   value="{{ old('type', $variant->type ?? '') }}"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                   placeholder="Masukkan tipe varian (misal: Warna, Ukuran, dll)"
+                   required>
         </div>
 
         <div>

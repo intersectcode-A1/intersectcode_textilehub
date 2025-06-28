@@ -87,6 +87,31 @@
                         <span class="text-lg text-gray-500">/{{ $product->unit->symbol ?? $product->satuan ?? 'pcs' }}</span>
                     </div>
 
+                    {{-- Variant Info --}}
+                    @if($product->variants && $product->variants->count() > 0)
+                        <div class="border-t border-gray-200 pt-4 mb-4">
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">Varian Produk</h3>
+                            @php $groupedVariants = $product->variants->groupBy('type'); @endphp
+                            @foreach($groupedVariants as $type => $variants)
+                                <div class="mb-2">
+                                    <span class="font-semibold">{{ ucfirst($type) }}</span>:
+                                    @foreach($variants as $variant)
+                                        <span class="inline-block bg-gray-100 rounded px-2 py-1 text-sm text-gray-800 mr-2 mb-1">
+                                            {{ $variant->name }}
+                                            @if($variant->additional_price > 0)
+                                                <span class="text-green-600">(+Rp {{ number_format($variant->additional_price, 0, ',', '.') }})</span>
+                                            @endif
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="border-t border-gray-200 pt-4 mb-4">
+                            <span class="text-gray-500">Tidak ada varian untuk produk ini.</span>
+                        </div>
+                    @endif
+
                     <div class="prose prose-blue max-w-none mb-8">
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">Deskripsi Produk</h3>
                         <p class="text-gray-600">{{ $product->deskripsi }}</p>

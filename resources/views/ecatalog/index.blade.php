@@ -1,8 +1,8 @@
 <x-layouts.catalog>
-    {{-- Page Header with Breadcrumb --}}
+    {{-- Header Halaman dengan Breadcrumb --}}
     <div class="bg-gradient-to-r from-blue-700 to-blue-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            {{-- Breadcrumb --}}
+            {{-- Navigasi Breadcrumb --}}
             <nav class="flex mb-6" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3">
                     <li class="inline-flex items-center">
@@ -35,18 +35,16 @@
                     @endif
                 </ol>
             </nav>
-
-            {{-- Page Title --}}
+            {{-- Judul Halaman --}}
             <div class="text-center max-w-3xl mx-auto">
                 <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">Katalog Produk</h1>
                 <p class="text-xl text-blue-100 font-light">Temukan produk terbaik untuk kebutuhan Anda</p>
             </div>
         </div>
     </div>
-
-    {{-- Main Content --}}
+    {{-- Konten Utama --}}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {{-- Alert Messages --}}
+        {{-- Pesan Sukses --}}
         @if(session('success'))
             <div class="mb-8">
                 <div class="bg-green-100 border-l-4 border-green-500 text-green-700 px-6 py-4 rounded-lg relative" role="alert">
@@ -54,7 +52,7 @@
                 </div>
             </div>
         @endif
-
+        {{-- Pesan Error --}}
         @if(session('error'))
             <div class="mb-8">
                 <div class="bg-red-100 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-lg relative" role="alert">
@@ -62,8 +60,7 @@
                 </div>
             </div>
         @endif
-
-        {{-- Action Buttons --}}
+        {{-- Tombol Aksi --}}
         <div class="flex flex-wrap justify-end gap-4 mb-12">
             <a href="{{ route('cart.index') }}"
                class="inline-flex items-center justify-center space-x-3 px-6 py-3 bg-yellow-500 rounded-lg shadow-lg text-white font-semibold text-sm hover:bg-yellow-600 transition duration-200 transform hover:-translate-y-0.5">
@@ -72,7 +69,6 @@
                 </svg>
                 <span>Lihat Keranjang</span>
             </a>
-
             <a href="{{ route('order.status') }}"
                class="inline-flex items-center justify-center space-x-3 px-6 py-3 bg-blue-600 rounded-lg shadow-lg text-white font-semibold text-sm hover:bg-blue-700 transition duration-200 transform hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -80,7 +76,6 @@
                 </svg>
                 <span>Status Pemesanan</span>
             </a>
-
             <a href="{{ route('purchase.history') }}"
                class="inline-flex items-center justify-center space-x-3 px-6 py-3 bg-green-600 rounded-lg shadow-lg text-white font-semibold text-sm hover:bg-green-700 transition duration-200 transform hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,11 +84,10 @@
                 <span>Riwayat Pembelian</span>
             </a>
         </div>
-
         <div class="flex flex-col lg:flex-row gap-12">
-            {{-- Sidebar --}}
+            {{-- Sidebar Kategori --}}
             <div class="lg:w-1/4">
-                {{-- Mobile Category Toggle --}}
+                {{-- Toggle Kategori di Mobile --}}
                 <div class="lg:hidden mb-6">
                     <button @click="showMobileCategories = !showMobileCategories"
                             class="w-full flex items-center justify-between px-6 py-3 bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200">
@@ -104,16 +98,14 @@
                         </svg>
                     </button>
                 </div>
-
-                {{-- Category Navigation --}}
+                {{-- Navigasi Kategori --}}
                 <div :class="{'hidden': !showMobileCategories}" class="lg:block sticky top-4">
                     <x-category-nav :categories="$categories" :currentCategory="request('category')"/>
                 </div>
             </div>
-
-            {{-- Main Content Area --}}
+            {{-- Area Konten Utama --}}
             <div class="lg:w-3/4">
-                {{-- Search & Filter Section --}}
+                {{-- Bagian Pencarian & Filter --}}
                 <div x-data="{ showFilters: false }" class="bg-white rounded-xl shadow-lg p-8 mb-12">
                     <form method="GET" action="{{ route('ecatalog.index') }}" class="space-y-6">
                         <div class="flex flex-col sm:flex-row gap-4">
@@ -142,8 +134,7 @@
                                 </button>
                             </div>
                         </div>
-
-                        {{-- Filter Panel --}}
+                        {{-- Panel Filter --}}
                         <div x-show="showFilters" 
                              x-transition:enter="transition ease-out duration-200"
                              x-transition:enter-start="opacity-0 transform -translate-y-2"
@@ -182,11 +173,10 @@
                         </div>
                     </form>
                 </div>
-
-                {{-- Products Grid --}}
+                {{-- Grid Produk --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     @forelse($products as $product)
-                        {{-- Product Card --}}
+                        {{-- Kartu Produk --}}
                         <article class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group">
                             <div class="relative">
                                 <img src="{{ asset('storage/' . $product->foto) }}" 
@@ -198,21 +188,18 @@
                                     </span>
                                 </div>
                             </div>
-
                             <div class="p-6">
                                 @if($product->category)
                                     <span class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full mb-3 font-medium">
                                         {{ $product->category->name }}
                                     </span>
                                 @endif
-
                                 <h3 class="text-xl font-semibold text-gray-900 mb-2 leading-tight">
                                     {{ $product->nama }}
                                 </h3>
                                 <p class="text-sm text-gray-600 mb-4 line-clamp-2">
                                     {{ Str::limit($product->deskripsi, 80) }}
                                 </p>
-
                                 <div class="mb-6">
                                     <div x-data="{ 
                                         selectedVariants: {},
@@ -226,7 +213,6 @@
                                             Rp <span x-text="({{ $product->harga }} + additionalPrice).toLocaleString('id-ID')"></span>
                                         </span>
                                         <span class="text-sm text-gray-500">/{{ $product->satuan }}</span>
-                                        
                                         @if($product->variants->isNotEmpty())
                                             <div class="mt-2 space-y-2">
                                                 @foreach($product->variants->groupBy('type') as $type => $variants)
@@ -262,14 +248,12 @@
                                         @endif
                                     </div>
                                 </div>
-
                                 <div class="space-y-3">
                                     <a href="{{ route('ecatalog.show', $product->id) }}" 
                                        class="btn-secondary w-full flex items-center justify-center">
                                         <i class="fas fa-eye mr-2"></i>
                                         Lihat Detail
                                     </a>
-
                                     @if($product->stok > 0)
                                         <x-quantity-modal :product="$product" />
                                     @else
@@ -290,8 +274,7 @@
                         </div>
                     @endforelse
                 </div>
-
-                {{-- Pagination --}}
+                {{-- Paginasi --}}
                 <div class="mt-16">
                     {{ $products->links() }}
                 </div>

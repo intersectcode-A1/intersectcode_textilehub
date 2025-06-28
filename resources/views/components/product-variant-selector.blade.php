@@ -29,7 +29,7 @@
 
     @if($product->variants->where('type', 'size')->count() > 0)
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Ukuran</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Variant</label>
             <div class="grid grid-cols-4 gap-2">
                 @foreach($product->variants->where('type', 'size') as $variant)
                     <label class="relative">

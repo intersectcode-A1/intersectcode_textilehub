@@ -58,7 +58,7 @@
         </button>
         <button @click="showModal = true; isCheckout = false"
                 class="flex-1 bg-yellow-500 text-white px-4 py-2.5 rounded-lg hover:bg-yellow-600 transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center">
-            <i class="fas fa-cart-plus mr-2"></i>Keranjang
+            <i class="fas fa-cart-plus mr-2"></i>
         </button>
     </div>
 
@@ -155,8 +155,16 @@
                         @foreach($groupedVariants as $type => $variants)
                             <div class="space-y-3">
                                 <p class="font-medium text-gray-800 flex items-center">
-                                    <i class="fas fa-{{ $type === 'color' ? 'palette' : 'ruler' }} mr-2 text-blue-600"></i>
-                                    {{ $type === 'color' ? 'Pilih Warna' : 'Pilih Ukuran' }}
+                                    @if($type === 'color')
+                                        <i class="fas fa-palette mr-2 text-blue-600"></i>
+                                        Pilih Warna
+                                    @elseif($type === 'size')
+                                        <i class="fas fa-ruler mr-2 text-blue-600"></i>
+                                        Pilih Ukuran
+                                    @else
+                                        <i class="fas fa-tag mr-2 text-blue-600"></i>
+                                        Pilih {{ ucfirst($type) }}
+                                    @endif
                                 </p>
                                 <div class="grid grid-cols-3 gap-3">
                                     @foreach($variants as $variant)

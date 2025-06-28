@@ -27,7 +27,22 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->validateProduct($request);
+
+        $request->validate([
+            'nama' => 'required',
+            'harga' => 'required|numeric',
+            'stok' => 'required|integer',
+            'category_id' => 'required|exists:categories,id',
+            'satuan' => 'required|string|max:50',
+            'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'variants' => 'nullable|array',
+            'variants.*.type' => 'required_with:variants|string|max:50',
+            'variants.*.name' => 'required_with:variants|string|max:255',
+            'variants.*.stock' => 'required_with:variants|integer|min:0',
+            'variants.*.additional_price' => 'required_with:variants|numeric|min:0',
+        ]);
+
 
         $data['foto'] = $this->handleFotoUpload($request);
 
@@ -87,7 +102,7 @@ class ProductController extends Controller
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'variants' => 'nullable|array',
-            'variants.*.type' => 'required_with:variants|in:color,size',
+            'variants.*.type' => 'required_with:variants|string|max:50',
             'variants.*.name' => 'required_with:variants|string|max:255',
             'variants.*.stock' => 'required_with:variants|integer|min:0',
             'variants.*.additional_price' => 'required_with:variants|numeric|min:0',
