@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Mail;
 
 class Register extends Component
 {
-    public $name, $email, $password, $password_confirmation, $otp, $step = 1, $generatedOtp;
+    public $name, $email, $password, $password_confirmation, $otp, $step = 1, $generatedOtp, $gRecaptchaResponse;
 
     public function register()
     {
@@ -20,6 +20,7 @@ class Register extends Component
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'gRecaptchaResponse' => 'required',
         ]);
 
         $this->generatedOtp = rand(100000, 999999);

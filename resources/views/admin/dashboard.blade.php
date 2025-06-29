@@ -93,18 +93,64 @@
         </div>
     </div>
 
-    <!-- Rating and Recent Users -->
+    <!-- Grafik Penjualan dan Laporan Keuangan -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-        <!-- Rating -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 min-h-[120px] sm:min-h-[150px]">
-            <h5 class="text-gray-600 dark:text-gray-300 font-semibold text-sm sm:text-base">Penilaian</h5>
-            <!-- Placeholder for rating content -->
+        <!-- Grafik Penjualan -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 min-h-[300px]">
+            <h5 class="text-gray-600 dark:text-gray-300 font-semibold text-sm sm:text-base mb-4">Grafik Penjualan</h5>
+            <canvas id="salesChart" height="120"></canvas>
         </div>
-        <!-- Recent Users -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 min-h-[120px] sm:min-h-[150px]">
-            <h5 class="text-gray-600 dark:text-gray-300 font-semibold text-sm sm:text-base">Pengguna Terbaru</h5>
-            <!-- Placeholder for recent users content -->
+        <!-- Laporan Keuangan -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 min-h-[300px]">
+            <h5 class="text-gray-600 dark:text-gray-300 font-semibold text-sm sm:text-base mb-4">Laporan Keuangan</h5>
+            <canvas id="financeReportChart" height="120"></canvas>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Grafik Penjualan
+    var ctxSales = document.getElementById('salesChart').getContext('2d');
+    new Chart(ctxSales, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($salesChartLabels ?? ['Jan', 'Feb', 'Mar', 'Apr']) !!},
+            datasets: [{
+                label: 'Penjualan',
+                data: {!! json_encode($salesChartData ?? [10, 20, 15, 30]) !!},
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Grafik Laporan Keuangan
+    var ctxFinance = document.getElementById('financeReportChart').getContext('2d');
+    new Chart(ctxFinance, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($financeLabels ?? ['Pemasukan', 'Pengeluaran', 'Profit']) !!},
+            datasets: [{
+                label: 'Jumlah (Rp)',
+                data: {!! json_encode($financeData ?? [5000000, 3000000, 2000000]) !!},
+                backgroundColor: ['#3b82f6', '#ef4444', '#10b981']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+});
+</script>
+@endpush
 
