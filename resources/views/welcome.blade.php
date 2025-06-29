@@ -17,6 +17,8 @@
 
     <!-- LeafletJS CSS (Dipindahkan ke Head) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gradient-to-br from-white to-blue-50 text-gray-800 font-sans scroll-smooth">
