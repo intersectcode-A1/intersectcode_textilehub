@@ -3,17 +3,17 @@
 @section('title', 'Analisis Penjualan')
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-2xl font-semibold text-gray-800 dark:text-white">Penjualan</h1>
-    <nav class="text-sm font-medium text-gray-500" aria-label="Breadcrumb">
-        <ol class="list-none p-0 inline-flex">
+<div class="mb-4 sm:mb-6">
+    <h1 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white">Penjualan</h1>
+    <nav class="text-xs sm:text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+        <ol class="list-none p-0 inline-flex flex-wrap">
             <li class="flex items-center">
                 <a href="{{ route('admin.dashboard') }}" class="text-gray-500 hover:text-gray-700">Home</a>
-                <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+                <svg class="fill-current w-3 h-3 mx-2 sm:mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
             </li>
             <li class="flex items-center">
                 <a href="#" class="text-gray-500 hover:text-gray-700">Penjualan</a>
-                <svg class="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+                <svg class="fill-current w-3 h-3 mx-2 sm:mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569 9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
             </li>
             <li>
                 <a href="#" class="text-gray-400" aria-current="page">Analisis Penjualan</a>
@@ -23,11 +23,11 @@
 </div>
 
 <!-- Filter Periode -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-    <form method="GET" action="{{ route('admin.sales.analysis') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
+    <form method="GET" action="{{ route('admin.sales.analysis') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Periode</label>
-            <select name="period" class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200">
+            <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">Periode</label>
+            <select name="period" class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 text-sm">
                 <option value="7">7 Hari Terakhir</option>
                 <option value="30">30 Hari Terakhir</option>
                 <option value="90">3 Bulan Terakhir</option>
@@ -35,7 +35,7 @@
             </select>
         </div>
         <div class="flex items-end">
-            <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200">
+            <button type="submit" class="w-full px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm">
                 Terapkan
             </button>
         </div>
@@ -43,7 +43,7 @@
 </div>
 
 <!-- Statistik Utama -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
     @php
         $stats = [
             [
@@ -78,29 +78,29 @@
     @endphp
 
     @foreach($stats as $stat)
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+        <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ $stat['title'] }}</p>
-                    <p class="text-2xl font-bold text-{{ $stat['color'] }}-600 dark:text-{{ $stat['color'] }}-400">{{ $stat['value'] }}</p>
+                    <p class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">{{ $stat['title'] }}</p>
+                    <p class="text-lg sm:text-2xl font-bold text-{{ $stat['color'] }}-600 dark:text-{{ $stat['color'] }}-400">{{ $stat['value'] }}</p>
                 </div>
-                <div class="p-3 bg-{{ $stat['color'] }}-100 dark:bg-{{ $stat['color'] }}-900 rounded-full">
-                    <svg class="w-6 h-6 text-{{ $stat['color'] }}-600 dark:text-{{ $stat['color'] }}-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-2 sm:p-3 bg-{{ $stat['color'] }}-100 dark:bg-{{ $stat['color'] }}-900 rounded-full">
+                    <svg class="w-4 h-4 sm:w-6 sm:h-6 text-{{ $stat['color'] }}-600 dark:text-{{ $stat['color'] }}-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $stat['icon'] }}"></path>
                     </svg>
                 </div>
             </div>
-            <div class="mt-4">
+            <div class="mt-3 sm:mt-4">
                 @if($stat['title'] !== 'Produk Terlaris')
-                    <span class="text-sm text-green-600 dark:text-green-400">
-                        <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="text-xs sm:text-sm text-green-600 dark:text-green-400">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                         </svg>
                         {{ $stat['growth'] }}%
                     </span>
-                    <span class="text-sm text-gray-600 dark:text-gray-400 ml-2">dari periode sebelumnya</span>
+                    <span class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 ml-1 sm:ml-2">dari periode sebelumnya</span>
                 @else
-                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ $stat['growth'] }} terjual</p>
+                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{{ $stat['growth'] }} terjual</p>
                 @endif
             </div>
         </div>
@@ -108,21 +108,21 @@
 </div>
 
 <!-- Grafik dan Analisis -->
-<div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
     <!-- Grafik dan Analisis -->
-    <div class="lg:col-span-3 grid grid-cols-1 gap-6">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tren Penjualan</h3>
-            <div class="chart-container h-80">
+    <div class="lg:col-span-3 grid grid-cols-1 gap-4 sm:gap-6">
+        <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+            <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">Tren Penjualan</h3>
+            <div class="chart-container h-60 sm:h-80">
                 @if(!empty($labelsHarian) && !empty($dataHarian))
                     <canvas id="penjualanChart"></canvas>
                 @else
                     <div class="flex items-center justify-center h-full">
                         <div class="text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
-                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Tidak ada data penjualan untuk periode ini</p>
+                            <p class="mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">Tidak ada data penjualan untuk periode ini</p>
                         </div>
                     </div>
                 @endif
@@ -131,19 +131,19 @@
     </div>
     
     <!-- Penjualan per Kategori -->
-    <div class="lg:col-span-2 grid grid-cols-1 gap-6">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Penjualan per Kategori</h3>
-            <div class="chart-container h-80">
+    <div class="lg:col-span-2 grid grid-cols-1 gap-4 sm:gap-6">
+        <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+            <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">Penjualan per Kategori</h3>
+            <div class="chart-container h-60 sm:h-80">
                 @if(!empty($labelsKategori) && !empty($dataKategori))
                     <canvas id="kategoriChart"></canvas>
                 @else
                     <div class="flex items-center justify-center h-full">
                         <div class="text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                             </svg>
-                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Tidak ada data kategori untuk periode ini</p>
+                            <p class="mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">Tidak ada data kategori untuk periode ini</p>
                         </div>
                     </div>
                 @endif
@@ -154,28 +154,34 @@
 
 <!-- Tabel Produk Terlaris -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-    <h3 class="text-lg font-semibold text-gray-900 dark:text-white p-6 border-b border-gray-200 dark:border-gray-700">Produk Terlaris</h3>
+    <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white p-3 sm:p-6 border-b border-gray-200 dark:border-gray-700">Produk Terlaris</h3>
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm">
             <thead class="bg-gray-50 dark:bg-gray-700/50">
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kategori</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Terjual</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Penjualan</th>
+                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
+                    <th scope="col" class="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kategori</th>
+                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Terjual</th>
+                    <th scope="col" class="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Penjualan</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse($produkTerlarisList ?? [] as $produk)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $produk->nama }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $produk->kategori }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $produk->jumlah_terjual }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">Rp {{ number_format($produk->total_penjualan, 0, ',', '.') }}</td>
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">
+                        <div>
+                            <div class="font-medium">{{ $produk->nama }}</div>
+                            <!-- Mobile: Show category -->
+                            <div class="sm:hidden text-xs text-gray-500 mt-1">Kategori: {{ $produk->kategori }}</div>
+                        </div>
+                    </td>
+                    <td class="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">{{ $produk->kategori }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">{{ $produk->jumlah_terjual }}</td>
+                    <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">Rp {{ number_format($produk->total_penjualan, 0, ',', '.') }}</td>
                 </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center py-12 text-gray-500 dark:text-gray-400">
+                        <td colspan="4" class="text-center py-8 sm:py-12 text-gray-500 dark:text-gray-400 text-sm">
                             Tidak ada data produk terlaris untuk periode ini.
                         </td>
                     </tr>
@@ -191,6 +197,19 @@
 .chart-container {
     position: relative;
     width: 100%;
+}
+
+/* Responsive chart adjustments */
+@media (max-width: 640px) {
+    .chart-container {
+        height: 250px !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .chart-container {
+        height: 300px !important;
+    }
 }
 </style>
 @endpush

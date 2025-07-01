@@ -3,13 +3,13 @@
 @section('title', isset($product) ? 'Edit Produk' : 'Tambah Produk')
 
 @section('content')
-<div class="container px-6 mx-auto">
-    <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">
+<div class="container px-2 sm:px-6 mx-auto">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">
             {{ isset($product) ? 'Edit Produk' : 'Tambah Produk Baru' }}
         </h1>
-        <a href="{{ route('products.index') }}" class="inline-flex items-center px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="{{ route('products.index') }}" class="inline-flex items-center px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
             Kembali ke Daftar
@@ -29,17 +29,17 @@
         </div>
     @endif
 
-    <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="bg-white rounded-lg shadow-md p-3 sm:p-6">
         <form action="{{ isset($product) ? route('products.update', $product) : route('products.store') }}" 
               method="POST" 
               enctype="multipart/form-data"
-              class="space-y-6">
+              class="space-y-4 sm:space-y-6">
             @csrf
             @if(isset($product))
                 @method('PUT')
             @endif
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <!-- Nama Produk -->
                 <div>
                     <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">
@@ -79,7 +79,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                 <!-- Harga -->
                 <div>
                     <label for="harga" class="block text-sm font-medium text-gray-700 mb-1">
@@ -124,7 +124,7 @@
                 </div>
 
                 <!-- Satuan -->
-                <div class="col-span-6 sm:col-span-3">
+                <div class="col-span-1">
                     <label for="satuan" class="block text-sm font-medium text-gray-700 mb-1">
                         Satuan
                     </label>
@@ -193,8 +193,8 @@
             </div>
 
             <!-- Variants Section -->
-            <div class="border-t border-gray-300 mt-8 pt-8">
-                <h3 class="text-lg font-medium text-gray-700 mb-4">Varian Produk</h3>
+            <div class="border-t border-gray-300 mt-6 sm:mt-8 pt-6 sm:pt-8">
+                <h3 class="text-base sm:text-lg font-medium text-gray-700 mb-2 sm:mb-4">Varian Produk</h3>
                 <div x-data="{ variants: [] }">
                     <div class="mb-4">
                         <button type="button" 

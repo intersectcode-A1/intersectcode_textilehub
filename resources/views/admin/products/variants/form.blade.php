@@ -1,9 +1,9 @@
-<div class="bg-white p-6 rounded-lg shadow-sm">
-    <h3 class="text-lg font-semibold mb-4">{{ isset($variant) ? 'Edit Varian' : 'Tambah Varian Baru' }}</h3>
+<div class="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
+    <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-4">{{ isset($variant) ? 'Edit Varian' : 'Tambah Varian Baru' }}</h3>
 
     <form action="{{ isset($variant) ? route('admin.variants.update', $variant->id) : route('admin.variants.store', $product->id) }}" 
           method="POST" 
-          class="space-y-4">
+          class="space-y-3 sm:space-y-4">
         @csrf
         @if(isset($variant))
             @method('PUT')
@@ -57,14 +57,14 @@
             </div>
         </div>
 
-        <div class="flex justify-end space-x-3">
+        <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
             <button type="button" 
                     onclick="window.history.back()" 
-                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    class="inline-flex items-center px-3 sm:px-4 py-2 border border-gray-300 rounded-md shadow-sm text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                 Batal
             </button>
             <button type="submit" 
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    class="inline-flex items-center px-3 sm:px-4 py-2 border border-transparent rounded-md shadow-sm text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                 {{ isset($variant) ? 'Simpan Perubahan' : 'Tambah Varian' }}
             </button>
         </div>

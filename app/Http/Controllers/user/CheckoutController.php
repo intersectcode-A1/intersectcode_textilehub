@@ -185,7 +185,8 @@ class CheckoutController extends Controller
                 return json_decode($item, true);
             }, $request->items);
 
-            // Buat order items dan kurangi stok
+
+            // Validasi semua stok
             foreach ($items as $item) {
                 $product = Product::find($item['id']);
                 if (!$product) {
@@ -205,8 +206,6 @@ class CheckoutController extends Controller
                 Log::info('Cart order item created', ['orderItem' => $orderItem->toArray()]);
                 $product->decrement('stok', $item['quantity']);
             }
-
-            // Kirim notifikasi ke semua admin
             $this->notifyAdmins($order);
 
             // Kosongkan keranjang
