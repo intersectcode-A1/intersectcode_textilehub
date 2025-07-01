@@ -386,15 +386,7 @@
     </div>
   </div>
   <div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-6 md:px-12 pt-6">
-    <span class="text-xs text-gray-400">© {{ date('Y') }} Toko Usaha Muda. All rights reserved.</span>
-    <div class="flex space-x-4 mt-2 md:mt-0 md:hidden">
-      <a href="https://www.instagram.com/toko.usahamuda/" class="hover:text-blue-400 transition" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect width="20" height="20" x="2" y="2" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="17" cy="7" r="1.5" fill="currentColor"/></svg>
-      </a>
-      <a href="https://wa.me/+628116655050" class="hover:text-blue-400 transition" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.004 2.003c-5.523 0-9.996 4.473-9.996 9.996a9.93 9.93 0 001.367 5.038l-1.41 5.164 5.288-1.39a10.007 10.007 0 004.75 1.198h.001c5.522 0 9.995-4.473 9.995-9.996s-4.473-9.996-9.995-9.996zm.003 17.99a8.08 8.08 0 01-4.099-1.125l-.292-.175-3.139.823.842-3.06-.19-.315a8.017 8.017 0 01-1.235-4.297c0-4.432 3.605-8.038 8.038-8.038 2.148 0 4.164.836 5.678 2.35a7.94 7.94 0 012.359 5.689c-.003 4.432-3.61 8.048-8.062 8.048zm4.324-5.94c-.237-.118-1.406-.694-1.625-.772-.218-.079-.377-.118-.536.119-.158.237-.615.772-.754.931-.138.158-.277.178-.514.059-.237-.118-1.002-.369-1.908-1.176-.705-.63-1.18-1.409-1.319-1.646-.138-.237-.015-.364.104-.482.107-.106.237-.277.356-.415.118-.138.158-.237.237-.396.079-.158.04-.297-.02-.416-.059-.118-.536-1.292-.735-1.772-.194-.467-.392-.404-.536-.413l-.456-.009c-.158 0-.416.059-.635.277s-.832.814-.832 1.987c0 1.173.853 2.309.972 2.467.118.158 1.677 2.56 4.064 3.588.569.245 1.013.391 1.359.5.571.181 1.09.155 1.5.094.457-.068 1.406-.575 1.606-1.131.198-.555.198-1.03.139-1.131-.059-.099-.217-.158-.456-.277z"/></svg>
-      </a>
-    </div>
+    <span class="text-xs text-gray-400">© {{ date('Y') }} Intersectcode. All rights reserved.</span>
   </div>
 </footer>
 
