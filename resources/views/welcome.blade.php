@@ -54,15 +54,15 @@
           <img src="/image/Coverwelcome.png"
                alt="Ilustrasi Produk"
                class="block md:hidden mx-auto mb-8 w-32 h-32 sm:w-44 sm:h-44 object-contain" />
-          <h1 class="text-5xl font-extrabold leading-tight font-sans mb-6 text-gray-900">
-            Mulai perjalananmu bersama <span class="text-blue-600">Toko Usaha Muda</span>
-          </h1>
+               <h1 class="text-5xl md:text-6xl font-extrabold mb-6 text-gray-900 leading-tight font-sans">
+                Mulai perjalananmu bersama <span class="text-blue-600">Toko Usaha Muda</span>
+              </h1>
           <p class="text-lg md:text-2xl mb-8 text-gray-600 max-w-xl font-light">
             Temukan dan beli produk tekstil berkualitas, harga bersaing, dan pelayanan terbaik untuk kebutuhan Anda. Belanja mudah, aman, dan cepat!
           </p>
           <div class="flex flex-row gap-4 mb-8">
-            <a href="#produk" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-xl shadow-lg hover:scale-105 hover:bg-blue-700 transition text-lg font-semibold">Mulai Belanja</a>
-            <a href="#kontak" class="inline-block px-8 py-3 bg-white border border-blue-600 text-blue-600 rounded-xl shadow hover:bg-blue-50 transition text-lg font-semibold">Liat Produk</a>
+            <a href="{{ route('login') }}" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-xl shadow-lg hover:scale-105 hover:bg-blue-700 transition text-lg font-semibold">Mulai Belanja</a>
+            <a href="#produk" class="inline-block px-8 py-3 bg-white border border-blue-600 text-blue-600 rounded-xl shadow hover:bg-blue-50 transition text-lg font-semibold">Liat Produk</a>
           </div>
           <div class="flex flex-row gap-8 items-center mb-6">
             <div class="flex flex-col items-start">
