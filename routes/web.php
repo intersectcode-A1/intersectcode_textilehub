@@ -29,7 +29,7 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\HargaStrategiController;
 use App\Http\Controllers\Admin\AnalisisPenjualanController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\user\WishlistController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\NotificationController;
 
 // Middleware
@@ -94,6 +94,11 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
+    // ❤️ Wishlist (User)
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -116,6 +121,8 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+    Route::resource('units', UnitController::class);
+    Route::resource('product-variants', \App\Http\Controllers\Admin\ProductVariantController::class);
 
     // Pesanan dari user
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
