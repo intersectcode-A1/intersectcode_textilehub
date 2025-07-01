@@ -23,11 +23,12 @@
 <body class="bg-gradient-to-br from-white to-blue-50 text-gray-800 font-sans scroll-smooth" style="font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;">
 
     <!-- Navbar -->
-    <header class="sticky top-0 z-50 bg-white/70 backdrop-blur shadow-md rounded-b-2xl">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <header class="sticky top-0 z-[999] bg-gradient-to-b from-blue-200 via-blue-50 to-white shadow-lg">
+        <div class="max-w-2xl md:max-w-4xl lg:max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="text-2xl font-bold text-blue-600 drop-shadow">
                 <a href="/" class="hover:scale-105 transition-all">Toko Usaha Muda</a>
             </div>
+            <!-- Desktop Menu -->
             <nav class="hidden md:flex space-x-6 text-gray-700 font-medium">
                 <a href="#produk" class="hover:text-blue-600 transition">Produk</a>
                 <a href="#keunggulan" class="hover:text-blue-600 transition">Keunggulan</a>
@@ -42,7 +43,47 @@
                     @endif
                 @endauth
             </nav>
+            <!-- Hamburger Button Mobile -->
+            <button id="mobile-menu-btn" class="block md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Buka menu">
+                <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
         </div>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="fixed inset-0 z-[9999] bg-black/40 md:hidden transition-all duration-300 hidden flex justify-end">
+            <div class="h-full w-[90vw] max-w-xs bg-gradient-to-b from-blue-100 via-white to-white shadow-2xl p-8 pt-8 flex flex-col gap-4 rounded-l-2xl" style="background: linear-gradient(to bottom, #dbeafe 0%, #fff 60%, #fff 100%) !important; opacity: 1 !important;">
+                <button id="close-mobile-menu" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 bg-white rounded-full shadow focus:outline-none" aria-label="Tutup menu">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                <a href="#produk" class="py-3 px-3 rounded-lg text-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition">Produk</a>
+                <a href="#keunggulan" class="py-3 px-3 rounded-lg text-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition">Keunggulan</a>
+                <a href="#testimoni" class="py-3 px-3 rounded-lg text-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition">Testimoni</a>
+                <a href="#kontak" class="py-3 px-3 rounded-lg text-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition">Kontak</a>
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="py-3 px-3 rounded-lg border border-gray-300 text-lg text-gray-700 font-semibold hover:bg-blue-100 transition">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="py-3 px-3 rounded-lg border border-blue-500 text-lg text-blue-600 font-semibold hover:bg-blue-600 hover:text-white transition">Login</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="py-3 px-3 rounded-lg border border-blue-500 text-lg text-blue-600 font-semibold hover:bg-blue-600 hover:text-white transition">Register</a>
+                    @endif
+                @endauth
+            </div>
+        </div>
+        <script>
+            // Hamburger menu logic
+            document.addEventListener('DOMContentLoaded', function() {
+                const btn = document.getElementById('mobile-menu-btn');
+                const menu = document.getElementById('mobile-menu');
+                const closeBtn = document.getElementById('close-mobile-menu');
+                if(btn && menu && closeBtn) {
+                    btn.onclick = () => menu.classList.remove('hidden');
+                    closeBtn.onclick = () => menu.classList.add('hidden');
+                    // Optional: close menu on click outside
+                    menu.addEventListener('click', function(e) {
+                        if(e.target === menu) menu.classList.add('hidden');
+                    });
+                }
+            });
+        </script>
     </header>
 
     <!-- Hero Section -->
@@ -330,7 +371,7 @@
     <!-- Kanan: Map -->
     <div class="flex-1 w-full">
       <div class="rounded-2xl overflow-hidden shadow-lg" style="min-height:320px;">
-        <div id="map" style="height: 320px; width: 100%;"></div>
+        <div id="map" style="height: 320px; width: 100%; z-index:10; position:relative;"></div>
       </div>
     </div>
   </div>
