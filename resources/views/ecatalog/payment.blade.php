@@ -1,14 +1,5 @@
 <x-layouts.catalog>
     <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <a href="{{ route('order.detail', $order->id) }}" class="text-blue-600 hover:text-blue-800 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Kembali ke Detail Pesanan
-            </a>
-        </div>
-
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
             <div class="p-6">
                 <h1 class="text-2xl font-bold text-gray-900 mb-6">Pembayaran Pesanan #{{ $order->order_number }}</h1>

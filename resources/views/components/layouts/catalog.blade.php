@@ -312,6 +312,13 @@
     </main>
 
     {{-- FOOTER --}}
+    
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <br>
     <br>
     <footer class="bg-white border-t border-gray-200 mt-auto">

@@ -1,92 +1,94 @@
 <x-layouts.catalog>
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- Tombol Kembali ke E-Catalog (paling atas) --}}
+        <a href="/" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            Kembali ke E-Catalog
+        </a>
+
         <div class="text-center max-w-3xl mx-auto mb-12">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Riwayat Pembelian</h1>
-            <p class="text-lg text-gray-600">Lihat riwayat pembelian Anda yang telah selesai</p>
+            <h1 class="text-4xl font-extrabold text-blue-900 mb-4">Riwayat Pembelian</h1>
+            <p class="text-lg text-blue-600">Lihat riwayat pembelian Anda yang telah selesai</p>
         </div>
 
         {{-- Navigation Tabs --}}
         <div class="flex justify-center space-x-4 mb-8">
             <a href="{{ route('order.status') }}" 
-               class="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300">
+               class="px-6 py-2 rounded-xl font-bold bg-gray-100 text-blue-700 shadow hover:bg-blue-50 transition-all duration-200">
                 Status Pemesanan
             </a>
             <a href="{{ route('purchase.history') }}" 
-               class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg">
+               class="px-6 py-2 rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow hover:from-blue-700 hover:to-indigo-700 transition-all duration-200">
                 Riwayat Pembelian
             </a>
         </div>
 
         {{-- Filter Section --}}
-        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
-            <form action="{{ route('purchase.history') }}" method="GET" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Dari Tanggal</label>
-                    <input type="date" name="start_date" value="{{ request('start_date') }}" 
-                           class="w-full border rounded-lg px-3 py-2">
+        <div class="bg-white/70 glass rounded-2xl shadow-2xl p-6 mb-6 animate-fadeIn">
+            <form action="{{ route('purchase.history') }}" method="GET" class="flex flex-col md:flex-row md:items-center md:space-x-4">
+                <div class="flex flex-row w-full gap-2 md:gap-3">
+                    <div class="flex flex-col w-1/2">
+                        <label class="block text-sm font-bold text-blue-800 mb-1">Dari Tanggal</label>
+                        <input type="date" name="start_date" value="{{ request('start_date') }}"
+                               class="w-full border border-blue-200 rounded-xl px-4 py-2 focus:ring-blue-500 focus:border-blue-500 h-11" />
+                    </div>
+                    <div class="flex flex-col w-1/2">
+                        <label class="block text-sm font-bold text-blue-800 mb-1">Sampai Tanggal</label>
+                        <input type="date" name="end_date" value="{{ request('end_date') }}"
+                               class="w-full border border-blue-200 rounded-xl px-4 py-2 focus:ring-blue-500 focus:border-blue-500 h-11" />
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Sampai Tanggal</label>
-                    <input type="date" name="end_date" value="{{ request('end_date') }}" 
-                           class="w-full border rounded-lg px-3 py-2">
-                </div>
-                <div class="md:col-span-2 flex justify-end">
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                        Filter
-                    </button>
+                <div class="flex md:justify-end items-center mt-3 md:mt-0 md:ml-4">
+                    <button type="submit" class="btn btn-primary px-8 py-2 text-base font-bold h-11 w-full md:w-auto">Filter</button>
                 </div>
             </form>
         </div>
 
         {{-- Orders List --}}
-        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="bg-white/80 glass rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                <table class="min-w-full divide-y divide-blue-100">
+                    <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 border-b-2 border-blue-200">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Order</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Pembayaran</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">No. Order</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Tanggal</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Total</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Status Pembayaran</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-blue-50">
                         @forelse($orders as $order)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    #{{ $order->order_number }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $order->created_at->format('d M Y H:i') }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    Rp {{ number_format($order->total, 0, ',', '.') }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                            <tr class="hover:bg-blue-50 transition-all duration-150">
+                                <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-blue-900">#{{ $order->order_number }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-blue-700">{{ $order->created_at->format('d M Y H:i') }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-blue-900">Rp {{ number_format($order->total, 0, ',', '.') }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full shadow animate-fadeIn
+                                        @if($order->payment_status === 'paid') bg-gradient-to-r from-green-200 to-emerald-400 text-green-900
+                                        @elseif($order->payment_status === 'unpaid') bg-gradient-to-r from-yellow-200 to-yellow-400 text-yellow-900
+                                        @else bg-gradient-to-r from-red-200 to-pink-400 text-red-900 @endif">
                                         @if($order->payment_status === 'paid')
-                                            bg-green-100 text-green-800
+                                            <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" class="stroke-green-500"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" class="stroke-green-700"/></svg>
+                                            Lunas
                                         @elseif($order->payment_status === 'unpaid')
-                                            bg-yellow-100 text-yellow-800
+                                            <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" class="stroke-yellow-500"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" class="stroke-yellow-700"/></svg>
+                                            Belum Bayar
                                         @else
-                                            bg-red-100 text-red-800
-                                        @endif">
-                                        {{ ucfirst($order->payment_status) }}
+                                            <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" class="stroke-red-500"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" class="stroke-red-700"/></svg>
+                                            Gagal
+                                        @endif
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-3">
-                                        <a href="{{ route('order.detail', $order->id) }}" 
-                                           class="text-blue-600 hover:text-blue-900">Detail</a>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <a href="{{ route('order.detail', $order->id) }}" class="btn-link text-blue-700 font-bold">Detail</a>
                                         @if($order->status === 'completed' && $order->payment_status === 'unpaid')
-                                            <a href="{{ route('payment.show', $order->id) }}" 
-                                               class="text-green-600 hover:text-green-900">Bayar</a>
+                                            <a href="{{ route('payment.show', $order->id) }}" class="btn-link text-green-700 font-bold">Bayar</a>
                                         @endif
                                         @if($order->payment_status === 'paid')
-                                            <a href="{{ route('order.invoice.pdf', $order->id) }}" 
-                                               class="text-indigo-600 hover:text-indigo-900" target="_blank">
-                                                Download Invoice
+                                            <a href="{{ route('order.invoice.pdf', $order->id) }}" class="btn-link text-indigo-700 font-bold" target="_blank">
+                                                <i class="fas fa-file-invoice mr-1"></i> Download Invoice
                                             </a>
                                         @endif
                                     </div>
@@ -94,16 +96,14 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                    Belum ada riwayat pembelian
-                                </td>
+                                <td colspan="5" class="px-6 py-4 text-center text-blue-400">Belum ada riwayat pembelian</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
             @if($orders->hasPages())
-                <div class="px-6 py-4 border-t border-gray-200">
+                <div class="px-6 py-4 border-t border-blue-100">
                     {{ $orders->links() }}
                 </div>
             @endif
@@ -111,16 +111,12 @@
 
         {{-- Messages --}}
         @if(session('success'))
-            <div class="mt-8 rounded-md bg-green-50 p-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
-                    </div>
+            <div class="mt-8 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 p-4 border-l-4 border-green-500 shadow-lg animate-fadeIn">
+                <div class="flex items-center">
+                    <svg class="h-5 w-5 text-green-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-green-800 font-semibold">{{ session('success') }}</span>
                 </div>
             </div>
         @endif
