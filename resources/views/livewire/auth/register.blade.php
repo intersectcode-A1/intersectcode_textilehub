@@ -130,9 +130,9 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#password');
+        document.addEventListener('DOMContentLoaded', function () {
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#password');
         if (togglePassword && password) {
             togglePassword.addEventListener('click', function () {
                 const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -142,8 +142,8 @@
             });
         }
 
-        const togglePasswordConfirmation = document.querySelector('#togglePasswordConfirmation');
-        const passwordConfirmation = document.querySelector('#password_confirmation');
+            const togglePasswordConfirmation = document.querySelector('#togglePasswordConfirmation');
+            const passwordConfirmation = document.querySelector('#password_confirmation');
         if (togglePasswordConfirmation && passwordConfirmation) {
             togglePasswordConfirmation.addEventListener('click', function () {
                 const type = passwordConfirmation.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -152,7 +152,7 @@
                 this.querySelector('i').classList.toggle('fa-eye-slash');
             });
         }
-    });
+        });
     </script>
 
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
