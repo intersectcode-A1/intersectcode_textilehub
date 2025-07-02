@@ -12,8 +12,8 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 sm:mb-8 gap-2 sm:gap-3">
         <p class="text-xs sm:text-lg text-gray-600 dark:text-gray-400">Kelola semua produk dalam satu tempat.</p>
         <a href="{{ route('products.create') }}" 
-           class="inline-flex items-center px-3 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white text-xs sm:text-base font-medium rounded-lg sm:rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg shadow-blue-500/20 w-full sm:w-auto justify-center">
-            <i data-lucide="plus" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 -ml-1"></i>
+           class="inline-flex items-center px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl shadow-lg backdrop-blur-md border border-white/30 hover:scale-105 hover:brightness-110 hover:shadow-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
             Tambah Produk
         </a>
     </div>
@@ -28,7 +28,7 @@
     @endif
 
     <!-- Filter dan Pencarian -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-md p-4 sm:p-6 mb-4 sm:mb-8">
+    <div class="bg-white/70 dark:bg-gray-800/80 glass rounded-2xl shadow-2xl p-6 mb-6 border border-white/20 dark:border-gray-700">
         <form action="{{ route('products.index') }}" method="GET">
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <div class="flex-1">
@@ -88,19 +88,19 @@
 
     <div class="bg-white dark:bg-gray-800 rounded-lg sm:rounded-2xl shadow-lg overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full text-xs sm:text-sm">
-                <thead class="bg-gray-50 dark:bg-gray-900/50">
+            <table class="min-w-full text-xs sm:text-sm rounded-2xl overflow-hidden">
+                <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-blue-900 dark:to-indigo-900 border-b-2 border-blue-200 dark:border-blue-700">
                     <tr>
-                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-[80px] sm:w-[100px]">Foto</th>
-                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Info Produk</th>
-                        <th class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Stok & Varian</th>
-                        <th class="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-[120px] sm:w-[150px]">Aksi</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">Foto</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">Info Produk</th>
+                        <th class="hidden md:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">Stok & Varian</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse($products as $product)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                            <td class="px-3 sm:px-6 py-3 sm:py-4">
+                            <td class="px-6 py-4">
                                 @if($product->foto)
                                     <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nama }}" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg sm:rounded-xl shadow-md ring-1 ring-gray-200 dark:ring-gray-700">
                                 @else
@@ -109,12 +109,12 @@
                                     </div>
                                 @endif
                             </td>
-                            <td class="px-3 sm:px-6 py-3 sm:py-4 align-top">
+                            <td class="px-6 py-4 align-top">
                                 <div class="space-y-1 sm:space-y-2">
                                     <h3 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">{{ $product->nama }}</h3>
                                     <div class="flex items-center space-x-2">
                                         <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Kategori:</span>
-                                        <span class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">{{ $product->category->name ?? 'N/A' }}</span>
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold shadow bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200">{{ $product->category->name ?? 'N/A' }}</span>
                                     </div>
                                     <div class="flex flex-col sm:flex-row sm:items-baseline sm:space-x-4 pt-1 gap-1 sm:gap-0">
                                         <div>
@@ -130,12 +130,12 @@
                                     <div class="md:hidden flex items-center space-x-4 pt-2">
                                         <div class="text-center">
                                             <span class="text-xs text-gray-500 dark:text-gray-400 block mb-1">Stok</span>
-                                            <span class="w-8 h-8 flex items-center justify-center text-xs font-bold rounded-full {{ $product->stok > 10 ? 'bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300' : 'bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-300' }}">{{ $product->stok }}</span>
+                                            <span class="w-8 h-8 flex items-center justify-center text-xs font-bold rounded-full bg-gradient-to-r from-green-200 to-emerald-400 text-green-900 dark:from-green-900 dark:to-emerald-800 dark:text-green-200">{{ $product->stok }}</span>
                                         </div>
                                         <div>
                                             <span class="text-xs text-gray-500 dark:text-gray-400 block mb-1">Varian</span>
                                             @if($product->variants && $product->variants->count() > 0)
-                                                <span class="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs">{{ $product->variants->count() }} Varian</span>
+                                                <span class="inline-flex items-center px-2 py-1 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 dark:from-blue-900 dark:to-indigo-900 dark:text-blue-200 rounded text-xs">{{ $product->variants->count() }} Varian</span>
                                             @else
                                                 <span class="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 text-xs rounded">Tidak ada</span>
                                             @endif
@@ -143,11 +143,11 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 align-top">
+                            <td class="hidden md:table-cell px-6 py-4 align-top">
                                 <div class="flex items-start space-x-4 sm:space-x-6">
                                     <div class="text-center">
                                         <span class="text-xs text-gray-500 dark:text-gray-400 block mb-1">Stok</span>
-                                        <span class="w-10 h-10 flex items-center justify-center text-sm font-bold rounded-full {{ $product->stok > 10 ? 'bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300' : 'bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-300' }}">{{ $product->stok }}</span>
+                                        <span class="w-10 h-10 flex items-center justify-center text-sm font-bold rounded-full bg-gradient-to-r from-green-200 to-emerald-400 text-green-900 dark:from-green-900 dark:to-emerald-800 dark:text-green-200">{{ $product->stok }}</span>
                                     </div>
                                     <div>
                                         <span class="text-xs text-gray-500 dark:text-gray-400 block mb-1">Varian</span>
@@ -172,16 +172,16 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-3 sm:px-6 py-3 sm:py-4 align-top">
+                            <td class="px-6 py-4 align-top">
                                 <div class="flex flex-col sm:flex-row items-center justify-end space-y-1 sm:space-y-0 sm:space-x-2 sm:space-x-3 pt-1">
-                                    <a href="{{ route('products.edit', $product) }}" class="p-1.5 sm:p-2 bg-gray-100 dark:bg-gray-700/80 hover:bg-blue-100 dark:hover:bg-blue-500/30 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg transition-colors">
-                                        <i data-lucide="edit" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                    <a href="{{ route('products.edit', $product) }}" class="p-2 bg-gradient-to-r from-blue-100 to-indigo-200 dark:from-blue-900 dark:to-indigo-900 hover:from-blue-200 hover:to-indigo-300 dark:hover:from-blue-800 dark:hover:to-indigo-800 text-blue-700 dark:text-blue-200 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-150">
+                                        <i data-lucide="edit" class="w-5 h-5"></i>
                                     </a>
                                     <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Yakin hapus produk ini?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="p-1.5 sm:p-2 bg-gray-100 dark:bg-gray-700/80 hover:bg-red-100 dark:hover:bg-red-500/30 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-colors">
-                                            <i data-lucide="trash-2" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                        <button type="submit" class="p-2 bg-gradient-to-r from-red-100 to-pink-200 dark:from-red-900 dark:to-pink-900 hover:from-red-200 hover:to-pink-300 dark:hover:from-red-800 dark:hover:to-pink-800 text-red-700 dark:text-red-200 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-red-400 transition-all duration-150">
+                                            <i data-lucide="trash-2" class="w-5 h-5"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -190,16 +190,14 @@
                     @empty
                         <tr>
                             <td colspan="4" class="text-center py-8 sm:py-16">
-                                <div class="text-gray-500 dark:text-gray-400">
-                                    <i data-lucide="package-x" class="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-gray-400"></i>
-                                    <h3 class="mt-2 text-base sm:text-lg font-semibold text-gray-800 dark:text-white">Tidak ada produk ditemukan</h3>
-                                    <p class="mt-1 text-xs sm:text-sm text-gray-500">Coba ubah filter atau tambahkan produk baru.</p>
-                                    <div class="mt-4 sm:mt-6">
-                                        <a href="{{ route('products.create') }}" class="inline-flex items-center px-3 sm:px-4 py-2 border border-transparent shadow-sm text-xs sm:text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                                            <i data-lucide="plus" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 -ml-1"></i>
-                                            Tambah Produk
-                                        </a>
-                                    </div>
+                                <div class="text-gray-500 dark:text-gray-400 flex flex-col items-center">
+                                    <i data-lucide="package-x" class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600"></i>
+                                    <h3 class="mt-2 text-lg font-bold text-gray-800 dark:text-white">Tidak ada produk ditemukan</h3>
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">Coba ubah filter atau tambahkan produk baru.</p>
+                                    <a href="{{ route('products.create') }}" class="inline-flex items-center px-4 py-2 mt-4 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-150">
+                                        <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
+                                        Tambah Produk
+                                    </a>
                                 </div>
                             </td>
                         </tr>

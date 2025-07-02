@@ -1,10 +1,10 @@
 <x-layouts.catalog>
     <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Tombol Kembali ke E-Catalog (paling atas) --}}
-        <a href="/" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
+        <a href="{{ route('ecatalog.index') }}" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
             Kembali ke E-Catalog
-            </a>
+        </a>
 
         <div class="bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
             {{-- Header Section --}}

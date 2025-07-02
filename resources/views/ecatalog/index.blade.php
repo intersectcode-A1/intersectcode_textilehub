@@ -1,6 +1,24 @@
 <x-layouts.catalog>
     {{-- Hero Section dengan Background Modern --}}
-    <div class="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 overflow-hidden">
+    <div x-data="{ dark: localStorage.getItem('theme') === 'dark', toggle() { this.dark = !this.dark; localStorage.setItem('theme', this.dark ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', this.dark); } }" x-init="if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}" class="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 overflow-hidden dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+        {{-- Animated SVG Particles --}}
+        <svg class="absolute left-0 top-0 w-full h-full pointer-events-none z-0" style="opacity:0.18;" aria-hidden="true">
+            <circle cx="120" cy="80" r="18">
+                <animate attributeName="cy" values="80;120;80" dur="7s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="300" cy="160" r="10">
+                <animate attributeName="cx" values="300;350;300" dur="6s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="600" cy="60" r="14">
+                <animate attributeName="cy" values="60;100;60" dur="8s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="900" cy="200" r="12">
+                <animate attributeName="cx" values="900;950;900" dur="9s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="1100" cy="100" r="8">
+                <animate attributeName="cy" values="100;140;100" dur="5s" repeatCount="indefinite" />
+            </circle>
+        </svg>
         {{-- Background Pattern --}}
         <div class="absolute inset-0 bg-black opacity-10">
             <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
@@ -49,29 +67,29 @@
                 </p>
                 {{-- Quick Stats --}}
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
-                        <div class="text-2xl font-bold text-white">{{ $products->total() ?? 0 }}</div>
-                        <div class="text-blue-200 text-sm">Total Produk</div>
+                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20 dark:bg-gray-800 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-white dark:text-yellow-300">{{ $products->total() ?? 0 }}</div>
+                        <div class="text-blue-200 text-sm dark:text-gray-400">Total Produk</div>
                     </div>
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
-                        <div class="text-2xl font-bold text-white">{{ $categories->count() ?? 0 }}</div>
-                        <div class="text-blue-200 text-sm">Kategori</div>
+                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20 dark:bg-gray-800 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-white dark:text-yellow-300">{{ $categories->count() ?? 0 }}</div>
+                        <div class="text-blue-200 text-sm dark:text-gray-400">Kategori</div>
                     </div>
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
-                        <div class="text-2xl font-bold text-white">24/7</div>
-                        <div class="text-blue-200 text-sm">Layanan</div>
+                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20 dark:bg-gray-800 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-white dark:text-yellow-300">24/7</div>
+                        <div class="text-blue-200 text-sm dark:text-gray-400">Layanan</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     {{-- Main Content Section --}}
-    <div class="bg-gray-50 min-h-screen">
+    <div class="bg-gray-50 min-h-screen dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             {{-- Alert Messages --}}
         @if(session('success'))
             <div class="mb-8">
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-800 px-6 py-4 rounded-xl shadow-lg relative" role="alert">
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-800 px-6 py-4 rounded-xl shadow-lg relative focus:outline-none focus:ring-4 focus:ring-green-200 transition-all duration-200 dark:bg-green-900 dark:text-green-200 dark:border-green-700" role="alert">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
@@ -83,7 +101,7 @@
         @endif
         @if(session('error'))
             <div class="mb-8">
-                    <div class="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-xl shadow-lg relative" role="alert">
+                    <div class="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-xl shadow-lg relative focus:outline-none focus:ring-4 focus:ring-red-200 transition-all duration-200" role="alert">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
@@ -96,21 +114,21 @@
             {{-- Action Buttons --}}
             <div class="flex flex-wrap justify-center gap-4 mb-12">
             <a href="{{ route('cart.index') }}"
-                   class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl shadow-xl text-white font-semibold text-sm hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl">
+                   class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl shadow-xl text-white font-semibold text-sm hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-offset-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 <span>Lihat Keranjang</span>
             </a>
             <a href="{{ route('order.status') }}"
-                   class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl text-white font-semibold text-sm hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl">
+                   class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl text-white font-semibold text-sm hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
                 <span>Status Pemesanan</span>
             </a>
             <a href="{{ route('purchase.history') }}"
-                   class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl shadow-xl text-white font-semibold text-sm hover:from-green-700 hover:to-emerald-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl">
+                   class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl shadow-xl text-white font-semibold text-sm hover:from-green-700 hover:to-emerald-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-green-300 focus:ring-offset-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                 </svg>
@@ -134,7 +152,7 @@
                 </div>
                     {{-- Category Navigation --}}
                     <div :class="{'hidden': !showMobileCategories}" class="lg:block">
-                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                     <x-category-nav :categories="$categories" :currentCategory="request('category')"/>
                 </div>
             </div>
@@ -142,7 +160,7 @@
                 {{-- Main Content Area --}}
             <div class="lg:w-3/4">
                     {{-- Search & Filter Section --}}
-                    <div x-data="{ showFilters: false }" class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8">
+                    <div x-data="{ showFilters: false }" class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8 dark:bg-gray-800 dark:border-gray-700">
                     <form method="GET" action="{{ route('ecatalog.index') }}" class="space-y-6">
                         <div class="flex flex-col sm:flex-row gap-4">
                                 <div class="flex-1 relative">
@@ -155,19 +173,19 @@
                                        name="search" 
                                            placeholder="Cari produk yang Anda butuhkan..." 
                                        value="{{ request('search') }}"
-                                           class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 placeholder-gray-400 transition-all duration-200"/>
+                                           class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-500 focus:outline-none text-gray-700 placeholder-gray-400 transition-all duration-200 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"/>
                             </div>
                             <div class="flex gap-3">
                                 <button type="button" 
                                         @click="showFilters = !showFilters"
-                                            class="px-6 py-4 bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 flex items-center gap-2 transition-all duration-200 border border-gray-200 hover:border-gray-300">
+                                            class="px-6 py-4 bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 flex items-center gap-2 transition-all duration-200 border border-gray-200 hover:border-gray-300 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-offset-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                                     </svg>
                                         <span class="font-medium">Filter</span>
                                 </button>
                                 <button type="submit"
-                                            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 flex items-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 flex items-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-offset-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                     </svg>
@@ -204,7 +222,7 @@
                                                name="min_price" 
                                                placeholder="Min" 
                                                value="{{ request('min_price') }}"
-                                                       class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"/>
+                                                       class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-500 focus:outline-none transition-all duration-200"/>
                                             </div>
                                             <div class="relative">
                                                 <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">Rp</span>
@@ -212,7 +230,7 @@
                                                name="max_price" 
                                                placeholder="Max" 
                                                value="{{ request('max_price') }}"
-                                                       class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"/>
+                                                       class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-500 focus:outline-none transition-all duration-200"/>
                                             </div>
                                     </div>
                                 </div>
@@ -223,27 +241,27 @@
                     {{-- Products Grid --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     @forelse($products as $product)
-                        <article class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group">
+                        <article class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 border border-gray-100">
                             <div class="relative">
                                 <img src="{{ asset('storage/' . $product->foto) }}" 
                                      alt="{{ $product->nama }}"
                                      class="w-full h-56 object-cover transform group-hover:scale-105 transition duration-300">
                                 <div class="absolute top-3 right-3">
-                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                         Stok: {{ $product->stok }} {{ $product->satuan }}
                                     </span>
                                 </div>
                             </div>
                             <div class="p-6">
                                 @if($product->category)
-                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full mb-3 font-medium">
+                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full mb-3 font-medium dark:bg-blue-900 dark:text-blue-200">
                                         {{ $product->category->name }}
                                     </span>
                                 @endif
-                                <h3 class="text-xl font-semibold text-gray-900 mb-2 leading-tight">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-2 leading-tight dark:text-gray-100">
                                     {{ $product->nama }}
                                 </h3>
-                                <p class="text-sm text-gray-600 mb-4 line-clamp-2">
+                                <p class="text-sm text-gray-600 mb-4 line-clamp-2 dark:text-gray-300">
                                     {{ Str::limit($product->deskripsi, 80) }}
                                 </p>
                                 <div class="mb-6">
@@ -255,10 +273,10 @@
                                                 .reduce((sum, variant) => sum + parseFloat(variant.additional_price), 0);
                                         }
                                     }">
-                                        <span class="text-2xl font-bold text-blue-600">
+                                        <span class="text-2xl font-bold text-blue-600 dark:text-blue-300">
                                             Rp <span x-text="({{ $product->harga }} + additionalPrice).toLocaleString('id-ID')"></span>
                                         </span>
-                                        <span class="text-sm text-gray-500">/{{ $product->satuan }}</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">/{{ $product->satuan }}</span>
                                         @if($product->variants->isNotEmpty())
                                             <div class="mt-2 space-y-2">
                                                 @foreach($product->variants->groupBy('type') as $type => $variants)
@@ -281,7 +299,7 @@
                                                                         'ring-2 ring-blue-500 border-blue-300 bg-blue-50': selectedVariants['{{ $type }}']?.id === {{ $variant->id }},
                                                                         'hover:border-blue-400 hover:bg-gray-50': selectedVariants['{{ $type }}']?.id !== {{ $variant->id }}
                                                                     }"
-                                                                    class="px-2 py-1 text-xs border rounded-lg transition-all duration-200">
+                                                                    class="px-2 py-1 text-xs border rounded-lg transition-all duration-200 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700">
                                                                 {{ $variant->name }}
                                                                 @if($variant->additional_price > 0)
                                                                     <span class="text-green-600">+{{ number_format($variant->additional_price, 0, ',', '.') }}</span>
@@ -296,14 +314,14 @@
                                 </div>
                                 <div class="space-y-3">
                                     <a href="{{ route('ecatalog.show', $product->id) }}" 
-                                       class="btn-secondary w-full flex items-center justify-center">
+                                       class="btn-secondary w-full flex items-center justify-center dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
                                         <i class="fas fa-eye mr-2"></i>
                                         Lihat Detail
                                     </a>
                                     @if($product->stok > 0)
                                         <x-quantity-modal :product="$product" />
                                     @else
-                                        <div class="bg-gray-100 text-gray-600 text-sm text-center py-3 rounded-lg font-medium">
+                                        <div class="bg-gray-100 text-gray-600 text-sm text-center py-3 rounded-lg font-medium dark:bg-gray-700 dark:text-gray-300">
                                             Stok Habis
                                         </div>
                                     @endif
@@ -312,18 +330,18 @@
                         </article>
                     @empty
                         <div class="col-span-full text-center py-16">
-                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
-                                <i class="fas fa-box-open text-gray-400 text-3xl"></i>
+                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6 dark:bg-gray-800">
+                                <i class="fas fa-box-open text-gray-400 text-3xl dark:text-gray-600"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Tidak ada produk</h3>
-                            <p class="text-gray-600">Tidak ada produk yang ditemukan dengan kriteria pencarian ini.</p>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2 dark:text-gray-100">Tidak ada produk</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Tidak ada produk yang ditemukan dengan kriteria pencarian ini.</p>
                         </div>
                     @endforelse
                 </div>
                     {{-- Pagination --}}
                     @if($products->hasPages())
                 <div class="mt-16">
-                            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 dark:bg-gray-800 dark:border-gray-700">
                     {{ $products->links() }}
                             </div>
                         </div>

@@ -87,9 +87,9 @@
 
     @livewireStyles
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50" x-data="{ mobileMenuOpen: false }">
+<body class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900" x-data="{ mobileMenuOpen: false, dark: localStorage.getItem('theme') === 'dark', toggleDark() { this.dark = !this.dark; localStorage.setItem('theme', this.dark ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', this.dark); } }" x-init="if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}" >
     {{-- HEADER --}}
-    <header class="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50">
+    <header class="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50 dark:bg-gray-900 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Top Navigation --}}
             <div class="flex justify-between items-center h-16">
@@ -114,6 +114,11 @@
                         <i class="fas fa-home mr-2"></i>
                         Beranda
                     </a>
+                    <button @click="toggleDark()" class="ml-2 flex items-center px-4 py-2 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg border border-white/30 dark:border-gray-700 text-blue-900 dark:text-yellow-300 font-bold text-xs gap-2 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-200">
+                        <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.66-12.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m16.66 4.66l-.71-.71M4.05 4.05l-.71-.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        <svg x-show="dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+                        <span x-text="dark ? 'Dark' : 'Light'"></span>
+                    </button>
                     
                     @auth
                         {{-- Cart Icon --}}
@@ -141,8 +146,8 @@
                                         </div>
                                     @endif
                                     <div class="hidden lg:block text-left">
-                                        <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
-                                        <p class="text-xs text-gray-500">Pelanggan</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ auth()->user()->name }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-300">Pelanggan</p>
                                     </div>
                                     <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" 
                                          :class="{'rotate-180': open}"
@@ -164,8 +169,8 @@
                                  class="absolute right-0 mt-2 w-64 rounded-xl shadow-xl bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-50 border border-gray-100">
                                 
                                 <div class="px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
-                                    <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
-                                    <p class="text-sm text-gray-500">{{ auth()->user()->email }}</p>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ auth()->user()->name }}</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300">{{ auth()->user()->email }}</p>
                                 </div>
                                 
                                 <div class="py-2">
@@ -252,8 +257,8 @@
                             </div>
                         @endif
                         <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
-                            <p class="text-xs text-gray-500">{{ auth()->user()->email }}</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ auth()->user()->name }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-300">{{ auth()->user()->email }}</p>
                         </div>
                     </div>
                     
@@ -311,7 +316,7 @@
     <br>
     <br>
     <br>
-    <footer class="bg-white border-t border-gray-200 mt-auto">
+    <footer class="bg-white border-t border-gray-200 mt-auto dark:bg-gray-900 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 {{-- Company Info --}}
@@ -322,18 +327,18 @@
                             Toko Usaha Muda
                         </span>
                     </div>
-                    <p class="text-gray-600 mb-4 leading-relaxed">
+                    <p class="text-gray-600 mb-4 leading-relaxed dark:text-gray-300">
                         Menyediakan produk berkualitas tinggi untuk memenuhi kebutuhan bisnis Anda. 
                         Kami berkomitmen memberikan layanan terbaik dengan harga yang kompetitif.
                     </p>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200">
+                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
                             <i class="fab fa-facebook text-xl"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200">
+                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
                             <i class="fab fa-instagram text-xl"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200">
+                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
                             <i class="fab fa-whatsapp text-xl"></i>
                         </a>
                     </div>
@@ -341,25 +346,25 @@
 
                 {{-- Quick Links --}}
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Layanan</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 dark:text-gray-100">Layanan</h3>
                     <ul class="space-y-2">
                         <li>
-                            <a href="/" class="text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                            <a href="/" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
                                 Beranda
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('ecatalog.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                            <a href="{{ route('ecatalog.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
                                 E-Catalog
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('cart.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                            <a href="{{ route('cart.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
                                 Keranjang
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('order.status') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                            <a href="{{ route('order.status') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
                                 Status Pesanan
                             </a>
                         </li>
@@ -368,17 +373,17 @@
 
                 {{-- Contact Info --}}
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Kontak</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 dark:text-gray-100">Kontak</h3>
                     <ul class="space-y-2">
-                        <li class="flex items-center text-gray-600">
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
                             <i class="fas fa-map-marker-alt mr-3 text-blue-500"></i>
                             <span>Jl. Pasar Raya A No.24F, Kp. Jao, Kec. Padang Bar. Kota Padang Sumatera Barat</span>
                         </li>
-                        <li class="flex items-center text-gray-600">
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
                             <i class="fas fa-phone mr-3 text-blue-500"></i>
                             <span>+62 811-6655-050</span>
                         </li>
-                        <li class="flex items-center text-gray-600">
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
                             <i class="fas fa-envelope mr-3 text-blue-500"></i>
                             <span>tokousahamuda@gmail.com</span>
                         </li>
@@ -387,19 +392,19 @@
             </div>
 
             {{-- Bottom Footer --}}
-            <div class="border-t border-gray-200 mt-8 pt-8">
+            <div class="border-t border-gray-200 mt-8 pt-8 dark:border-gray-700">
                 <div class="flex flex-col md:flex-row justify-between items-center">
-                    <p class="text-gray-500 text-sm">
+                    <p class="text-gray-500 text-sm dark:text-gray-400">
                 &copy; {{ date('Y') }} Toko Usaha Muda. All rights reserved.
                     </p>
                     <div class="flex space-x-6 mt-4 md:mt-0">
-                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200 dark:text-gray-400 dark:hover:text-blue-400">
                             Kebijakan Privasi
                         </a>
-                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200 dark:text-gray-400 dark:hover:text-blue-400">
                             Syarat & Ketentuan
                         </a>
-                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200 dark:text-gray-400 dark:hover:text-blue-400">
                             Bantuan
                         </a>
                     </div>
