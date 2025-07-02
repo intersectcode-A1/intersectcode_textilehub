@@ -80,10 +80,11 @@
                         @error('password_confirmation') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Tambahkan widget reCAPTCHA v2 -->
-                    <div id="recaptcha-container" class="g-recaptcha" data-sitekey="6LfieHErAAAAAMiFrtXqW8tgVNQYX9gr2Ba5UKot"></div>
-                    <input type="hidden" wire:model="gRecaptchaResponse">
-                    @error('g-recaptcha-response') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
+                    <!-- Widget reCAPTCHA v2 -->
+                    <div id="recaptcha-container"></div>
+                    <input type="hidden" id="gRecaptchaResponseLivewire" wire:model="gRecaptchaResponse">
+                    <span id="recaptcha-debug" class="text-xs text-green-600"></span>
+                    @error('gRecaptchaResponse') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
 
                     <button type="submit"
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300shadow">
@@ -121,18 +122,27 @@
     </div>
 
     <script>
-    function onloadCallback() {
-        grecaptcha.render('recaptcha-container', {
-            'sitekey': '6LfieHErAAAAAMiFrtXqW8tgVNQYX9gr2Ba5UKot',
-            'callback': function(response) {
-                document.getElementById('g-recaptcha-response').value = response;
-            }
-        });
+    function recaptchaCallback(token) {
+        var livewireInput = document.getElementById('gRecaptchaResponseLivewire');
+        if (livewireInput) {
+            livewireInput.value = token;
+            livewireInput.dispatchEvent(new Event('input', { bubbles: true }));
+            document.getElementById('recaptcha-debug').innerText = 'Token masuk!';
+        }
     }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const togglePassword = document.querySelector('#togglePassword');
-            const password = document.querySelector('#password');
+    function onloadCallback() {
+        if (window.grecaptcha && document.getElementById('recaptcha-container')) {
+            grecaptcha.render('recaptcha-container', {
+                'sitekey': '6LeQkHQrAAAAAJgveoTSHmngm-j1Zkik6DUIef_U',
+                'callback': recaptchaCallback
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
         if (togglePassword && password) {
             togglePassword.addEventListener('click', function () {
                 const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -142,8 +152,8 @@
             });
         }
 
-            const togglePasswordConfirmation = document.querySelector('#togglePasswordConfirmation');
-            const passwordConfirmation = document.querySelector('#password_confirmation');
+        const togglePasswordConfirmation = document.querySelector('#togglePasswordConfirmation');
+        const passwordConfirmation = document.querySelector('#password_confirmation');
         if (togglePasswordConfirmation && passwordConfirmation) {
             togglePasswordConfirmation.addEventListener('click', function () {
                 const type = passwordConfirmation.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -152,7 +162,7 @@
                 this.querySelector('i').classList.toggle('fa-eye-slash');
             });
         }
-        });
+    });
     </script>
 
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>

@@ -20,8 +20,15 @@ class Register extends Component
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
-            'gRecaptchaResponse' => 'required',
+            'gRecaptchaResponse' => 'required|string',
         ]);
+        
+        // Debug: jika tetap error, log value property
+        if (empty($this->gRecaptchaResponse)) {
+            $this->dispatch('refreshRecaptcha');
+            session()->flash('error', 'Token reCAPTCHA tidak terisi. Silakan centang ulang reCAPTCHA.');
+            return;
+        }
 
         $this->generatedOtp = rand(100000, 999999);
 
