@@ -9,23 +9,12 @@
     <div class="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 min-h-screen py-12">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Tombol Kembali ke E-Catalog (paling atas) --}}
-            <a href="/" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
+            <a href="{{ route('ecatalog.index') }}" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
                 Kembali ke E-Catalog
             </a>
 
             {{-- Breadcrumb & Back --}}
-            <div class="mb-8 flex items-center space-x-2">
-                <a href="{{ route('ecatalog.show', $productId) }}" class="text-blue-200 hover:text-white flex items-center text-sm font-medium">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    Kembali ke Produk
-                </a>
-                <span class="text-blue-300">/</span>
-                <span class="text-blue-100">Checkout</span>
-            </div>
-
             <div class="mb-10 text-center">
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-white drop-shadow mb-2">🧾 Checkout</h1>
                 <p class="text-blue-200 text-base sm:text-lg font-light">Isi data pengiriman & cek ringkasan pesanan Anda sebelum konfirmasi.</p>

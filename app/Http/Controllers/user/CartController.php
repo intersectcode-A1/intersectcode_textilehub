@@ -24,7 +24,11 @@ class CartController extends Controller
             if ($request->has('selected_variants')) {
                 $variantIds = explode(',', $request->selected_variants);
                 foreach ($variantIds as $variantId) {
-                    $variant = ProductVariant::findOrFail($variantId);
+                    try {
+                        $variant = ProductVariant::findOrFail($variantId);
+                    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                        return back()->with('error', 'Gagal menambahkan produk ke keranjang: anda harus memilih variant');
+                    }
                     if ($variant->product_id !== $product->id) {
                         return back()->with('error', 'Varian yang dipilih tidak valid.');
                     }
@@ -90,6 +94,9 @@ class CartController extends Controller
                 'cartCount' => $totalItems
             ]);
         } catch (\Exception $e) {
+            if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                return back()->with('error', 'Gagal menambahkan produk ke keranjang: anda harus memilih variant');
+            }
             return back()->with('error', 'Gagal menambahkan produk ke keranjang: ' . $e->getMessage());
         }
     }

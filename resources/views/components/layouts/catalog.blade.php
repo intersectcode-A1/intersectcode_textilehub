@@ -179,11 +179,6 @@
                                         <i class="fas fa-history mr-3 text-gray-400 group-hover:text-blue-500 transition-colors duration-200"></i>
                                         <span class="font-medium">Riwayat Pembelian</span>
                                     </a>
-                                    <a href="{{ route('wishlist.index') }}" 
-                                       class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200">
-                                        <i class="fas fa-heart mr-3 text-gray-400 group-hover:text-blue-500 transition-colors duration-200"></i>
-                                        <span class="font-medium">Wishlist</span>
-                                    </a>
                                 </div>
                                 
                                 <div class="py-2">
@@ -272,11 +267,6 @@
                         <i class="fas fa-history mr-3 text-gray-400"></i>
                     Riwayat Pembelian
                 </a>
-                    <a href="{{ route('wishlist.index') }}" 
-                       class="flex items-center px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
-                        <i class="fas fa-heart mr-3 text-gray-400"></i>
-                        Wishlist
-                    </a>
                     
                     <div class="border-t border-gray-200 mt-4 pt-4">
                 <form method="POST" action="{{ route('logout') }}">

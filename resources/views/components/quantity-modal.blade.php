@@ -154,8 +154,8 @@
                     <!-- Quantity Selector -->
                     <div class="bg-gray-50 rounded-xl p-6">
                         <p class="text-center text-sm font-medium text-gray-700 mb-4">Pilih Jumlah</p>
-                        <div class="flex items-center justify-center space-x-6">
-                            <button @click="decrease()"
+                    <div class="flex items-center justify-center space-x-6">
+                        <button @click="decrease()"
                                     class="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-white hover:border-blue-500 hover:shadow-lg transition-all duration-200">
                                 <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
@@ -170,7 +170,7 @@
                                 <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                 </svg>
-                            </button>
+                        </button>
                         </div>
                     </div>
 
@@ -182,7 +182,7 @@
                         @foreach($groupedVariants as $type => $variants)
                             <div class="space-y-3">
                                 <p class="font-semibold text-gray-800 flex items-center">
-                                    Pilih {{ ucfirst($type) }}
+                                        Pilih {{ ucfirst($type) }}
                                 </p>
                                 <div class="grid grid-cols-3 gap-3">
                                     @foreach($variants as $variant)
@@ -268,4 +268,4 @@
         <input type="hidden" name="quantity" value="1">
         <input type="hidden" name="selected_variants" value="">
     </form>
-</div>
+</div> 

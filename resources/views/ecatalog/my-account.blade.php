@@ -4,41 +4,41 @@
         <a href="/" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
             Kembali ke E-Catalog
-        </a>
+            </a>
 
         <div class="bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
             {{-- Header Section --}}
             <div class="p-8 bg-gradient-to-r from-blue-700 to-indigo-800 flex items-center space-x-8">
                 <div class="relative group">
-                    @if(auth()->user()->profile_photo)
+                        @if(auth()->user()->profile_photo)
                         <img class="h-28 w-28 rounded-full border-4 border-white shadow-xl object-cover ring-4 ring-blue-300 transition-transform duration-300 group-hover:scale-105" 
-                             src="{{ asset('storage/' . auth()->user()->profile_photo) }}" 
-                             alt="{{ auth()->user()->name }}">
-                    @else
+                                 src="{{ asset('storage/' . auth()->user()->profile_photo) }}" 
+                                 alt="{{ auth()->user()->name }}">
+                        @else
                         <img class="h-28 w-28 rounded-full border-4 border-white shadow-xl ring-4 ring-blue-300 transition-transform duration-300 group-hover:scale-105" 
-                             src="https://i.pravatar.cc/200?u={{ auth()->user()->email }}" 
-                             alt="{{ auth()->user()->name }}">
-                    @endif
+                                 src="https://i.pravatar.cc/200?u={{ auth()->user()->email }}" 
+                                 alt="{{ auth()->user()->name }}">
+                        @endif
                     <label for="profile_photo" class="absolute bottom-1 right-1 bg-white rounded-full p-2 shadow-lg hover:bg-blue-100 cursor-pointer border border-blue-200 transition-all duration-200">
                         <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                    </label>
-                    @if(auth()->user()->profile_photo)
-                        <form action="{{ route('profile.photo.delete') }}" method="POST" class="absolute -bottom-2 -left-2">
-                            @csrf
-                            @method('DELETE')
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </label>
+                        @if(auth()->user()->profile_photo)
+                            <form action="{{ route('profile.photo.delete') }}" method="POST" class="absolute -bottom-2 -left-2">
+                                @csrf
+                                @method('DELETE')
                             <button type="submit" class="bg-gradient-to-tr from-rose-100 to-pink-200 text-rose-600 p-1.5 rounded-full hover:bg-rose-200 shadow-lg border border-rose-200 transition-all duration-200" 
-                                    onclick="return confirm('Apakah Anda yakin ingin menghapus foto profil?')">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
-                        </form>
-                    @endif
-                </div>
-                <div class="text-white">
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus foto profil?')">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                    <div class="text-white">
                     <h1 class="text-3xl font-extrabold mb-1">{{ auth()->user()->name }}</h1>
                     <p class="text-blue-100 text-lg font-medium">{{ auth()->user()->email }}</p>
                 </div>
@@ -49,8 +49,8 @@
                 <div class="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 rounded-xl shadow-lg animate-fadeIn">
                     <div class="flex items-center">
                         <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
                         <span class="text-green-800 font-semibold">{{ session('success') }}</span>
                     </div>
                 </div>

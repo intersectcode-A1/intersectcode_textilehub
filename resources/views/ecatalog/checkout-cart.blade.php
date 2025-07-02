@@ -15,16 +15,6 @@
             </a>
 
             {{-- Breadcrumb & Back --}}
-            <div class="mb-8 flex items-center space-x-2">
-                <a href="{{ route('cart.index') }}" class="text-blue-200 hover:text-white flex items-center text-sm font-medium">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    Kembali ke Keranjang
-                </a>
-                <span class="text-blue-300">/</span>
-                <span class="text-blue-100">Checkout</span>
-            </div>
 
             <div class="mb-10 text-center">
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-white drop-shadow mb-2">🧾 Checkout</h1>

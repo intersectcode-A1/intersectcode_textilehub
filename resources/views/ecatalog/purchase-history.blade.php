@@ -1,7 +1,7 @@
 <x-layouts.catalog>
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Tombol Kembali ke E-Catalog (paling atas) --}}
-        <a href="/" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
+        <a href="{{ route('ecatalog.index') }}" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
             Kembali ke E-Catalog
         </a>
@@ -25,7 +25,7 @@
 
         {{-- Filter Section --}}
         <div class="bg-white/70 glass rounded-2xl shadow-2xl p-6 mb-6 animate-fadeIn">
-            <form action="{{ route('purchase.history') }}" method="GET" class="flex flex-col md:flex-row md:items-center md:space-x-4">
+            <form action="{{ route('purchase.history') }}" method="GET" class="flex flex-col md:flex-row md:items-end md:space-x-4">
                 <div class="flex flex-row w-full gap-2 md:gap-3">
                     <div class="flex flex-col w-1/2">
                         <label class="block text-sm font-bold text-blue-800 mb-1">Dari Tanggal</label>
@@ -65,10 +65,14 @@
                                 <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-blue-900">Rp {{ number_format($order->total, 0, ',', '.') }}</td>
                                 <td class="px-6 py-3 whitespace-nowrap">
                                     <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full shadow animate-fadeIn
-                                        @if($order->payment_status === 'paid') bg-gradient-to-r from-green-200 to-emerald-400 text-green-900
+                                        @if($order->status === 'cancelled') bg-gradient-to-r from-red-200 to-pink-400 text-red-900
+                                        @elseif($order->payment_status === 'paid') bg-gradient-to-r from-green-200 to-emerald-400 text-green-900
                                         @elseif($order->payment_status === 'unpaid') bg-gradient-to-r from-yellow-200 to-yellow-400 text-yellow-900
                                         @else bg-gradient-to-r from-red-200 to-pink-400 text-red-900 @endif">
-                                        @if($order->payment_status === 'paid')
+                                        @if($order->status === 'cancelled')
+                                            <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" class="stroke-red-500"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" class="stroke-red-700"/></svg>
+                                            Dibatalkan
+                                        @elseif($order->payment_status === 'paid')
                                             <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" class="stroke-green-500"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" class="stroke-green-700"/></svg>
                                             Lunas
                                         @elseif($order->payment_status === 'unpaid')
@@ -81,14 +85,16 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-3 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
+                                    <div class="flex items-center space-x-3">
                                         <a href="{{ route('order.detail', $order->id) }}" class="btn-link text-blue-700 font-bold">Detail</a>
                                         @if($order->status === 'completed' && $order->payment_status === 'unpaid')
                                             <a href="{{ route('payment.show', $order->id) }}" class="btn-link text-green-700 font-bold">Bayar</a>
                                         @endif
                                         @if($order->payment_status === 'paid')
-                                            <a href="{{ route('order.invoice.pdf', $order->id) }}" class="btn-link text-indigo-700 font-bold" target="_blank">
-                                                <i class="fas fa-file-invoice mr-1"></i> Download Invoice
+                                            <a href="{{ route('order.invoice.pdf', $order->id) }}" target="_blank"
+                                               class="inline-flex items-center px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-sm shadow-md backdrop-blur-md border border-white/20 hover:scale-105 hover:brightness-110 hover:shadow-lg active:scale-100 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400 h-9 ml-4">
+                                                <svg class="w-4 h-4 mr-1 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m-6 4h6a2 2 0 002-2V7a2 2 0 00-2-2h-3.5a.5.5 0 01-.5-.5V3.5a.5.5 0 00-.5-.5H9a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                                Download Invoice
                                             </a>
                                         @endif
                                     </div>

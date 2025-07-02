@@ -29,7 +29,6 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\HargaStrategiController;
 use App\Http\Controllers\Admin\AnalisisPenjualanController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\NotificationController;
 
 // Middleware
@@ -93,11 +92,6 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-
-    // ❤️ Wishlist (User)
-    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-    Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
-    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

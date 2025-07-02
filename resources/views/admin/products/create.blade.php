@@ -41,8 +41,8 @@
         @csrf
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
             <!-- Nama Produk -->
-            <div>
-                <label for="nama" class="block text-base font-medium text-gray-700 dark:text-gray-300">
+        <div>
+            <label for="nama" class="block text-base font-medium text-gray-700 dark:text-gray-300">
                     Nama Produk <span class="text-red-500">*</span>
                 </label>
                 <div class="mt-2">
@@ -79,8 +79,8 @@
             <div>
                 <label for="harga" class="block text-base font-medium text-gray-700 dark:text-gray-300">
                     Harga <span class="text-red-500">*</span>
-                </label>
-                <div class="mt-2">
+            </label>
+            <div class="mt-2">
                     <input type="number" name="harga" id="harga" value="{{ old('harga') }}"
                         class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200"
                         required min="0" step="1000" placeholder="0">
@@ -101,14 +101,14 @@
                 </div>
                 @error('stok')
                     <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                @enderror
-            </div>
+            @enderror
+        </div>
             <!-- Satuan -->
-            <div>
+        <div>
                 <label for="satuan" class="block text-base font-medium text-gray-700 dark:text-gray-300">
                     Satuan <span class="text-red-500">*</span>
                 </label>
-                <div class="mt-2">
+            <div class="mt-2">
                     <input type="text" name="satuan" id="satuan" value="{{ old('satuan') }}"
                         class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200"
                         required placeholder="Contoh: Pcs, Lusin, Kg">
@@ -189,7 +189,7 @@
                                     min="0" placeholder="0">
                             </div>
                             <!-- Tambahan Harga -->
-                            <div>
+        <div>
                                 <label :for="'variants['+index+'][additional_price]'" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     Tambahan Harga
                                 </label>

@@ -21,7 +21,7 @@
         <tr>
             <td class="no-border" style="vertical-align: middle;">
                 <span class="big">Invoice Pembelian</span><br>
-                <span style="font-size: 13px; color: #555;">Toko Usaha Muda Padang/span>
+                <span style="font-size: 13px; color: #555;">Toko Usaha Muda Padang</span>
             </td>
             <td class="no-border text-right" style="vertical-align: middle;">
                 <img src="{{ public_path('image/img_logo_tokousahamuda.png') }}" alt="Logo Usaha Muda" style="height: 100px;">
