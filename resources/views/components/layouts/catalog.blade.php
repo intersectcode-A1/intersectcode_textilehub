@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $title ?? 'Sistem Aplikasi' }}</title>
+    <title>{{ $title ?? 'Toko Usaha Muda - E-Catalog' }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Temukan produk berkualitas tinggi untuk kebutuhan bisnis Anda di Toko Usaha Muda">
 
     {{-- Favicon --}}
     <link rel="icon" type="image/png" href="{{ asset('image/img_logo_tokousahamuda.png') }}">
@@ -17,70 +18,142 @@
     {{-- Alpine.js --}}
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+    {{-- Google Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         [x-cloak] { 
             display: none !important; 
         }
         
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
         /* Custom Styles */
         .product-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
         
         .product-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-8px);
         }
         
         .btn-primary {
-            @apply bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+            @apply bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 focus:ring-blue-500;
         }
         
         .btn-secondary {
             @apply bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-500;
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Smooth Animations */
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glass Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
     </style>
 
     @livewireStyles
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
+<body class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900" x-data="{ mobileMenuOpen: false, dark: localStorage.getItem('theme') === 'dark', toggleDark() { this.dark = !this.dark; localStorage.setItem('theme', this.dark ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', this.dark); } }" x-init="if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}" >
     {{-- HEADER --}}
-    <header class="bg-primary-600 shadow-md">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <header class="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50 dark:bg-gray-900 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Top Navigation --}}
             <div class="flex justify-between items-center h-16">
                 {{-- Logo --}}
-                <a href="/" class="flex items-center space-x-3">
-                    <img class="h-10" src="{{ asset('image/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda">
-                    <span class="text-xl font-bold text-white font-serif">Toko Usaha Muda</span>
+                <a href="/" class="flex items-center space-x-3 group">
+                    <div class="relative">
+                        <img class="h-10 w-auto group-hover:scale-105 transition-transform duration-200" 
+                             src="{{ asset('image/img_logo_tokousahamuda.png') }}" 
+                             alt="Toko Usaha Muda">
+                    </div>
+                    <div class="hidden sm:block">
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                            Toko Usaha Muda
+                        </span>
+                        <p class="text-xs text-gray-500 -mt-1">E-Catalog</p>
+                    </div>
                 </a>
 
-                {{-- Navigation --}}
-                <nav class="hidden md:flex items-center space-x-4">
-                    <a href="/" class="text-white hover:text-blue-100 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+                {{-- Desktop Navigation --}}
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-blue-50">
+                        <i class="fas fa-home mr-2"></i>
                         Beranda
                     </a>
+                    <button @click="toggleDark()" class="ml-2 flex items-center px-4 py-2 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg border border-white/30 dark:border-gray-700 text-blue-900 dark:text-yellow-300 font-bold text-xs gap-2 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-200">
+                        <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.66-12.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m16.66 4.66l-.71-.71M4.05 4.05l-.71-.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        <svg x-show="dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+                        <span x-text="dark ? 'Dark' : 'Light'"></span>
+                    </button>
+                    
                     @auth
                         {{-- Cart Icon --}}
+                        <div class="relative">
                         <x-cart-icon />
+                        </div>
 
                         {{-- Order Status Icon --}}
+                        <div class="relative">
                         <x-order-status-icon />
+                        </div>
 
                         {{-- User Menu --}}
                         <div class="relative" x-data="{ open: false }" x-cloak>
-                            <button @click="open = !open" class="flex items-center text-white hover:text-blue-100 focus:outline-none">
-                                <div class="flex items-center space-x-2">
+                            <button @click="open = !open" 
+                                    class="flex items-center text-gray-700 hover:text-blue-600 focus:outline-none transition-all duration-200">
+                                <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-50">
                                     @if(auth()->user()->profile_photo)
-                                        <img class="h-8 w-8 rounded-full border-2 border-white object-cover" 
+                                        <img class="h-8 w-8 rounded-full border-2 border-gray-200 object-cover shadow-sm" 
                                              src="{{ asset('storage/' . auth()->user()->profile_photo) }}" 
                                              alt="{{ auth()->user()->name }}">
                                     @else
-                                        <img class="h-8 w-8 rounded-full border-2 border-white" 
-                                             src="https://i.pravatar.cc/100?u={{ auth()->user()->email }}" 
-                                             alt="{{ auth()->user()->name }}">
+                                        <div class="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-semibold text-sm">
+                                            {{ substr(auth()->user()->name, 0, 1) }}
+                                        </div>
                                     @endif
-                                    <span class="hidden sm:inline text-sm">{{ auth()->user()->name }}</span>
-                                    <i class="fas fa-chevron-down text-xs"></i>
+                                    <div class="hidden lg:block text-left">
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ auth()->user()->name }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-300">Pelanggan</p>
+                                    </div>
+                                    <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" 
+                                         :class="{'rotate-180': open}"
+                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
                                 </div>
                             </button>
 
@@ -88,38 +161,52 @@
                             <div x-show="open" 
                                  @click.away="open = false" 
                                  x-transition:enter="transition ease-out duration-200"
-                                 x-transition:enter-start="opacity-0 transform scale-95"
-                                 x-transition:enter-end="opacity-100 transform scale-100"
-                                 x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 transform scale-100"
-                                 x-transition:leave-end="opacity-0 transform scale-95"
-                                 class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-50">
-                                <div class="py-1">
-                                    <a href="{{ route('profile.show') }}" class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50">
-                                        <i class="fas fa-user mr-3 text-gray-400 group-hover:text-primary-500"></i>
-                                        Profil Saya
+                                 x-transition:enter-start="opacity-0 transform scale-95 -translate-y-2"
+                                 x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-150"
+                                 x-transition:leave-start="opacity-100 transform scale-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 transform scale-95 -translate-y-2"
+                                 class="absolute right-0 mt-2 w-64 rounded-xl shadow-xl bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-50 border border-gray-100">
+                                
+                                <div class="px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ auth()->user()->name }}</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-300">{{ auth()->user()->email }}</p>
+                                </div>
+                                
+                                <div class="py-2">
+                                    <a href="{{ route('profile.show') }}" 
+                                       class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200">
+                                        <i class="fas fa-user mr-3 text-gray-400 group-hover:text-blue-500 transition-colors duration-200"></i>
+                                        <span class="font-medium">Profil Saya</span>
                                     </a>
-                                    <a href="{{ route('purchase.history') }}" class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50">
-                                        <i class="fas fa-history mr-3 text-gray-400 group-hover:text-primary-500"></i>
-                                        Riwayat Pembelian
+                                    <a href="{{ route('purchase.history') }}" 
+                                       class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200">
+                                        <i class="fas fa-history mr-3 text-gray-400 group-hover:text-blue-500 transition-colors duration-200"></i>
+                                        <span class="font-medium">Riwayat Pembelian</span>
                                     </a>
                                 </div>
-                                <div class="py-1">
+                                
+                                <div class="py-2">
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit" class="group flex w-full items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50">
-                                            <i class="fas fa-sign-out-alt mr-3 text-red-400 group-hover:text-red-500"></i>
-                                            Keluar
+                                        <button type="submit" 
+                                                class="group flex w-full items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-all duration-200">
+                                            <i class="fas fa-sign-out-alt mr-3 text-red-400 group-hover:text-red-500 transition-colors duration-200"></i>
+                                            <span class="font-medium">Keluar</span>
                                         </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="text-white hover:text-blue-100 px-3 py-2 rounded-md text-sm font-medium">
+                        <a href="{{ route('login') }}" 
+                           class="text-gray-700 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-blue-50">
+                            <i class="fas fa-sign-in-alt mr-2"></i>
                             Masuk
                         </a>
-                        <a href="{{ route('register') }}" class="bg-white text-primary-600 hover:bg-blue-50 px-4 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+                        <a href="{{ route('register') }}" 
+                           class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <i class="fas fa-user-plus mr-2"></i>
                             Daftar
                         </a>
                     @endauth
@@ -129,8 +216,11 @@
                 <div class="md:hidden">
                     <button type="button" 
                             @click="mobileMenuOpen = !mobileMenuOpen"
-                            class="text-white hover:text-blue-100 focus:outline-none">
-                        <i class="fas fa-bars text-xl"></i>
+                            class="text-gray-700 hover:text-blue-600 focus:outline-none p-2 rounded-lg hover:bg-blue-50 transition-all duration-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -138,48 +228,187 @@
     </header>
 
     {{-- Mobile Navigation Menu --}}
-    <div x-data="{ mobileMenuOpen: false }" 
-         x-show="mobileMenuOpen" 
+    <div x-show="mobileMenuOpen" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 transform -translate-y-4"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 transform translate-y-0"
+         x-transition:leave-end="opacity-0 transform -translate-y-4"
          x-cloak
-         class="md:hidden bg-white border-b shadow-lg">
-        <div class="px-2 pt-2 pb-3 space-y-1">
-            <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+         class="md:hidden bg-white border-b border-gray-200 shadow-lg">
+        <div class="px-4 py-6 space-y-4">
+            <a href="/" 
+               class="flex items-center px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
+                <i class="fas fa-home mr-3 text-gray-400"></i>
                 Beranda
             </a>
+            
             @auth
-                <a href="{{ route('profile.show') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex items-center px-4 py-3 mb-4">
+                        @if(auth()->user()->profile_photo)
+                            <img class="h-10 w-10 rounded-full border-2 border-gray-200 object-cover" 
+                                 src="{{ asset('storage/' . auth()->user()->profile_photo) }}" 
+                                 alt="{{ auth()->user()->name }}">
+                        @else
+                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-semibold">
+                                {{ substr(auth()->user()->name, 0, 1) }}
+                            </div>
+                        @endif
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ auth()->user()->name }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-300">{{ auth()->user()->email }}</p>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ route('profile.show') }}" 
+                       class="flex items-center px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
+                        <i class="fas fa-user mr-3 text-gray-400"></i>
                     Profil Saya
                 </a>
-                <a href="{{ route('purchase.history') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                    <a href="{{ route('purchase.history') }}" 
+                       class="flex items-center px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
+                        <i class="fas fa-history mr-3 text-gray-400"></i>
                     Riwayat Pembelian
                 </a>
+                    
+                    <div class="border-t border-gray-200 mt-4 pt-4">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-700 hover:text-red-900 hover:bg-red-50">
+                            <button type="submit" 
+                                    class="flex w-full items-center px-4 py-3 rounded-xl text-base font-medium text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200">
+                                <i class="fas fa-sign-out-alt mr-3 text-red-400"></i>
                         Keluar
                     </button>
                 </form>
+                    </div>
+                </div>
             @else
-                <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                <div class="space-y-3 pt-4">
+                    <a href="{{ route('login') }}" 
+                       class="flex items-center px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
+                        <i class="fas fa-sign-in-alt mr-3 text-gray-400"></i>
                     Masuk
                 </a>
-                <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-50">
+                    <a href="{{ route('register') }}" 
+                       class="flex items-center px-4 py-3 rounded-xl text-base font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-200">
+                        <i class="fas fa-user-plus mr-3"></i>
                     Daftar
                 </a>
+                </div>
             @endauth
         </div>
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main class="flex-grow">
+    <main class="flex-grow animate-fade-in">
         {{ $slot }}
     </main>
 
     {{-- FOOTER --}}
-    <footer class="bg-white border-t mt-auto">
-        <div class="container mx-auto px-4 py-6">
-            <div class="text-center text-sm text-gray-500">
+    
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <footer class="bg-white border-t border-gray-200 mt-auto dark:bg-gray-900 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                {{-- Company Info --}}
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img class="h-8 w-auto" src="{{ asset('image/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda">
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                            Toko Usaha Muda
+                        </span>
+                    </div>
+                    <p class="text-gray-600 mb-4 leading-relaxed dark:text-gray-300">
+                        Menyediakan produk berkualitas tinggi untuk memenuhi kebutuhan bisnis Anda. 
+                        Kami berkomitmen memberikan layanan terbaik dengan harga yang kompetitif.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Quick Links --}}
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 dark:text-gray-100">Layanan</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="/" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
+                                Beranda
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('ecatalog.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
+                                E-Catalog
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('cart.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
+                                Keranjang
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('order.status') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 dark:text-gray-300 dark:hover:text-blue-400">
+                                Status Pesanan
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                {{-- Contact Info --}}
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 dark:text-gray-100">Kontak</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-map-marker-alt mr-3 text-blue-500"></i>
+                            <span>Jl. Pasar Raya A No.24F, Kp. Jao, Kec. Padang Bar. Kota Padang Sumatera Barat</span>
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-phone mr-3 text-blue-500"></i>
+                            <span>+62 811-6655-050</span>
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-envelope mr-3 text-blue-500"></i>
+                            <span>tokousahamuda@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {{-- Bottom Footer --}}
+            <div class="border-t border-gray-200 mt-8 pt-8 dark:border-gray-700">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 text-sm dark:text-gray-400">
                 &copy; {{ date('Y') }} Toko Usaha Muda. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200 dark:text-gray-400 dark:hover:text-blue-400">
+                            Kebijakan Privasi
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200 dark:text-gray-400 dark:hover:text-blue-400">
+                            Syarat & Ketentuan
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600 text-sm transition-colors duration-200 dark:text-gray-400 dark:hover:text-blue-400">
+                            Bantuan
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>

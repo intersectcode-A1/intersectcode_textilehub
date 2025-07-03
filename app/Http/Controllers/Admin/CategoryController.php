@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
-
 class CategoryController extends Controller
 {
     public function index()
@@ -21,13 +20,13 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->validateCategory($request);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        Category::create($data);
+        Category::create($request->all());
 
-        return redirect()
-            ->route('categories.index')
-            ->with('success', 'Kategori berhasil ditambahkan.');
+        return redirect()->route('categories.index')->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     public function edit(Category $category)
@@ -37,29 +36,18 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $data = $this->validateCategory($request);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        $category->update($data);
+        $category->update($request->all());
 
-        return redirect()
-            ->route('categories.index')
-            ->with('success', 'Kategori berhasil diupdate.');
+        return redirect()->route('categories.index')->with('success', 'Kategori berhasil diupdate.');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-
-        return redirect()
-            ->route('categories.index')
-            ->with('success', 'Kategori berhasil dihapus.');
-    }
-
-    // 🔽 Validasi terpusat
-    private function validateCategory(Request $request): array
-    {
-        return $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus.');
     }
 }

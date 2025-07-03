@@ -29,7 +29,6 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\HargaStrategiController;
 use App\Http\Controllers\Admin\AnalisisPenjualanController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\user\WishlistController;
 use App\Http\Controllers\NotificationController;
 
 // Middleware
@@ -116,6 +115,8 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     // Produk & Kategori
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+    Route::resource('units', UnitController::class);
+    Route::resource('product-variants', \App\Http\Controllers\Admin\ProductVariantController::class);
 
     // Pesanan dari user
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

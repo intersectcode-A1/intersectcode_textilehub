@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Models\Order;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
@@ -13,17 +13,15 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = $this->getOrdersPaginated();
+        $orders = Order::with(['user', 'items.product'])->latest()->paginate(10);
         return view('admin.orders.index', compact('orders'));
     }
 
     public function show($id)
     {
         $order = Order::with('items.product')->findOrFail($id);
-        return view('admin.orders.show', [
-            'order' => $order,
-            'total' => $order->total,
-        ]);
+        $total = $order->total;
+        return view('admin.orders.show', compact('order', 'total'));
     }
 
     public function updateStatus(Request $request, $id)
@@ -32,21 +30,22 @@ class OrderController extends Controller
             'status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled'])],
         ]);
 
-        $order = Order::with('items.product')->findOrFail($id);
+        $order = Order::findOrFail($id);
         $oldStatus = $order->status;
+        $order->status = $request->status;
 
+        // Jika status berubah menjadi completed, update stok
         if ($oldStatus !== 'completed' && $request->status === 'completed') {
             foreach ($order->items as $item) {
-                if ($item->product && $item->product->stok < $item->quantity) {
-                    return back()->with('error', "Stok produk {$item->product->nama} tidak mencukupi.");
+                $product = $item->product;
+                if ($product && $product->stok < $item->quantity) {
+                    return redirect()->back()->with('error', 'Stok produk ' . $product->nama . ' tidak mencukupi.');
                 }
             }
         }
 
-        $order->status = $request->status;
         $order->save();
-
-        return back()->with('success', 'Status pesanan berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
     }
 
     public function destroy(Order $order)
@@ -58,18 +57,29 @@ class OrderController extends Controller
     public function export()
     {
         $orders = Order::with(['items', 'user'])->get();
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename=orders.csv',
         ];
 
-        return Response::stream(function () use ($orders) {
+        $callback = function() use ($orders) {
             $file = fopen('php://output', 'w');
+
+            // Add headers
             fputcsv($file, [
-                'ID', 'Tanggal', 'Nama Pembeli', 'Email', 'Telepon', 'Alamat',
-                'Total Items', 'Total Harga', 'Status'
+                'ID',
+                'Tanggal',
+                'Nama Pembeli',
+                'Email',
+                'Telepon',
+                'Alamat',
+                'Total Items',
+                'Total Harga',
+                'Status'
             ]);
 
+            // Add data rows
             foreach ($orders as $order) {
                 fputcsv($file, [
                     $order->id,
@@ -85,22 +95,24 @@ class OrderController extends Controller
             }
 
             fclose($file);
-        }, 200, $headers);
+        };
+
+        return Response::stream($callback, 200, $headers);
     }
 
     public function filter(Request $request)
     {
         $query = Order::with(['user', 'items.product']);
 
-        if ($request->filled('status')) {
+        if ($request->status) {
             $query->where('status', $request->status);
         }
 
-        if ($request->filled('date_from')) {
+        if ($request->date_from) {
             $query->whereDate('created_at', '>=', $request->date_from);
         }
 
-        if ($request->filled('date_to')) {
+        if ($request->date_to) {
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
@@ -118,15 +130,12 @@ class OrderController extends Controller
         $order->payment_status = $request->payment_status;
         $order->save();
 
-        // TODO: Tambahkan pengiriman notifikasi di sini
+        // Jika pembayaran diverifikasi, kirim notifikasi ke user
+        if ($request->payment_status === 'paid') {
+            // TODO: Implementasi notifikasi ke user bisa ditambahkan di sini
+        }
 
-        return back()->with('success', 'Status pembayaran berhasil diperbarui.');
-    }
-
-    // Helper method
-    private function getOrdersPaginated()
-    {
-        return Order::with(['user', 'items.product'])->latest()->paginate(10);
+        return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
     }
 
     public function invoice($id)

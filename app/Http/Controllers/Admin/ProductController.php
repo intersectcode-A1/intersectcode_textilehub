@@ -12,22 +12,21 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->latest()->paginate(10);
-        $semuaKosong = $products->count() > 0 && $products->every(fn($p) => $p->stok == 0);
-        $categories = Category::all();
-
+        // Muat relasi category dan unit
+        $products = Product::with(['category'])->latest()->paginate(10);
+        $semuaKosong = $products->count() > 0 && $products->every(fn ($p) => $p->stok == 0);
+        $categories = Category::all(); // Tambahkan ini untuk dropdown filter
         return view('admin.products.index', compact('products', 'semuaKosong', 'categories'));
     }
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::all(); // ambil semua kategori untuk dropdown
         return view('admin.products.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-
         $request->validate([
             'nama' => 'required',
             'harga' => 'required|numeric',
@@ -43,20 +42,36 @@ class ProductController extends Controller
             'variants.*.additional_price' => 'required_with:variants|numeric|min:0',
         ]);
 
+        $path = $request->file('foto')?->store('produk', 'public');
 
-        $data['foto'] = $this->handleFotoUpload($request);
+        $product = Product::create([
+            'nama' => $request->nama,
+            'harga' => $request->harga,
+            'stok' => $request->stok,
+            'category_id' => $request->category_id,
+            'satuan' => $request->satuan,
+            'deskripsi' => $request->deskripsi,
+            'foto' => $path,
+        ]);
 
-        $product = Product::create($data);
-
-        $this->handleVariants($request, $product);
+        // Simpan varian jika ada
+        if ($request->has('variants')) {
+            foreach ($request->variants as $variantData) {
+                $product->variants()->create([
+                    'type' => $variantData['type'],
+                    'name' => $variantData['name'],
+                    'stock' => $variantData['stock'],
+                    'additional_price' => $variantData['additional_price']
+                ]);
+            }
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     public function edit(Product $product)
     {
-        $categories = Category::all();
-
+        $categories = Category::all(); // untuk dropdown edit
         return view('admin.products.edit', [
             'data' => $product,
             'categories' => $categories,
@@ -65,35 +80,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $data = $this->validateProduct($request);
-
-        if ($request->hasFile('foto')) {
-            $this->deleteFotoLama($product->foto);
-            $data['foto'] = $this->handleFotoUpload($request);
-        }
-
-        $product->update($data);
-
-        $this->handleVariants($request, $product, true);
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
-    }
-
-    public function destroy(Product $product)
-    {
-        $this->deleteFotoLama($product->foto);
-        $product->delete();
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus!');
-    }
-
-    // =======================
-    // 🔽 Private helper methods
-    // =======================
-
-    private function validateProduct(Request $request): array
-    {
-        return $request->validate([
+        $data = $request->validate([
             'nama' => 'required',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
@@ -107,35 +94,37 @@ class ProductController extends Controller
             'variants.*.stock' => 'required_with:variants|integer|min:0',
             'variants.*.additional_price' => 'required_with:variants|numeric|min:0',
         ]);
-    }
 
-    private function handleFotoUpload(Request $request): ?string
-    {
-        return $request->file('foto')?->store('produk', 'public');
-    }
-
-    private function deleteFotoLama(?string $foto): void
-    {
-        if ($foto) {
-            Storage::disk('public')->delete($foto);
-        }
-    }
-
-    private function handleVariants(Request $request, Product $product, bool $isUpdate = false): void
-    {
-        if ($isUpdate) {
-            $product->variants()->delete();
+        if ($request->hasFile('foto')) {
+            if ($product->foto) Storage::disk('public')->delete($product->foto);
+            $data['foto'] = $request->file('foto')->store('produk', 'public');
         }
 
+        $product->update($data);
+
+        // Update varian
         if ($request->has('variants')) {
-            foreach ($request->variants as $variant) {
+            // Hapus varian yang ada
+            $product->variants()->delete();
+            
+            // Tambah varian baru
+            foreach ($request->variants as $variantData) {
                 $product->variants()->create([
-                    'type' => $variant['type'],
-                    'name' => $variant['name'],
-                    'stock' => $variant['stock'],
-                    'additional_price' => $variant['additional_price'],
+                    'type' => $variantData['type'],
+                    'name' => $variantData['name'],
+                    'stock' => $variantData['stock'],
+                    'additional_price' => $variantData['additional_price']
                 ]);
             }
         }
+
+        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
+    }
+
+    public function destroy(Product $product)
+    {
+        if ($product->foto) Storage::disk('public')->delete($product->foto);
+        $product->delete();
+        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus!');
     }
 }
