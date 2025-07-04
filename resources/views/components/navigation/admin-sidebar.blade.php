@@ -94,9 +94,4 @@
         width: 280px;
     }
 }
-</style>
-<script>
-    window.onbeforeunload = function() {
-        return "Apakah Anda yakin ingin meninggalkan halaman ini?";
-    };
-</script> 
+</style> 
