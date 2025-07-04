@@ -157,31 +157,28 @@
     <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white p-3 sm:p-6 border-b border-gray-200 dark:border-gray-700">Produk Terlaris</h3>
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
+            <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 border-b-2 border-blue-200">
                 <tr>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
-                    <th scope="col" class="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kategori</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Terjual</th>
-                    <th scope="col" class="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Penjualan</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Produk</th>
+                    <th class="hidden sm:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Kategori</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Terjual</th>
+                    <th class="hidden md:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Total Penjualan</th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody class="bg-white divide-y divide-blue-100">
                 @forelse($produkTerlarisList ?? [] as $produk)
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">
-                        <div>
-                            <div class="font-medium">{{ $produk->nama }}</div>
-                            <!-- Mobile: Show category -->
-                            <div class="sm:hidden text-xs text-gray-500 mt-1">Kategori: {{ $produk->kategori }}</div>
-                        </div>
+                <tr class="hover:bg-blue-50 transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-normal break-all font-medium text-gray-900">
+                        {{ $produk->nama }}
+                        <div class="sm:hidden text-xs text-gray-500 mt-1">Kategori: {{ $produk->kategori }}</div>
                     </td>
-                    <td class="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">{{ $produk->kategori }}</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">{{ $produk->jumlah_terjual }}</td>
-                    <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">Rp {{ number_format($produk->total_penjualan, 0, ',', '.') }}</td>
+                    <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $produk->kategori }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ $produk->jumlah_terjual }}</td>
+                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap font-bold text-gray-900">Rp {{ number_format($produk->total_penjualan, 0, ',', '.') }}</td>
                 </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center py-8 sm:py-12 text-gray-500 dark:text-gray-400 text-sm">
+                        <td colspan="4" class="text-center py-8 sm:py-12 text-gray-500 text-sm">
                             Tidak ada data produk terlaris untuk periode ini.
                         </td>
                     </tr>

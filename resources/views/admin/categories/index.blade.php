@@ -41,43 +41,37 @@
     </div>
 @endif
 
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+<div class="bg-gradient-to-r from-blue-400 to-blue-200 rounded-t-xl shadow-lg overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
+        <table class="min-w-full divide-y divide-blue-200 text-xs sm:text-sm">
+            <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-blue-900 dark:to-indigo-900 border-b-2 border-blue-200 dark:border-blue-700">
                 <tr>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        No
-                    </th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Nama Kategori
-                    </th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Aksi
-                    </th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">NO</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">NAMA KATEGORI</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">AKSI</th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody class="bg-white divide-y divide-blue-100">
                 @forelse ($categories as $index => $category)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
-                            {{ $index + 1 }}
+                    <tr class="hover:bg-blue-50 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-blue-400 to-blue-300 text-white font-bold shadow">{{ $index + 1 }}</span>
                         </td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">
-                            {{ $category->name }}
+                        <td class="px-6 py-4 whitespace-normal break-all">
+                            <span class="font-semibold text-gray-800">{{ $category->name }}</span>
                         </td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
-                            <div class="flex flex-col sm:flex-row items-center justify-end space-y-1 sm:space-y-0 sm:space-x-1 sm:space-x-2">
-                                <a href="{{ route('categories.edit', $category->id) }}" class="p-1.5 sm:p-2 text-gray-500 hover:text-blue-600 bg-gray-100 hover:bg-blue-100 rounded-lg transition-all duration-200">
-                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex flex-row items-center justify-end space-x-2">
+                                <a href="{{ route('categories.edit', $category->id) }}" class="p-2 bg-blue-100 hover:bg-blue-400 text-blue-600 hover:text-white rounded-full shadow transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"/>
                                     </svg>
                                 </a>
                                 <form action="{{ route('categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-1.5 sm:p-2 text-gray-500 hover:text-red-600 bg-gray-100 hover:bg-red-100 rounded-lg transition-all duration-200">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <button type="submit" class="p-2 bg-red-100 hover:bg-red-400 text-red-600 hover:text-white rounded-full shadow transition-all duration-200">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>
                                     </button>
@@ -111,7 +105,7 @@
     </div>
 
     @if ($categories->hasPages())
-        <div class="p-3 sm:p-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="p-3 sm:p-6 bg-white border-t border-blue-200">
             {{ $categories->links() }}
         </div>
     @endif

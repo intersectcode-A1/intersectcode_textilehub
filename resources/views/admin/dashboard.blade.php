@@ -150,6 +150,12 @@ document.addEventListener('DOMContentLoaded', function () {
             plugins: { legend: { display: false } }
         }
     });
+
+    // Blokir tombol back browser agar tetap di dashboard
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
 });
 </script>
 @endpush

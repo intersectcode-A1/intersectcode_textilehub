@@ -3,9 +3,9 @@
 @section('title', 'Tambah Kategori')
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-2xl sm:text-3xl font-semibold text-gray-800 dark:text-white">Tambah Kategori Baru</h1>
-    <nav class="text-xs sm:text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+<div class="mb-4 sm:mb-6">
+    <h1 class="text-2xl font-extrabold text-blue-900 dark:text-blue-200 mb-2">Tambah Kategori Baru</h1>
+    <nav class="text-xs sm:text-sm font-medium text-blue-700 dark:text-blue-300 bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-blue-900 dark:to-indigo-900 rounded-xl px-4 py-2 shadow mb-2 inline-block glass">
         <ol class="list-none p-0 inline-flex flex-wrap">
             <li class="flex items-center">
                 <a href="{{ route('admin.dashboard') }}" class="text-gray-500 hover:text-gray-700">Home</a>
@@ -35,11 +35,11 @@
     </div>
 @endif
 
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-8">
-    <form action="{{ route('categories.store') }}" method="POST" class="space-y-4 sm:space-y-6">
+<div class="bg-white/70 dark:bg-gray-800/80 glass rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-700">
+    <form action="{{ route('categories.store') }}" method="POST" class="space-y-6">
     @csrf
     <div>
-            <label for="name" class="block text-base font-medium text-gray-700 dark:text-gray-300">
+            <label for="name" class="block text-base font-bold text-blue-900 dark:text-blue-200 mb-1">
                 Nama Kategori <span class="text-red-500">*</span>
             </label>
             <div class="mt-2">
@@ -47,7 +47,7 @@
                        name="name" 
                        id="name" 
                        value="{{ old('name') }}"
-                       class="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200"
+                       class="w-full px-4 py-3 rounded-lg bg-white/60 dark:bg-gray-900 border-2 border-blue-100 dark:border-gray-700 text-blue-900 dark:text-blue-100 placeholder-blue-300 dark:placeholder-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200"
                        placeholder="Masukkan nama kategori" 
                        required>
             </div>
@@ -55,12 +55,11 @@
                 <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
             @enderror
     </div>
-
-        <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <a href="{{ route('categories.index') }}" class="px-4 sm:px-6 py-2 sm:py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 text-sm sm:text-base">
+        <div class="flex flex-col sm:flex-row justify-end gap-4 pt-8 border-t-2 border-blue-100 dark:border-blue-900 mt-8">
+            <a href="{{ route('categories.index') }}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-all duration-200 text-base font-bold text-center">
                 Batal
             </a>
-            <button type="submit" class="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm sm:text-base">
+            <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400 text-base">
                 Simpan Kategori
             </button>
         </div>

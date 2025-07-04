@@ -83,32 +83,32 @@
 </div>
 
 <!-- Tabel Pesanan -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+<div class="bg-gradient-to-r from-blue-400 to-blue-200 rounded-t-xl shadow-lg overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
+        <table class="min-w-full divide-y divide-blue-200 text-xs sm:text-sm">
+            <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-blue-900 dark:to-indigo-900 border-b-2 border-blue-200 dark:border-blue-700">
                 <tr>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama Pemesan</th>
-                    <th scope="col" class="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tanggal</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                    <th scope="col" class="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">Nama Pemesan</th>
+                    <th class="hidden sm:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">Tanggal</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">Status</th>
+                    <th class="hidden md:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider">Total</th>
+                    <th class="px-6 py-4 text-right text-xs font-bold text-blue-700 dark:text-blue-200 uppercase tracking-wider w-32">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody class="bg-white divide-y divide-blue-100">
                 @forelse($orders as $order)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900 dark:text-white">#{{ $order->id }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">
-                            <div>
-                                <div class="font-medium text-gray-900 dark:text-white">{{ $order->user->name ?? $order->user_name }}</div>
-                                <div class="text-xs text-gray-500 sm:hidden">{{ $order->created_at->format('d M Y') }}</div>
-                            </div>
+                    <tr class="hover:bg-blue-50 transition-colors duration-150 align-top">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-blue-400 to-blue-300 text-white font-bold shadow">#{{ $order->id }}</span>
                         </td>
-                        <td class="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">{{ $order->created_at->format('d M Y') }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+                        <td class="px-6 py-4 whitespace-normal break-all max-w-xs">
+                            <div class="font-medium text-gray-900">{{ $order->user->name ?? $order->user_name }}</div>
+                            <div class="text-xs text-gray-500 sm:hidden">{{ $order->created_at->format('d M Y') }}</div>
+                        </td>
+                        <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $order->created_at->format('d M Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold
                                 @if($order->status === 'pending') bg-yellow-100 text-yellow-800
                                 @elseif($order->status === 'processing') bg-blue-100 text-blue-800
                                 @elseif($order->status === 'completed') bg-green-100 text-green-800
@@ -117,24 +117,23 @@
                                 {{ ucfirst($order->status) }}
                             </span>
                         </td>
-                        <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Rp {{ number_format($order->total, 0, ',', '.') }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
-                            <a href="{{ route('orders.show', $order->id) }}" class="inline-flex items-center px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-300 shadow-sm text-xs sm:text-sm leading-4 font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
-                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                                <span class="hidden sm:inline">Detail</span>
-                                <span class="sm:hidden">Lihat</span>
-                            </a>
-                            @if($order->status === 'completed' || $order->payment_status === 'paid')
-                            <a href="{{ route('orders.invoice', $order->id) }}" class="inline-flex items-center px-3 py-2 ml-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-lg text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200">
-                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6 2a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19z"/>
-                                </svg>
-                                Invoice
-                            </a>
-                            @endif
+                        <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap font-bold text-gray-900">Rp {{ number_format($order->total, 0, ',', '.') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right w-32">
+                            <div class="flex flex-row items-center justify-end space-x-2">
+                                <a href="{{ route('orders.show', $order->id) }}" class="p-2 bg-blue-100 hover:bg-blue-400 text-blue-600 hover:text-white rounded-full shadow transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                @if($order->status === 'completed' || $order->payment_status === 'paid')
+                                <a href="{{ route('orders.invoice', $order->id) }}" class="p-2 bg-green-100 hover:bg-green-400 text-green-600 hover:text-white rounded-full shadow transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6 2a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19z"/>
+                                    </svg>
+                                </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @empty
@@ -153,9 +152,8 @@
             </tbody>
         </table>
     </div>
-
     @if ($orders->hasPages())
-        <div class="p-3 sm:p-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="p-3 sm:p-6 bg-white border-t border-blue-200">
             {{ $orders->links() }}
         </div>
     @endif

@@ -41,49 +41,45 @@
 </div>
 @endif
 
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
+<div class="bg-gradient-to-r from-blue-400 to-blue-200 rounded-t-xl shadow-lg overflow-hidden">
+    <div class="overflow-x-auto w-full">
+        <table class="min-w-full divide-y divide-blue-200 text-xs sm:text-sm">
+            <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 border-b-2 border-blue-200">
                 <tr>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">No</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama</th>
-                    <th scope="col" class="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Alamat</th>
-                    <th scope="col" class="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kontak</th>
-                    <th scope="col" class="hidden lg:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">No</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Nama</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider min-w-[200px]">Produk</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider min-w-[200px]">Alamat</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider min-w-[180px]">Kontak</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Harga Modal</th>
+                    <th class="px-6 py-4 text-right text-xs font-bold text-blue-700 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody class="bg-white divide-y divide-blue-100">
                 @forelse($suppliers as $supplier)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900 dark:text-white">{{ $loop->iteration }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">
-                            <div>
-                                <div class="font-medium text-gray-900 dark:text-white">{{ $supplier->nama }}</div>
-                                <!-- Mobile: Show additional info -->
-                                <div class="md:hidden text-xs text-gray-500 mt-1">
-                                    <div>Alamat: {{ Str::limit($supplier->alamat, 30) }}</div>
-                                    <div>Kontak: {{ $supplier->kontak }}</div>
-                                    <div>Produk: {{ Str::limit($supplier->produk, 20) }}</div>
-                                </div>
-                            </div>
+                    <tr class="hover:bg-blue-50 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-blue-400 to-blue-300 text-white font-bold shadow">{{ $loop->iteration }}</span>
                         </td>
-                        <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">{{ $supplier->alamat }}</td>
-                        <td class="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">{{ $supplier->kontak }}</td>
-                        <td class="hidden lg:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">{{ $supplier->produk }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
-                            <div class="flex flex-col sm:flex-row items-center justify-end space-y-1 sm:space-y-0 sm:space-x-1 sm:space-x-2">
-                                <a href="{{ route('supplier.edit', $supplier) }}" class="p-1.5 sm:p-2 text-gray-500 hover:text-blue-600 bg-gray-100 hover:bg-blue-100 rounded-lg transition-all duration-200">
-                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="font-semibold text-gray-800">{{ $supplier->nama }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-normal break-all min-w-[200px] text-xs sm:text-sm text-gray-500">{{ $supplier->produk }}</td>
+                        <td class="px-6 py-4 whitespace-normal break-all min-w-[200px] text-xs sm:text-sm text-gray-500">{{ $supplier->alamat }}</td>
+                        <td class="px-6 py-4 whitespace-normal break-all min-w-[180px] text-xs sm:text-sm text-gray-500">{{ $supplier->kontak }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700 font-bold">Rp {{ number_format($supplier->harga_modal,0,',','.') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex flex-row items-center justify-end space-x-2">
+                                <a href="{{ route('supplier.edit', $supplier) }}" class="p-2 bg-blue-100 hover:bg-blue-400 text-blue-600 hover:text-white rounded-full shadow transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"/>
                                     </svg>
                                 </a>
                                 <form action="{{ route('supplier.destroy', $supplier) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus supplier ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-1.5 sm:p-2 text-gray-500 hover:text-red-600 bg-gray-100 hover:bg-red-100 rounded-lg transition-all duration-200">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <button type="submit" class="p-2 bg-red-100 hover:bg-red-400 text-red-600 hover:text-white rounded-full shadow transition-all duration-200">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>
                                     </button>
@@ -93,7 +89,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center py-8 sm:py-12">
+                        <td colspan="7" class="text-center py-8 sm:py-12">
                             <div class="text-gray-500 dark:text-gray-400">
                                  <svg class="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
