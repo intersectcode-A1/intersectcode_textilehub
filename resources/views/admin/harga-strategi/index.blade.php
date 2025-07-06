@@ -75,56 +75,51 @@
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
+            <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 border-b-2 border-blue-200">
                 <tr>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Harga</th>
-                    <th scope="col" class="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Margin</th>
-                    <th scope="col" class="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Rekomendasi Harga</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
-                    </tr>
-                </thead>
-            <tbody id="productTableBody" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    @foreach($products as $product)
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200">
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
-                        <div>
-                            <div class="font-medium">{{ $product->nama }}</div>
-                            <!-- Mobile: Show margin -->
-                            <div class="sm:hidden text-xs text-gray-500 mt-1">
-                                Margin: <span class="font-semibold {{ $product->margin >= 30 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                    {{ number_format($product->margin, 1) }}%
-                                </span>
-                            </div>
-                        </div>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Produk</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Harga</th>
+                    <th class="hidden sm:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Margin</th>
+                    <th class="hidden md:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Rekomendasi Harga</th>
+                    <th class="px-6 py-4 text-right text-xs font-bold text-blue-700 uppercase tracking-wider w-32">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody" class="bg-white divide-y divide-blue-100">
+                @foreach($products as $product)
+                <tr class="hover:bg-blue-50 transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-normal break-all font-medium text-gray-900">
+                        {{ $product->nama }}
                     </td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
-                        <td class="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span class="font-semibold {{ $product->margin >= 30 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                {{ number_format($product->margin, 1) }}%
-                            </span>
-                            @if($product->margin < 30)
-                            <span class="ml-2 px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-full text-xs">Perlu Optimasi</span>
-                            @endif
-                        </td>
-                    <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400">
-                            Rp {{ number_format($product->recommended_price, 0, ',', '.') }}
-                        </td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
-                        <div class="flex flex-col sm:flex-row items-end sm:items-center justify-end space-y-1 sm:space-y-0 sm:space-x-2">
-                            <a href="{{ route('admin.harga-strategi.edit', $product->id) }}" class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-2 border border-transparent text-xs sm:text-sm leading-4 font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition-all duration-200" title="Edit harga produk">
-                                Edit Harga
+                    <td class="px-6 py-4 whitespace-nowrap font-semibold text-blue-600">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
+                    <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
+                        <span class="font-semibold {{ $product->margin >= 30 ? 'text-green-600' : 'text-red-600' }}">
+                            {{ number_format($product->margin, 1) }}%
+                        </span>
+                        @if($product->margin < 30)
+                        <span class="ml-2 px-2 py-1 bg-gradient-to-r from-red-100 to-pink-100 text-red-600 rounded-full text-xs font-bold shadow">Perlu Optimasi</span>
+                        @endif
+                    </td>
+                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap font-semibold text-blue-600">
+                        Rp {{ number_format($product->recommended_price, 0, ',', '.') }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right w-32">
+                        <div class="flex flex-row items-center justify-end space-x-2">
+                            <a href="{{ route('admin.harga-strategi.edit', $product->id) }}" class="p-2 bg-blue-100 hover:bg-blue-400 text-blue-600 hover:text-white rounded-full shadow transition-all duration-200" title="Edit harga produk">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"/>
+                                </svg>
                             </a>
-                            <button class="history-btn inline-flex items-center px-2 sm:px-3 py-1 sm:py-2 border border-gray-300 text-xs sm:text-sm leading-4 font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-all duration-200"
-                                data-id="{{ $product->id }}" data-nama="{{ $product->nama }}" title="Lihat riwayat harga">
-                                Riwayat
+                            <button class="p-2 bg-gray-100 hover:bg-gray-300 text-gray-600 hover:text-white rounded-full shadow transition-all duration-200 history-btn" data-id="{{ $product->id }}" data-nama="{{ $product->nama }}" title="Lihat riwayat harga">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6 2a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19z"/>
+                                </svg>
                             </button>
                         </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
 

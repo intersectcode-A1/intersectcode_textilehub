@@ -35,7 +35,7 @@
                 <a href="#testimoni" class="hover:text-blue-600 transition">Testimoni</a>
                 <a href="#kontak" class="hover:text-blue-600 transition">Kontak</a>
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="px-4 py-1 rounded-lg border border-gray-300 hover:bg-blue-100 transition">Dashboard</a>
+                    <a href="{{ url('/dashboard') }}" class="px-4 py-1 rounded-lg border border-gray-300 hover:bg-blue-100 transition">E-Katalog</a>
                 @else
                     <a href="{{ route('login') }}" class="px-4 py-1 rounded-lg border border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white transition">Login</a>
                     @if (Route::has('register'))

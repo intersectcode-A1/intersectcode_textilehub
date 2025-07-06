@@ -87,9 +87,15 @@
                     @error('gRecaptchaResponse') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
 
                     <button type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300shadow">
-                        Daftar Sekarang
-                    </button>
+                    class="w-full flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-lg transition disabled:opacity-70 disabled:cursor-not-allowed shadow"
+                    wire:loading.attr="disabled">
+                    <svg wire:loading class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <span wire:loading.remove>Daftar Sekarang</span>
+                    <span wire:loading>Memproses...</span>
+                </button>
                 </form>
             @elseif ($step === 2)
                 <form wire:submit.prevent="verifyOtp" class="space-y-5">
