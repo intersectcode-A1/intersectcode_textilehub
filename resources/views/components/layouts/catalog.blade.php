@@ -87,7 +87,7 @@
 
     @livewireStyles
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900" x-data="{ mobileMenuOpen: false, dark: localStorage.getItem('theme') === 'dark', toggleDark() { this.dark = !this.dark; localStorage.setItem('theme', this.dark ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', this.dark); } }" x-init="if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}" >
+<body class="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-300" x-data="{ mobileMenuOpen: false, dark: localStorage.getItem('theme') === 'dark', toggleDark() { this.dark = !this.dark; localStorage.setItem('theme', this.dark ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', this.dark); } }" x-init="if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}" >
     {{-- HEADER --}}
     <header class="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50 dark:bg-gray-900 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -302,20 +302,11 @@
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main class="flex-grow animate-fade-in">
+    <main class="flex-grow animate-fade-in bg-white dark:bg-gray-900 transition-colors duration-300">
         {{ $slot }}
     </main>
 
     {{-- FOOTER --}}
-    
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
     <footer class="bg-white border-t border-gray-200 mt-auto dark:bg-gray-900 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
