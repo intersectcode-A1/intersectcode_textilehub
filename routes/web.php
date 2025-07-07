@@ -17,7 +17,6 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\Admin\TrackingController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\PublicProductController;
 use App\Http\Controllers\KatalogController;
@@ -128,10 +127,6 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::get('/orders/{id}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
 
-    // Pelacakan
-    Route::get('/pelacakan', [TrackingController::class, 'index'])->name('tracking.index');
-    Route::post('/pelacakan', [TrackingController::class, 'search'])->name('tracking.search');
-
     // Analisis Penjualan
     Route::get('/analisis-penjualan', [AnalisisPenjualanController::class, 'index'])->name('admin.sales.analysis');
 
@@ -152,4 +147,12 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
     // Notifications
     Route::get('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
+
+    // Manual Invoice Creation
+    Route::get('/manual-invoice', [\App\Http\Controllers\Admin\ManualInvoiceController::class, 'index'])->name('admin.manual-invoice.index');
+    Route::get('/manual-invoice/create', [\App\Http\Controllers\Admin\ManualInvoiceController::class, 'create'])->name('admin.manual-invoice.create');
+    Route::post('/manual-invoice', [\App\Http\Controllers\Admin\ManualInvoiceController::class, 'store'])->name('admin.manual-invoice.store');
+    Route::get('/manual-invoice/{id}', [\App\Http\Controllers\Admin\ManualInvoiceController::class, 'show'])->name('admin.manual-invoice.show');
+    Route::get('/manual-invoice/{id}/download', [\App\Http\Controllers\Admin\ManualInvoiceController::class, 'download'])->name('admin.manual-invoice.download');
+    Route::delete('/manual-invoice/{id}', [\App\Http\Controllers\Admin\ManualInvoiceController::class, 'destroy'])->name('admin.manual-invoice.destroy');
 });
