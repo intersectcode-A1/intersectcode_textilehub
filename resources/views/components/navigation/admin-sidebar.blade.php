@@ -48,10 +48,6 @@
                 <i data-lucide="trending-up" class="w-5 h-5 flex-shrink-0"></i>
                 <span class="sidebar-label">Strategi Harga</span>
             </a>
-            <a href="{{ route('tracking.index') }}" class="{{ request()->routeIs('tracking.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="map-pin" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Pelacakan</span>
-            </a>
         </div>
         <div>
             <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Pelaporan</h3>
@@ -62,6 +58,10 @@
             <a href="{{ route('laporan.index') }}" class="{{ request()->routeIs('laporan.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
                 <i data-lucide="bar-chart-2" class="w-5 h-5 flex-shrink-0"></i>
                 <span class="sidebar-label">Laporan Keuangan</span>
+            </a>
+            <a href="{{ route('admin.manual-invoice.index') }}" class="{{ request()->routeIs('admin.manual-invoice.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                <i data-lucide="file-text" class="w-5 h-5 flex-shrink-0"></i>
+                <span class="sidebar-label">Invoice Manual</span>
             </a>
         </div>
     </nav>

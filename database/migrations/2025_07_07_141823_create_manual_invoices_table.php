@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-       // database/migrations/xxxx_xx_xx_create_trackings_table.php
-        Schema::create('trackings', function (Blueprint $table) {
+        Schema::create('manual_invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('order_number')->unique();
-            $table->string('status');
-            $table->text('description')->nullable();
+            $table->string('user_name');
+            $table->string('alamat');
+            $table->string('telepon');
+            $table->date('tanggal');
+            $table->bigInteger('total');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('trackings');
+        Schema::dropIfExists('manual_invoices');
     }
 };
