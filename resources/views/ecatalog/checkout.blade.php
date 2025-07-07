@@ -6,30 +6,28 @@
     $subtotal = $price;
 @endphp
 <x-layouts.catalog>
-    <div class="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 min-h-screen py-12">
+    <div class="bg-white dark:bg-gray-900 min-h-screen py-12 transition-colors duration-300">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Tombol Kembali ke E-Catalog (paling atas) --}}
-            <a href="{{ route('ecatalog.index') }}" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            <a href="{{ route('ecatalog.index') }}" class="inline-flex items-center mb-6 px-5 py-2 bg-blue-600 hover:bg-blue-800 text-white font-bold rounded-xl shadow-md hover:scale-105 transition-all duration-150">
+                <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
                 Kembali ke E-Catalog
             </a>
 
             {{-- Breadcrumb & Back --}}
             <div class="mb-10 text-center">
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-white drop-shadow mb-2">🧾 Checkout</h1>
-                <p class="text-blue-200 text-base sm:text-lg font-light">Isi data pengiriman & cek ringkasan pesanan Anda sebelum konfirmasi.</p>
+                <h1 class="text-4xl font-extrabold text-blue-900 drop-shadow mb-2">🧾 Checkout</h1>
+                <p class="text-blue-500 text-base sm:text-lg font-light">Isi data pengiriman & cek ringkasan pesanan Anda sebelum konfirmasi.</p>
             </div>
 
             {{-- Alerts --}}
             @if(session('error'))
                 <div class="mb-6 animate-fadeIn">
-                    <div class="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-xl shadow-lg relative" role="alert">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="font-medium">{{ session('error') }}</span>
-                        </div>
+                    <div class="bg-red-50 border-l-4 border-red-400 text-red-900 px-6 py-4 rounded-xl shadow-md flex items-center gap-3">
+                        <svg class="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="font-semibold">{{ session('error') }}</span>
                     </div>
                 </div>
             @endif

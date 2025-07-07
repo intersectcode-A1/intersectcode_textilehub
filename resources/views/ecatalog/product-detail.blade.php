@@ -1,46 +1,51 @@
 <x-layouts.catalog>
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Tombol Kembali ke E-Catalog (paling atas) --}}
-        <a href="/" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        <a href="/" class="inline-flex items-center mb-6 px-5 py-2 bg-blue-600 hover:bg-blue-800 text-white font-bold rounded-xl shadow-md hover:scale-105 transition-all duration-150">
+            <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
             Kembali ke E-Catalog
         </a>
 
         {{-- Breadcrumb --}}
-        <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-8">
-            <a href="{{ route('ecatalog.index') }}" class="hover:text-blue-600">Katalog</a>
-            <span>&gt;</span>
-            <span class="text-gray-900">{{ $product->nama }}</span>
+        <nav class="flex items-center space-x-2 text-sm text-blue-500 mb-8">
+            <a href="{{ route('ecatalog.index') }}" class="hover:text-blue-700 font-semibold">Katalog</a>
+            <span class="text-blue-300">&gt;</span>
+            <span class="text-blue-900 font-bold">{{ $product->nama }}</span>
         </nav>
 
         {{-- Alert Messages --}}
         @if(session('success'))
             <div class="mb-6">
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative" role="alert">
-                    <span class="block sm:inline">{{ session('success') }}</span>
+                <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-900 px-6 py-4 rounded-xl shadow-md flex items-center gap-3">
+                    <svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="font-semibold">{{ session('success') }}</span>
                 </div>
             </div>
         @endif
-
         @if(session('error'))
             <div class="mb-6">
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
-                    <span class="block sm:inline">{{ session('error') }}</span>
+                <div class="bg-red-50 border-l-4 border-red-400 text-red-900 px-6 py-4 rounded-xl shadow-md flex items-center gap-3">
+                    <svg class="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="font-semibold">{{ session('error') }}</span>
                 </div>
             </div>
         @endif
 
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-md border border-blue-100 overflow-hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
                 {{-- Product Images --}}
                 <div class="space-y-4">
-                    <div class="aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden">
+                    <div class="aspect-w-1 aspect-h-1 bg-blue-50 rounded-xl overflow-hidden border border-blue-100">
                         @if($product->foto)
                             <img src="{{ asset('storage/' . $product->foto) }}" 
                                  alt="{{ $product->nama }}" 
                                  class="w-full h-full object-center object-cover">
                         @else
-                            <div class="w-full h-full flex items-center justify-center text-gray-500">
+                            <div class="w-full h-full flex items-center justify-center text-blue-200">
                                 <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
@@ -51,14 +56,14 @@
 
                 {{-- Product Info --}}
                 <div class="space-y-6">
-                    <h1 class="text-3xl font-bold text-gray-900">{{ $product->nama }}</h1>
+                    <h1 class="text-3xl font-bold text-blue-900">{{ $product->nama }}</h1>
                     
                     <div class="flex items-baseline">
-                        <p class="text-3xl font-bold text-green-600">
+                        <p class="text-3xl font-bold text-blue-600">
                             Rp {{ number_format($product->harga, 0, ',', '.') }}
                         </p>
                         @if($product->old_price)
-                            <p class="ml-4 text-lg text-gray-500 line-through">
+                            <p class="ml-4 text-lg text-blue-300 line-through">
                                 Rp {{ number_format($product->old_price, 0, ',', '.') }}
                             </p>
                         @endif
@@ -66,27 +71,27 @@
 
                     {{-- Stock Status --}}
                     <div class="flex items-center space-x-2">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->stok > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                             {{ $product->stok > 0 ? 'Stok Tersedia' : 'Stok Habis' }}
                         </span>
                         @if($product->stok > 0)
-                            <span class="text-sm text-gray-500">/{{ $product->satuan }}</span>
+                            <span class="text-sm text-blue-300">/{{ $product->satuan }}</span>
                         @endif
                     </div>
 
                     {{-- Variant Info --}}
                     @if($product->variants && $product->variants->count() > 0)
-                        <div class="border-t border-gray-200 pt-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Varian Produk</h3>
+                        <div class="border-t border-blue-100 pt-4">
+                            <h3 class="text-lg font-medium text-blue-900 mb-2">Varian Produk</h3>
                             @php $groupedVariants = $product->variants->groupBy('type'); @endphp
                             @foreach($groupedVariants as $type => $variants)
                                 <div class="mb-2">
-                                    <span class="font-semibold">{{ ucfirst($type) }}</span>:
+                                    <span class="font-semibold text-blue-700">{{ ucfirst($type) }}</span>:
                                     @foreach($variants as $variant)
-                                        <span class="inline-block bg-gray-100 rounded px-2 py-1 text-sm text-gray-800 mr-2 mb-1">
+                                        <span class="inline-block bg-blue-50 border border-blue-200 rounded px-2 py-1 text-sm text-blue-800 mr-2 mb-1">
                                             {{ $variant->name }}
                                             @if($variant->additional_price > 0)
-                                                <span class="text-green-600">(+Rp {{ number_format($variant->additional_price, 0, ',', '.') }})</span>
+                                                <span class="text-blue-600">(+Rp {{ number_format($variant->additional_price, 0, ',', '.') }})</span>
                                             @endif
                                         </span>
                                     @endforeach
@@ -94,26 +99,26 @@
                             @endforeach
                         </div>
                     @else
-                        <div class="border-t border-gray-200 pt-4">
-                            <span class="text-gray-500">Tidak ada varian untuk produk ini.</span>
+                        <div class="border-t border-blue-100 pt-4">
+                            <span class="text-blue-300">Tidak ada varian untuk produk ini.</span>
                         </div>
                     @endif
 
                     {{-- Description --}}
-                    <div class="prose prose-sm text-gray-500">
-                        <h3 class="text-lg font-medium text-gray-900">Deskripsi Produk</h3>
+                    <div class="prose prose-sm text-blue-700">
+                        <h3 class="text-lg font-medium text-blue-900">Deskripsi Produk</h3>
                         <p>{{ $product->deskripsi ?: 'Tidak ada deskripsi produk.' }}</p>
                     </div>
 
                     {{-- Specifications --}}
                     @if($product->specifications)
-                    <div class="border-t border-gray-200 pt-6">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Spesifikasi</h3>
+                    <div class="border-t border-blue-100 pt-6">
+                        <h3 class="text-lg font-medium text-blue-900 mb-4">Spesifikasi</h3>
                         <div class="grid grid-cols-1 gap-4">
                             @foreach(json_decode($product->specifications) as $key => $value)
                             <div class="grid grid-cols-3 gap-4 text-sm">
-                                <dt class="font-medium text-gray-500">{{ $key }}</dt>
-                                <dd class="col-span-2 text-gray-900">{{ $value }}</dd>
+                                <dt class="font-medium text-blue-400">{{ $key }}</dt>
+                                <dd class="col-span-2 text-blue-900">{{ $value }}</dd>
                             </div>
                             @endforeach
                         </div>
@@ -121,7 +126,7 @@
                     @endif
 
                     {{-- Action Buttons --}}
-                    <div class="space-y-4 pt-6 border-t border-gray-200">
+                    <div class="space-y-4 pt-6 border-t border-blue-100">
                         {{-- Variant Selector --}}
                         @if($product->variants && $product->variants->count() > 0)
                             <div x-data="{ 
@@ -152,7 +157,7 @@
 
                                 @foreach($groupedVariants as $type => $variants)
                                     <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">
+                                        <label class="block text-sm font-medium text-blue-700">
                                             {{ $type === 'color' ? 'Pilih Warna' : 'Pilih Ukuran' }}:
                                             <span class="text-rose-500">*</span>
                                         </label>
@@ -161,19 +166,19 @@
                                                 <button type="button"
                                                         @click="selectedVariants['{{ $type }}'] = {{ json_encode($variant) }}; updatePrice()"
                                                         :class="{
-                                                            'ring-2 ring-blue-500 border-blue-500': selectedVariants['{{ $type }}']?.id === {{ $variant->id }},
-                                                            'ring-1 ring-gray-200 opacity-50 cursor-not-allowed': !isVariantAvailable({{ $variant->id }}),
-                                                            'ring-1 ring-gray-200 hover:border-blue-500': isVariantAvailable({{ $variant->id }}) && selectedVariants['{{ $type }}']?.id !== {{ $variant->id }}
+                                                            'ring-2 ring-blue-500 border-blue-500 bg-blue-50': selectedVariants['{{ $type }}']?.id === {{ $variant->id }},
+                                                            'ring-1 ring-blue-100 opacity-50 cursor-not-allowed': !isVariantAvailable({{ $variant->id }}),
+                                                            'ring-1 ring-blue-100 hover:border-blue-500 hover:bg-blue-50': isVariantAvailable({{ $variant->id }}) && selectedVariants['{{ $type }}']?.id !== {{ $variant->id }}
                                                         }"
                                                         :disabled="!isVariantAvailable({{ $variant->id }})"
                                                         class="px-4 py-2 rounded-lg bg-white border text-sm font-medium transition-all duration-200">
                                                     <div class="flex items-center space-x-2">
                                                         <span>{{ $variant->name }}</span>
                                                         @if($variant->additional_price > 0)
-                                                            <span class="text-xs text-green-600">(+{{ number_format($variant->additional_price, 0, ',', '.') }})</span>
+                                                            <span class="text-xs text-blue-600">(+{{ number_format($variant->additional_price, 0, ',', '.') }})</span>
                                                         @endif
                                                     </div>
-                                                    <div class="text-xs text-gray-500 mt-1">
+                                                    <div class="text-xs text-blue-400 mt-1">
                                                         Stok: {{ $variant->stock }}
                                                     </div>
                                                 </button>
@@ -183,7 +188,7 @@
                                 @endforeach
 
                                 {{-- Total Price Display --}}
-                                <div class="mt-4 text-lg font-semibold text-gray-900">
+                                <div class="mt-4 text-lg font-semibold text-blue-900">
                                     Total Harga: 
                                     <span x-text="'Rp ' + new Intl.NumberFormat('id-ID').format({{ $product->harga }} + additionalPrice)"></span>
                                 </div>
@@ -198,10 +203,10 @@
 
                         {{-- Quantity Selector --}}
                         <div class="flex items-center space-x-4">
-                            <label for="quantity" class="text-sm font-medium text-gray-700">Jumlah:</label>
-                            <div class="flex items-center border border-gray-300 rounded-lg">
+                            <label for="quantity" class="text-sm font-medium text-blue-700">Jumlah:</label>
+                            <div class="flex items-center border border-blue-300 rounded-lg">
                                 <button type="button" 
-                                        class="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50" 
+                                        class="p-2 text-blue-600 hover:text-blue-900 disabled:opacity-50" 
                                         onclick="decrementQuantity()"
                                         :disabled="!allVariantsSelected()">
                                     -
@@ -215,7 +220,7 @@
                                        :disabled="!allVariantsSelected()"
                                        class="w-16 text-center border-0 focus:ring-0 disabled:opacity-50">
                                 <button type="button" 
-                                        class="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50" 
+                                        class="p-2 text-blue-600 hover:text-blue-900 disabled:opacity-50" 
                                         onclick="incrementQuantity()"
                                         :disabled="!allVariantsSelected()">
                                     +
