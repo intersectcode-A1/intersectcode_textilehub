@@ -25,7 +25,7 @@
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
                         <div class="relative mt-1">
-                            <input type="text" id="name" wire:model="name" required
+                            <input type="text" id="name" wire:model="name" required autocomplete="name"
                                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
                             <div class="absolute left-3 top-2.5 text-gray-400">
                                 <i class="fas fa-user"></i>
@@ -37,7 +37,7 @@
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                         <div class="relative mt-1">
-                            <input type="email" id="email" wire:model="email" required
+                            <input type="email" id="email" wire:model="email" required autocomplete="email"
                                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
                             <div class="absolute left-3 top-2.5 text-gray-400">
                                 <i class="fas fa-envelope"></i>
@@ -50,7 +50,7 @@
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                         <div class="relative mt-1">
-                            <input type="password" id="password" wire:model="password" required
+                            <input type="password" id="password" wire:model="password" required autocomplete="new-password"
                                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
                             <div class="absolute left-3 top-2.5 text-gray-400">
                                 <i class="fas fa-lock"></i>
@@ -67,7 +67,7 @@
                     <div>
                         <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
                         <div class="relative mt-1">
-                            <input type="password" id="password_confirmation" wire:model="password_confirmation" required
+                            <input type="password" id="password_confirmation" wire:model="password_confirmation" required autocomplete="new-password"
                                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
                             <div class="absolute left-3 top-2.5 text-gray-400">
                                 <i class="fas fa-lock"></i>
@@ -80,10 +80,11 @@
                         @error('password_confirmation') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Tambahkan widget reCAPTCHA v2 -->
-                    <div id="recaptcha-container" class="g-recaptcha" data-sitekey="6LeYxmMrAAAAAOFaNfgR7BM5Lum2gZ71SegTyZlX"></div>
-                    <input type="hidden" wire:model="g-recaptcha-response" id="g-recaptcha-response">
-                    @error('g-recaptcha-response') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
+                    <!-- Widget reCAPTCHA v2 -->
+                    <div id="recaptcha-container"></div>
+                    <input type="hidden" id="gRecaptchaResponseLivewire" wire:model="gRecaptchaResponse">
+                    <span id="recaptcha-debug" class="text-xs text-green-600"></span>
+                    @error('gRecaptchaResponse') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
 
                     <button type="submit"
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300shadow">
@@ -94,7 +95,7 @@
                 <form wire:submit.prevent="verifyOtp" class="space-y-5">
                     <div>
                         <label for="otp" class="block text-sm font-medium text-gray-700">Kode OTP</label>
-                        <input type="text" id="otp" wire:model="otp" maxlength="6" required
+                        <input type="text" id="otp" wire:model="otp" maxlength="6" required autocomplete="one-time-code"
                             class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
                         @error('otp') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -121,37 +122,48 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const togglePassword = document.querySelector('#togglePassword');
-            const password = document.querySelector('#password');
+    function recaptchaCallback(token) {
+        var livewireInput = document.getElementById('gRecaptchaResponseLivewire');
+        if (livewireInput) {
+            livewireInput.value = token;
+            livewireInput.dispatchEvent(new Event('input', { bubbles: true }));
+            document.getElementById('recaptcha-debug').innerText = 'Token masuk!';
+        }
+    }
+
+    function onloadCallback() {
+        if (window.grecaptcha && document.getElementById('recaptcha-container')) {
+            grecaptcha.render('recaptcha-container', {
+                'sitekey': '6LeQkHQrAAAAAJgveoTSHmngm-j1Zkik6DUIef_U',
+                'callback': recaptchaCallback
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        if (togglePassword && password) {
             togglePassword.addEventListener('click', function () {
                 const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
                 password.setAttribute('type', type);
                 this.querySelector('i').classList.toggle('fa-eye');
                 this.querySelector('i').classList.toggle('fa-eye-slash');
             });
+        }
 
-            const togglePasswordConfirmation = document.querySelector('#togglePasswordConfirmation');
-            const passwordConfirmation = document.querySelector('#password_confirmation');
+        const togglePasswordConfirmation = document.querySelector('#togglePasswordConfirmation');
+        const passwordConfirmation = document.querySelector('#password_confirmation');
+        if (togglePasswordConfirmation && passwordConfirmation) {
             togglePasswordConfirmation.addEventListener('click', function () {
                 const type = passwordConfirmation.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordConfirmation.setAttribute('type', type);
                 this.querySelector('i').classList.toggle('fa-eye');
                 this.querySelector('i').classList.toggle('fa-eye-slash');
             });
-
-            // Tambahkan callback reCAPTCHA
-            window.onloadCallback = function() {
-                grecaptcha.render('recaptcha-container', {
-                    'sitekey': '6LeYxmMrAAAAAOFaNfgR7BM5Lum2gZ71SegTyZlX',
-                    'callback': function(response) {
-                        document.getElementById('g-recaptcha-response').value = response;
-                    }
-                });
-            };
-        });
+        }
+    });
     </script>
 
-    <!-- Tambahkan script reCAPTCHA -->
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 </components.layouts.app>

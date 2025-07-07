@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Mail;
 
 class Register extends Component
 {
-    public $name, $email, $password, $password_confirmation, $otp, $step = 1, $generatedOtp;
+    public $name, $email, $password, $password_confirmation, $otp, $step = 1, $generatedOtp, $gRecaptchaResponse;
 
     public function register()
     {
@@ -20,7 +20,15 @@ class Register extends Component
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'gRecaptchaResponse' => 'required|string',
         ]);
+        
+        // Debug: jika tetap error, log value property
+        if (empty($this->gRecaptchaResponse)) {
+            $this->dispatch('refreshRecaptcha');
+            session()->flash('error', 'Token reCAPTCHA tidak terisi. Silakan centang ulang reCAPTCHA.');
+            return;
+        }
 
         $this->generatedOtp = rand(100000, 999999);
 
