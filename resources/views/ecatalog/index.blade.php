@@ -130,18 +130,19 @@
             <div class="flex flex-col lg:flex-row gap-8">
                 {{-- Sidebar Categories --}}
             <div class="lg:w-1/4">
+                <div x-data="{ showMobileCategories: false }">
                     {{-- Mobile Category Toggle (hanya tampil di mobile) --}}
-                <div class="lg:hidden mb-6">
-                    <button @click="showMobileCategories = !showMobileCategories"
-                        class="w-full flex items-center justify-between px-6 py-4 bg-white border border-blue-200 rounded-2xl shadow-md hover:bg-blue-50 transition-all duration-300">
-                        <span class="font-semibold text-blue-900">Pilih Kategori</span>
-                        <svg class="w-5 h-5 text-blue-500 transition-transform duration-200"
-                            :class="{'rotate-180': showMobileCategories}"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                </div>
+                    <div class="lg:hidden mb-6">
+                        <button @click="showMobileCategories = !showMobileCategories"
+                            class="w-full flex items-center justify-between px-6 py-4 bg-white border border-blue-200 rounded-2xl shadow-md hover:bg-blue-50 transition-all duration-300">
+                            <span class="font-semibold text-blue-900">Pilih Kategori</span>
+                            <svg class="w-5 h-5 text-blue-500 transition-transform duration-200"
+                                :class="{'rotate-180': showMobileCategories}"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                    </div>
                     {{-- Category Navigation --}}
                     <div :class="{'hidden': !showMobileCategories}" class="lg:block">
                         <div class="bg-white rounded-2xl shadow-md border border-blue-200 overflow-hidden">
@@ -149,6 +150,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
                 {{-- Main Content Area --}}
             <div class="lg:w-3/4">
                     {{-- Search & Filter Section --}}
