@@ -35,7 +35,7 @@ class CatalogController extends Controller
     public function purchaseHistory()
     {
         $orders = Order::where('user_id', Auth::id())
-                      ->whereIn('status', ['completed', 'cancelled'])
+                      ->where('payment_status', 'paid')
                       ->orderBy('created_at', 'desc')
                       ->paginate(10);
 
@@ -48,6 +48,7 @@ class CatalogController extends Controller
     public function orderStatus()
     {
         $orders = Order::where('user_id', Auth::id())
+                      ->where('payment_status', '!=', 'paid')
                       ->orderBy('created_at', 'desc')
                       ->paginate(10);
         return view('ecatalog.order-status', compact('orders'));

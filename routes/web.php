@@ -104,6 +104,10 @@ Route::middleware(['auth', 'web'])->group(function () {
         request()->session()->regenerateToken();
         return redirect()->route('home');
     })->name('logout');
+
+    Route::get('/bantuan-pengiriman', function() {
+        return view('ecatalog.bantuan-pengiriman');
+    })->name('bantuan.pengiriman');
 });
 
 // 🛠️ Admin Panel Routes
