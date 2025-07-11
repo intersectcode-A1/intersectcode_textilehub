@@ -21,6 +21,10 @@
                class="px-6 py-2 rounded-xl font-bold bg-gray-100 text-blue-700 shadow hover:bg-blue-50 transition-all duration-200">
                 Riwayat Pembelian
             </a>
+            <a href="{{ route('bantuan.pengiriman') }}"
+               class="px-6 py-2 rounded-xl font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow hover:from-green-600 hover:to-emerald-600 transition-all duration-200">
+                Bantuan Pengiriman
+            </a>
         </div>
 
         {{-- Orders List --}}
@@ -74,6 +78,9 @@
                                                     Batalkan
                                                 </button>
                                             </form>
+                                        @endif
+                                        @if($order->status === 'completed' && $order->payment_status === 'unpaid')
+                                            <a href="{{ route('payment.show', $order->id) }}" class="btn-link text-green-700 font-bold">Bayar</a>
                                         @endif
                                     </div>
                                 </td>

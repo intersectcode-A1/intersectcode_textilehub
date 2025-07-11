@@ -21,6 +21,10 @@
                class="px-6 py-2 rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow hover:from-blue-700 hover:to-indigo-700 transition-all duration-200">
                 Riwayat Pembelian
             </a>
+            <a href="{{ route('bantuan.pengiriman') }}"
+               class="px-6 py-2 rounded-xl font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow hover:from-green-600 hover:to-emerald-600 transition-all duration-200">
+                Bantuan Pengiriman
+            </a>
         </div>
 
         {{-- Filter Section --}}
@@ -87,9 +91,6 @@
                                 <td class="px-6 py-3 whitespace-nowrap text-sm font-medium">
                                     <div class="flex items-center space-x-3">
                                         <a href="{{ route('order.detail', $order->id) }}" class="btn-link text-blue-700 font-bold">Detail</a>
-                                        @if($order->status === 'completed' && $order->payment_status === 'unpaid')
-                                            <a href="{{ route('payment.show', $order->id) }}" class="btn-link text-green-700 font-bold">Bayar</a>
-                                        @endif
                                         @if($order->payment_status === 'paid')
                                             <a href="{{ route('order.invoice.pdf', $order->id) }}" target="_blank"
                                                class="inline-flex items-center px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-sm shadow-md backdrop-blur-md border border-white/20 hover:scale-105 hover:brightness-110 hover:shadow-lg active:scale-100 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400 h-9 ml-4">
