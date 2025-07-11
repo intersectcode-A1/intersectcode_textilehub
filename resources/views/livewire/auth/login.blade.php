@@ -17,7 +17,7 @@
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <div class="relative mt-1">
                         <input type="email" id="email" wire:model="email" required
-                            class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                            class="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
                         <div class="absolute left-3 top-2.5 text-gray-400">
                             <i class="fas fa-envelope"></i>
                         </div>
@@ -31,7 +31,7 @@
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     <div class="relative mt-1">
                         <input type="password" id="password" wire:model="password" required
-                            class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
+                            class="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800">
                         <div class="absolute left-3 top-2.5 text-gray-400">
                             <i class="fas fa-lock"></i>
                         </div>
@@ -46,8 +46,14 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-300 shadow">
-                    Login
+                    class="w-full flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-lg transition disabled:opacity-70 disabled:cursor-not-allowed shadow"
+                    wire:loading.attr="disabled">
+                    <svg wire:loading class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <span wire:loading.remove>Login</span>
+                    <span wire:loading>Memproses...</span>
                 </button>
             </form>
 

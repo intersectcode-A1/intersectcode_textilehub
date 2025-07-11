@@ -22,7 +22,7 @@ class Register extends Component
             'password' => 'required|min:6',
             'gRecaptchaResponse' => 'required|string',
         ]);
-        
+
         // Debug: jika tetap error, log value property
         if (empty($this->gRecaptchaResponse)) {
             $this->dispatch('refreshRecaptcha');
@@ -56,7 +56,7 @@ class Register extends Component
         $otpData = session('otp_user_data');
 
         if (!$otpData || now()->gt($otpData['otp_expires_at'])) {
-            session()->flash('error', 'OTP kadaluarsa. Silakan daftar ulang.');
+            session()->flash('error', 'OTP kadaluarsa. Silakan kirim ulang OTP.');
             return;
         }
 

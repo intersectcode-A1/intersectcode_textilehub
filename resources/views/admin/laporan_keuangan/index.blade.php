@@ -87,33 +87,31 @@
     <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white p-3 sm:p-6 border-b border-gray-200 dark:border-gray-700">Daftar Transaksi</h3>
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
+            <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 border-b-2 border-blue-200">
                 <tr>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tanggal</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Deskripsi</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Jumlah</th>
-                                </tr>
-                            </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Tanggal</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Deskripsi</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Jumlah</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-blue-100">
                 @if(isset($laporan) && !$laporan->isEmpty())
-                                @foreach($laporan as $item)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">{{ Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
-                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">{{ $item->deskripsi }}</td>
-                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm {{ $item->jumlah >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                            Rp {{ number_format($item->jumlah, 0, ',', '.') }}
-                                        </td>
-                                    </tr>
-                                @endforeach
+                    @foreach($laporan as $item)
+                    <tr class="hover:bg-blue-50 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
+                        <td class="px-6 py-4 whitespace-normal break-all text-xs sm:text-sm text-gray-900">{{ $item->deskripsi }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs sm:text-sm {{ $item->jumlah >= 0 ? 'text-green-600' : 'text-red-600' }} font-bold">Rp {{ number_format($item->jumlah, 0, ',', '.') }}</td>
+                    </tr>
+                    @endforeach
                 @else
                     <tr>
-                        <td colspan="3" class="text-center py-8 sm:py-12 text-gray-500 dark:text-gray-400 text-sm">
+                        <td colspan="3" class="text-center py-8 sm:py-12 text-gray-500 text-sm">
                             {{ isset($laporan) ? 'Tidak ada data dalam rentang waktu yang dipilih.' : 'Silakan pilih rentang tanggal untuk menampilkan laporan.' }}
                         </td>
                     </tr>
                 @endif
-                            </tbody>
-                        </table>
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection

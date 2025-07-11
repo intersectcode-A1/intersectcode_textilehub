@@ -172,16 +172,20 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 align-top">
-                                <div class="flex flex-col sm:flex-row items-center justify-end space-y-1 sm:space-y-0 sm:space-x-2 sm:space-x-3 pt-1">
-                                    <a href="{{ route('products.edit', $product) }}" class="p-2 bg-gradient-to-r from-blue-100 to-indigo-200 dark:from-blue-900 dark:to-indigo-900 hover:from-blue-200 hover:to-indigo-300 dark:hover:from-blue-800 dark:hover:to-indigo-800 text-blue-700 dark:text-blue-200 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-150">
-                                        <i data-lucide="edit" class="w-5 h-5"></i>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <div class="flex flex-row items-center justify-end space-x-2">
+                                    <a href="{{ route('products.edit', $product) }}" class="p-2 bg-blue-100 hover:bg-blue-400 text-blue-600 hover:text-white rounded-full shadow transition-all duration-200">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"/>
+                                        </svg>
                                     </a>
                                     <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Yakin hapus produk ini?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="p-2 bg-gradient-to-r from-red-100 to-pink-200 dark:from-red-900 dark:to-pink-900 hover:from-red-200 hover:to-pink-300 dark:hover:from-red-800 dark:hover:to-pink-800 text-red-700 dark:text-red-200 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-red-400 transition-all duration-150">
-                                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                        <button type="submit" class="p-2 bg-red-100 hover:bg-red-400 text-red-600 hover:text-white rounded-full shadow transition-all duration-200">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
                                         </button>
                                     </form>
                                 </div>

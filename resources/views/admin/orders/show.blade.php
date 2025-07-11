@@ -137,46 +137,43 @@
         </div>
 
         {{-- Tabel Produk --}}
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-    <h2 class="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-200 p-3 sm:p-6 border-b border-gray-200 dark:border-gray-700">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                </svg>
-                Daftar Produk
-            </h2>
-            <div class="overflow-x-auto">
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mt-6">
+    <h2 class="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-200 p-3 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300 text-white rounded-t-lg">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        Daftar Produk
+    </h2>
+    <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm">
-            <thead class="bg-gray-50 dark:bg-gray-700/50">
+            <thead class="bg-gradient-to-r from-blue-50 to-indigo-100 border-b-2 border-blue-200">
                 <tr>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produk</th>
-                    <th scope="col" class="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Harga Satuan</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Jumlah</th>
-                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Subtotal</th>
-                        </tr>
-                    </thead>
+                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Produk</th>
+                    <th scope="col" class="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Harga Satuan</th>
+                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Jumlah</th>
+                    <th scope="col" class="px-3 sm:px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Subtotal</th>
+                </tr>
+            </thead>
             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($order->items as $item)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-white">
-                            <div>
-                                <div class="font-medium">{{ $item->product_name }}</div>
-                                <!-- Mobile: Show price -->
-                                <div class="sm:hidden text-xs text-gray-500 mt-1">Harga: Rp{{ number_format($item->price, 0, ',', '.') }}</div>
-                            </div>
-                        </td>
-                        <td class="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">{{ $item->quantity }}</td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-            <tfoot class="bg-gray-50 dark:bg-gray-700/50">
-                        <tr>
+                @foreach ($order->items as $item)
+                <tr class="hover:bg-blue-50 dark:hover:bg-gray-700/50 transition-colors duration-150 align-top">
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-normal break-all max-w-xs text-gray-900 dark:text-white">
+                        <div class="font-medium">{{ $item->product_name }}</div>
+                        <div class="sm:hidden text-xs text-gray-500 mt-1">Harga: Rp{{ number_format($item->price, 0, ',', '.') }}</div>
+                    </td>
+                    <td class="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-300">{{ $item->quantity }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+            <tfoot class="bg-gradient-to-r from-blue-50 to-indigo-100 border-t-2 border-blue-200">
+                <tr>
                     <td colspan="3" class="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Total Keseluruhan:</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-gray-900 dark:text-white">Rp{{ number_format($total, 0, ',', '.') }}</td>
-                        </tr>
-                    </tfoot>
-                </table>
-        </div>
+                </tr>
+            </tfoot>
+        </table>
     </div>
+</div>
 @endsection

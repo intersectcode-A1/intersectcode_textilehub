@@ -1,39 +1,35 @@
 <x-layouts.catalog>
-    <div class="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 min-h-screen py-12">
+    <div class="bg-white dark:bg-gray-900 min-h-screen py-12 transition-colors duration-300">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Tombol Kembali ke E-Catalog (paling atas) --}}
-            <a href="{{ route('ecatalog.index') }}" class="inline-flex items-center mb-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow hover:scale-105 hover:shadow-lg transition-all duration-150">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            <a href="{{ route('ecatalog.index') }}" class="inline-flex items-center mb-6 px-5 py-2 bg-blue-600 hover:bg-blue-800 text-white font-bold rounded-xl shadow-md hover:scale-105 transition-all duration-150">
+                <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
                 Kembali ke E-Catalog
             </a>
 
             <div class="mb-10 text-center">
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-white drop-shadow mb-2">🛒 Keranjang Belanja</h1>
-                <p class="text-blue-200 text-base sm:text-lg font-light">Cek kembali produk yang ingin Anda beli sebelum checkout.</p>
+                <h1 class="text-4xl font-extrabold text-blue-900 drop-shadow mb-2">🛒 Keranjang Belanja</h1>
+                <p class="text-blue-500 text-base sm:text-lg font-light">Cek kembali produk yang ingin Anda beli sebelum checkout.</p>
             </div>
 
             {{-- Alerts --}}
             @if(session('success'))
                 <div class="mb-6 animate-fadeIn">
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-800 px-6 py-4 rounded-xl shadow-lg relative" role="alert">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="font-medium">{{ session('success') }}</span>
-                        </div>
+                    <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-900 px-6 py-4 rounded-xl shadow-md flex items-center gap-3">
+                        <svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="font-semibold">{{ session('success') }}</span>
                     </div>
                 </div>
             @endif
             @if(session('error'))
                 <div class="mb-6 animate-fadeIn">
-                    <div class="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-xl shadow-lg relative" role="alert">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="font-medium">{{ session('error') }}</span>
-                        </div>
+                    <div class="bg-red-50 border-l-4 border-red-400 text-red-900 px-6 py-4 rounded-xl shadow-md flex items-center gap-3">
+                        <svg class="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="font-semibold">{{ session('error') }}</span>
                     </div>
                 </div>
             @endif
@@ -67,14 +63,14 @@
                                                 @php $groupedVariants = collect($item['variants'])->groupBy('type'); @endphp
                                                 @foreach($groupedVariants as $type => $variants)
                                                     <div class="flex items-center gap-1">
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide bg-gradient-to-r from-blue-400 to-indigo-300 text-white shadow">
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide bg-blue-200 text-blue-900 shadow">
                                                             {{ ucfirst($type) }}
                                                         </span>
                                                         @foreach($variants as $variant)
-                                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-xs text-blue-900 font-semibold border border-blue-100 shadow-sm">
+                                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-xs text-blue-800 font-semibold border border-blue-100 shadow-sm">
                                                                 {{ $variant['name'] }}
                                                                 @if($variant['additional_price'] > 0)
-                                                                    <span class="ml-2 text-green-600 font-bold">+Rp {{ number_format($variant['additional_price'], 0, ',', '.') }}</span>
+                                                                    <span class="ml-2 text-blue-600 font-bold">+Rp {{ number_format($variant['additional_price'], 0, ',', '.') }}</span>
                                                                 @endif
                                                             </span>
                                                         @endforeach
@@ -82,10 +78,10 @@
                                                 @endforeach
                                             </div>
                                             @if($totalAdditionalPrice > 0)
-                                                <div class="text-xs text-green-700 mb-1 font-semibold">Harga tambahan varian: +Rp {{ number_format($totalAdditionalPrice, 0, ',', '.') }}</div>
+                                                <div class="text-xs text-blue-600 mb-1 font-semibold">Harga tambahan varian: +Rp {{ number_format($totalAdditionalPrice, 0, ',', '.') }}</div>
                                             @endif
                                         @endif
-                                        <div class="text-xs text-gray-500">Harga satuan: Rp {{ number_format($item['harga'], 0, ',', '.') }}</div>
+                                        <div class="text-xs text-blue-500">Harga satuan: Rp {{ number_format($item['harga'], 0, ',', '.') }}</div>
                                         <div class="text-base sm:text-lg font-bold text-blue-900 mt-1">Subtotal: Rp {{ number_format($subtotal, 0, ',', '.') }}</div>
                                     </div>
                                     <div class="flex flex-col items-end gap-2 justify-between h-full">
@@ -111,28 +107,28 @@
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                             <div>
                                 <p class="text-lg font-extrabold text-blue-900">Total</p>
-                                <p class="text-sm text-blue-500">{{ count($cart) }} item</p>
+                                <p class="text-sm text-blue-600">{{ count($cart) }} item</p>
                             </div>
                             <div class="text-left sm:text-right">
-                                <p class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 drop-shadow">Rp {{ number_format($total, 0, ',', '.') }}</p>
+                                <p class="text-3xl font-black text-blue-700 drop-shadow">Rp {{ number_format($total, 0, ',', '.') }}</p>
                             </div>
                         </div>
                         <div class="mt-8 flex flex-col sm:flex-row justify-end gap-4">
-                            <a href="{{ route('ecatalog.index') }}" class="btn btn-secondary">Lanjut Belanja</a>
-                            <a href="{{ route('checkout.cart') }}" class="btn btn-primary">Checkout</a>
+                            <a href="{{ route('ecatalog.index') }}" class="btn btn-secondary text-blue-900 border-blue-200 bg-white hover:bg-blue-50">Lanjut Belanja</a>
+                            <a href="{{ route('checkout.cart') }}" class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white">Checkout</a>
                         </div>
                     </div>
                 </div>
             @else
                 <div class="flex flex-col items-center justify-center py-20 animate-fadeIn">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 mb-6 shadow-lg">
-                        <svg class="w-8 h-8 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100 mb-6 shadow-lg">
+                        <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Keranjang Belanja Kosong</h3>
-                    <p class="mb-6 text-sm sm:text-base text-blue-100">Belum ada produk yang ditambahkan ke keranjang.</p>
-                    <a href="{{ route('ecatalog.index') }}" class="btn btn-primary">Mulai Belanja</a>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-2">Keranjang Belanja Kosong</h3>
+                    <p class="mb-6 text-sm sm:text-base text-blue-600">Belum ada produk yang ditambahkan ke keranjang.</p>
+                    <a href="{{ route('ecatalog.index') }}" class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white">Mulai Belanja</a>
                 </div>
             @endif
         </div>

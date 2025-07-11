@@ -1,6 +1,18 @@
 @props(['categories', 'currentCategory' => null])
 
-<div x-data="{ searchCategory: '', visibleCategories: [] }" class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+<div x-data="{
+    searchCategory: '',
+    get filteredCategories() {
+        return [
+            @foreach($categories as $category)
+                {
+                    id: {{ $category->id }},
+                    name: '{{ strtolower($category->name) }}',
+                },
+            @endforeach
+        ].filter(cat => !this.searchCategory || cat.name.includes(this.searchCategory.toLowerCase()));
+    }
+}" class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
     {{-- Category Header --}}
     <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
         <h3 class="text-white font-semibold text-lg flex items-center">
@@ -73,7 +85,7 @@
     </nav>
 
     {{-- Empty State --}}
-    <div x-show="searchCategory && !$el.querySelectorAll('[x-show*=\"searchCategory\"]:not([x-show*=\"false\"])').length" 
+    <div x-show="searchCategory && filteredCategories.length === 0"
          class="p-6 text-center text-gray-500 border-t border-gray-100 dark:text-gray-400 dark:border-gray-700 dark:bg-gray-900">
         <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3 dark:bg-gray-800">
             <svg class="w-6 h-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
