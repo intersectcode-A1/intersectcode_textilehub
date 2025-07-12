@@ -117,6 +117,7 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () 
 
     // Produk & Kategori
     Route::resource('products', ProductController::class);
+    Route::get('/products/export/stock', [ProductController::class, 'exportStock'])->name('products.export.stock');
     Route::resource('categories', CategoryController::class);
     Route::resource('units', UnitController::class);
     Route::resource('product-variants', \App\Http\Controllers\Admin\ProductVariantController::class);
