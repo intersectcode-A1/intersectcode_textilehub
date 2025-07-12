@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\StockReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -126,5 +128,10 @@ class ProductController extends Controller
         if ($product->foto) Storage::disk('public')->delete($product->foto);
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus!');
+    }
+
+    public function exportStock()
+    {
+        return Excel::download(new StockReportExport, 'laporan_stok_' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }
