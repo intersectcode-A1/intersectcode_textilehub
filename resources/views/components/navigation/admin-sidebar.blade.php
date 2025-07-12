@@ -1,11 +1,11 @@
-<div id="sidebar" class="flex-shrink-0 bg-gray-800 shadow-lg h-screen sticky top-0 transition-all duration-300 flex flex-col z-50 backdrop-blur-lg" role="navigation" aria-label="Sidebar Admin">
+<aside id="sidebar" class="w-64 flex-shrink-0 bg-gray-800 shadow-lg h-screen sticky top-0 transition-all duration-300 flex flex-col">
     <!-- Mobile Header -->
     <div class="lg:hidden flex items-center justify-between p-4 border-b border-gray-700">
         <div class="flex items-center gap-3">
             <img src="{{ asset('image/img_logo_tokousahamuda.png') }}" alt="Toko Usaha Muda" class="h-8 w-auto rounded-full">
             <span class="font-bold text-lg text-white">Toko Usaha Muda</span>
         </div>
-        <button onclick="closeMobileSidebar()" class="text-gray-400 hover:text-white focus:outline-none" aria-label="Tutup Menu Sidebar">
+        <button onclick="closeMobileSidebar()" class="text-gray-400 hover:text-white">
             <i data-lucide="x" class="w-6 h-6"></i>
         </button>
     </div>
@@ -74,7 +74,7 @@
             </button>
         </form>
     </div>
-</div>
+</aside>
 <style>
 /* Custom scrollbar for sidebar */
 #sidebar nav::-webkit-scrollbar {
