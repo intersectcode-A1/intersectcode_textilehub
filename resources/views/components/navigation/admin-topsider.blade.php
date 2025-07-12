@@ -1,4 +1,4 @@
-<div class="flex items-center justify-between px-3 sm:px-4 lg:px-6 py-3 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+<div class="flex items-center justify-between px-3 sm:px-4 lg:px-6 py-3 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 backdrop-blur-sm">
     <!-- Kiri: menu & search -->
     <div class="flex items-center gap-2 sm:gap-4">
         <button id="sidebarToggleBtn" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none p-1" title="Menu">

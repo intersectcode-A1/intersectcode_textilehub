@@ -1,4 +1,4 @@
-<aside id="sidebar" class="w-64 flex-shrink-0 bg-gray-800 shadow-lg h-screen sticky top-0 transition-all duration-300 flex flex-col">
+<aside id="sidebar" class="flex-shrink-0 bg-gray-800 shadow-lg h-screen sticky top-0 transition-all duration-300 flex flex-col">
     <!-- Mobile Header -->
     <div class="lg:hidden flex items-center justify-between p-4 border-b border-gray-700">
         <div class="flex items-center gap-3">
