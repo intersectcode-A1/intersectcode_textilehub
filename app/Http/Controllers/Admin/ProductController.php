@@ -159,20 +159,40 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        // Update varian
+        // Handle variants properly
         if ($request->has('variants')) {
-            // Hapus varian yang ada
-            $product->variants()->delete();
+            $submittedVariantIds = [];
             
-            // Tambah varian baru
             foreach ($request->variants as $variantData) {
-                $product->variants()->create([
-                    'type' => $variantData['type'],
-                    'name' => $variantData['name'],
-                    'stock' => $variantData['stock'],
-                    'additional_price' => $variantData['additional_price']
-                ]);
+                if (isset($variantData['id']) && !empty($variantData['id'])) {
+                    // Update existing variant
+                    $variant = $product->variants()->find($variantData['id']);
+                    if ($variant) {
+                        $variant->update([
+                            'type' => $variantData['type'],
+                            'name' => $variantData['name'],
+                            'stock' => $variantData['stock'],
+                            'additional_price' => $variantData['additional_price']
+                        ]);
+                        $submittedVariantIds[] = $variant->id;
+                    }
+                } else {
+                    // Create new variant
+                    $newVariant = $product->variants()->create([
+                        'type' => $variantData['type'],
+                        'name' => $variantData['name'],
+                        'stock' => $variantData['stock'],
+                        'additional_price' => $variantData['additional_price']
+                    ]);
+                    $submittedVariantIds[] = $newVariant->id;
+                }
             }
+            
+            // Delete variants that were not submitted (removed from frontend)
+            $product->variants()->whereNotIn('id', $submittedVariantIds)->delete();
+        } else {
+            // If no variants submitted, delete all existing variants
+            $product->variants()->delete();
         }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
