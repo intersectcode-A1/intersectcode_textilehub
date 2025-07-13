@@ -1,13 +1,9 @@
-@if($paginator->total() > 0)
-    <div class="flex items-center gap-3 px-6 py-2 bg-white/80 dark:bg-gray-800/80 border-t border-blue-200/50 dark:border-blue-700/50 rounded-2xl mb-2">
-        <span class="text-gray-600 dark:text-gray-300 text-sm">Halaman:</span>
-        <span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">
-            {{ $paginator->currentPage() }} dari {{ $paginator->lastPage() }}
-        </span>
-    </div>
-@endif
 @if ($paginator->hasPages())
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+    <div class="flex flex-col items-center justify-between gap-2 p-4 sm:p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+        {{-- Info jumlah data (selalu tampil) --}}
+        <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+            Menampilkan {{ $paginator->firstItem() ?? 0 }} - {{ $paginator->lastItem() ?? 0 }} dari {{ $paginator->total() }} data
+        </div>
         {{-- Mobile Pagination --}}
         <div class="flex items-center justify-between w-full sm:hidden">
             <div class="text-sm text-gray-600 dark:text-gray-400">

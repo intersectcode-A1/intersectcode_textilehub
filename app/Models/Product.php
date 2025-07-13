@@ -19,7 +19,8 @@ class Product extends Model
         'category_id',
         'supplier_id',
         'satuan',
-        'unit_id'
+        'unit_id',
+        'discount'
     ];
 
     // Relasi ke kategori
@@ -96,5 +97,16 @@ class Product extends Model
             return (($this->harga - $this->harga_modal) / $this->harga) * 100;
         }
         return 0;
+    }
+
+    /**
+     * Get harga setelah diskon
+     */
+    public function getHargaSetelahDiskonAttribute()
+    {
+        if ($this->discount && $this->discount > 0) {
+            return $this->harga * (1 - $this->discount / 100);
+        }
+        return $this->harga;
     }
 }
