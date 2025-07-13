@@ -284,7 +284,7 @@
                 @forelse($recentInventoryLogs ?? [] as $log)
                 <tr class="hover:bg-gray-50 transition-colors duration-150">
                     <td class="px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                        {{ \Carbon\Carbon::parse($log->created_at)->format('d/m/Y H:i') }}
+                        {{ \Carbon\Carbon::parse($log->created_at)->timezone('Asia/Jakarta')->format('d/m/Y H:i') }}
                     </td>
                     <td class="px-6 py-4 whitespace-normal break-all font-medium text-gray-900">
                         {{ $log->product->nama ?? 'Produk tidak ditemukan' }}

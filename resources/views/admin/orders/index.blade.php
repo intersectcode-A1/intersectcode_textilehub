@@ -144,9 +144,9 @@
                         </td>
                         <td class="px-6 py-4 whitespace-normal break-all max-w-xs">
                             <div class="font-medium text-gray-900">{{ $order->user->name ?? $order->user_name }}</div>
-                            <div class="text-xs text-gray-500 sm:hidden">{{ $order->created_at->format('d M Y') }}</div>
+                            <div class="text-xs text-gray-500 sm:hidden">{{ $order->created_at->timezone('Asia/Jakarta')->format('d M Y') }}</div>
                         </td>
-                        <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $order->created_at->format('d M Y') }}</td>
+                        <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{{ $order->created_at->timezone('Asia/Jakarta')->format('d M Y') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold
                                 @if($order->status === 'pending') bg-yellow-100 text-yellow-800

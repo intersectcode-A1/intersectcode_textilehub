@@ -14,7 +14,8 @@ class HargaStrategiController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->get()->map(function($product) {
+        $products = Product::with('category')->paginate(10);
+        $products->getCollection()->transform(function($product) {
             $cost = $product->harga * 0.7;
             $margin = $product->harga > 0 ? (($product->harga - $cost) / $product->harga) * 100 : 0;
             $categoryAvg = $product->category ? Product::where('category_id', $product->category_id)->avg('harga') : $product->harga;
@@ -35,12 +36,14 @@ class HargaStrategiController extends Controller
                 'numeric',
                 'min:0',
                 'max:9223372036854775807'
-            ]
+            ],
+            'discount' => 'nullable|numeric|min:0|max:100', // validasi diskon
         ], [
             'new_price.max' => 'Harga maksimal adalah 19 digit (9.223.372.036.854.775.807).'
         ]);
         $old_price = $product->harga;
         $product->harga = $request->new_price;
+        $product->discount = $request->discount; // simpan diskon
         $product->save();
         // Catat riwayat jika ada tabel price_histories
         if (method_exists($product, 'priceHistory')) {
@@ -51,9 +54,9 @@ class HargaStrategiController extends Controller
             ]);
         }
         if ($request->ajax() || $request->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'Harga produk berhasil diperbarui']);
+            return response()->json(['success' => true, 'message' => 'Harga produk dan diskon berhasil diperbarui']);
         } else {
-            return redirect()->route('admin.harga-strategi.index')->with('success', 'Harga produk berhasil diperbarui');
+            return redirect()->route('admin.harga-strategi.index')->with('success', 'Harga produk dan diskon berhasil diperbarui');
         }
     }
 

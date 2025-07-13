@@ -9,7 +9,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start mb-8 gap-4">
                 <div>
                     <h1 class="text-2xl sm:text-3xl font-bold text-blue-900 mb-2">Detail Pesanan #{{ $order->id }}</h1>
-                    <p class="text-blue-700">{{ $order->created_at->format('d M Y, H:i') }}</p>
+                    <p class="text-blue-700">{{ $order->created_at->timezone('Asia/Jakarta')->format('d M Y, H:i') }}</p>
                 </div>
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold shadow animate-fade-in
                     @if($order->status === 'completed') bg-green-100 text-green-700 border border-green-200

@@ -93,6 +93,7 @@ class ProductController extends Controller
             'satuan' => 'required|string|max:50',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'discount' => 'nullable|numeric|min:0|max:100', // validasi diskon
             'variants' => 'nullable|array',
             'variants.*.type' => 'required_with:variants|string|max:50',
             'variants.*.name' => 'required_with:variants|string|max:255',
@@ -110,6 +111,7 @@ class ProductController extends Controller
             'satuan' => $request->satuan,
             'deskripsi' => $request->deskripsi,
             'foto' => $path,
+            'discount' => $request->discount, // simpan diskon
         ]);
 
 
@@ -148,6 +150,7 @@ class ProductController extends Controller
             'satuan' => 'required|string|max:50',
             'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'discount' => 'nullable|numeric|min:0|max:100', // validasi diskon
             'variants' => 'nullable|array',
             'variants.*.type' => 'required_with:variants|string|max:50',
             'variants.*.name' => 'required_with:variants|string|max:255',

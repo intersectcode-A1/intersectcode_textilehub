@@ -60,8 +60,8 @@ class ManualInvoiceController extends Controller
 
     public function show($id)
     {
-        // Dummy detail
-        return 'Detail invoice manual ID: ' . $id;
+        $invoice = \App\Models\ManualInvoice::with('items')->findOrFail($id);
+        return view('admin.manual_invoice.show', compact('invoice'));
     }
 
     public function download($id)

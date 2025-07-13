@@ -14,7 +14,7 @@
                         <svg class="w-7 h-7 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v4a1 1 0 001 1h3m10-5h2a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h2"/></svg>
                         Order #{{ $order->order_number }}
                     </h2>
-                    <p class="text-sm text-blue-700 mt-1">{{ $order->created_at->format('d M Y H:i') }}</p>
+                    <p class="text-sm text-blue-700 mt-1">{{ $order->created_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}</p>
                 </div>
                 <span class="px-4 py-2 rounded-full text-sm font-bold shadow flex items-center gap-2 animate-fade-in
                     @if($order->status === 'completed') bg-green-100 text-green-700 border border-green-200

@@ -29,9 +29,19 @@
         </p>
 
         <div class="mb-6">
-            <span class="text-2xl font-bold text-primary-600">
-                Rp {{ number_format($product->harga, 0, ',', '.') }}
-            </span>
+            @if($product->discount && $product->discount > 0)
+                <span class="text-lg font-semibold text-gray-400 line-through mr-2">
+                    Rp {{ number_format($product->harga, 0, ',', '.') }}
+                </span>
+                <span class="text-2xl font-bold text-primary-600">
+                    Rp {{ number_format($product->harga_setelah_diskon, 0, ',', '.') }}
+                </span>
+                <span class="ml-2 inline-block px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">-{{ number_format($product->discount, 1) }}%</span>
+            @else
+                <span class="text-2xl font-bold text-primary-600">
+                    Rp {{ number_format($product->harga, 0, ',', '.') }}
+                </span>
+            @endif
             <span class="text-sm text-gray-500">/{{ $product->satuan }}</span>
         </div>
 

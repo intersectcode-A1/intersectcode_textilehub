@@ -43,7 +43,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm text-gray-600 dark:text-gray-400">Tanggal</p>
-                        <p class="font-semibold text-gray-900 dark:text-white">{{ $log->created_at->format('d/m/Y H:i') }}</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ $log->created_at->timezone('Asia/Jakarta')->format('d/m/Y H:i') }}</p>
                     </div>
                 </div>
             </div>
@@ -140,12 +140,12 @@
                             
                             <div>
                                 <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Waktu Dibuat</label>
-                                <p class="text-gray-900 dark:text-white">{{ $log->created_at->format('d/m/Y H:i:s') }}</p>
+                                <p class="text-gray-900 dark:text-white">{{ $log->created_at->timezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</p>
                             </div>
                             
                             <div>
                                 <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Terakhir Diupdate</label>
-                                <p class="text-gray-900 dark:text-white">{{ $log->updated_at->format('d/m/Y H:i:s') }}</p>
+                                <p class="text-gray-900 dark:text-white">{{ $log->updated_at->timezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</p>
                             </div>
                         </div>
                     </div>

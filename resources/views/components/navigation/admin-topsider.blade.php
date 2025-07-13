@@ -50,7 +50,7 @@
                                     Pesanan #{{ $notification->data['order_number'] ?? $notification->data['order_id'] }} senilai Rp {{ number_format($notification->data['total'], 0, ',', '.') }} telah dibuat.
                                 </p>
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                                    {{ $notification->created_at->diffForHumans() }}
+                                    {{ $notification->created_at->timezone('Asia/Jakarta')->diffForHumans() }}
                                 </p>
                             </a>
                         @endforeach

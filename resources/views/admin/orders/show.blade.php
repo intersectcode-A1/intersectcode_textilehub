@@ -56,7 +56,7 @@
                         <p><span class="font-medium">Email:</span> {{ $order->email ?? '-' }}</p>
                         <p><span class="font-medium">Telepon:</span> {{ $order->telepon ?? '-' }}</p>
                         <p><span class="font-medium">Alamat:</span> {{ $order->alamat ?? '-' }}</p>
-                        <p class="sm:col-span-2"><span class="font-medium">Tanggal Pesan:</span> {{ $order->created_at->format('d M Y, H:i') }}</p>
+                        <p class="sm:col-span-2"><span class="font-medium">Tanggal Pesan:</span> {{ $order->created_at->timezone('Asia/Jakarta')->format('d M Y, H:i') }}</p>
                     </div>
                 </div>
 

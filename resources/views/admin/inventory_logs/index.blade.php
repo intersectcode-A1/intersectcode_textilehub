@@ -277,7 +277,7 @@
                     @forelse($logs as $log)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                            {{ $log->created_at->format('d/m/Y H:i') }}
+                            {{ $log->created_at->timezone('Asia/Jakarta')->format('d/m/Y H:i') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                             {{ $log->product->nama ?? 'Produk tidak ditemukan' }}

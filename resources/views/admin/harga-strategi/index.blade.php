@@ -79,8 +79,8 @@
                 <tr>
                     <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Produk</th>
                     <th class="px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Harga</th>
-                    <th class="hidden sm:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Margin</th>
-                    <th class="hidden md:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Rekomendasi Harga</th>
+                    <th class="hidden sm:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Diskon</th>
+                    <th class="hidden md:table-cell px-6 py-4 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Harga Setelah Diskon</th>
                     <th class="px-6 py-4 text-right text-xs font-bold text-blue-700 uppercase tracking-wider w-32">Aksi</th>
                 </tr>
             </thead>
@@ -92,15 +92,12 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap font-semibold text-blue-600">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
                     <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
-                        <span class="font-semibold {{ $product->margin >= 30 ? 'text-green-600' : 'text-red-600' }}">
-                            {{ number_format($product->margin, 1) }}%
+                        <span class="font-semibold {{ $product->discount > 0 ? 'text-green-600' : 'text-gray-600' }}">
+                            {{ $product->discount ? number_format($product->discount, 1) : '0' }}%
                         </span>
-                        @if($product->margin < 30)
-                        <span class="ml-2 px-2 py-1 bg-gradient-to-r from-red-100 to-pink-100 text-red-600 rounded-full text-xs font-bold shadow">Perlu Optimasi</span>
-                        @endif
                     </td>
                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap font-semibold text-blue-600">
-                        Rp {{ number_format($product->recommended_price, 0, ',', '.') }}
+                        Rp {{ number_format($product->harga_setelah_diskon, 0, ',', '.') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right w-32">
                         <div class="flex flex-row items-center justify-end space-x-2">
@@ -122,6 +119,11 @@
         </table>
     </div>
 </div>
+@if ($products->hasPages())
+    <div class="p-3 sm:p-6 bg-white dark:bg-gray-800 border-t border-blue-200 dark:border-blue-700">
+        {{ $products->links('vendor.pagination.modern') }}
+    </div>
+@endif
 
 <!-- Modal Riwayat Harga -->
 <div id="historyModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
@@ -167,22 +169,6 @@
     <div id="jsToastError" data-message="{{ session('error') }}"></div>
 @endif
 
-{{-- Grafik Tren Harga --}}
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md mt-6 sm:mt-8 p-4 sm:p-6">
-    <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4">
-        <label for="selectChartProduct" class="text-gray-700 dark:text-gray-300 font-semibold text-sm sm:text-base">Pilih Produk untuk Grafik Tren Harga:</label>
-        <select id="selectChartProduct" class="px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 text-sm">
-            @foreach($products as $product)
-                <option value="{{ $product->id }}">{{ $product->nama }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="chart-container h-60 sm:h-80">
-        <canvas id="priceChart"></canvas>
-    </div>
-    <div id="chartLoading" class="text-center text-gray-500 dark:text-gray-400 mt-4 text-sm">Memuat grafik...</div>
-    <div id="chartEmpty" class="text-center text-gray-500 dark:text-gray-400 mt-4 text-sm hidden">Belum ada data riwayat harga.</div>
-</div>
 @endsection
 
 @push('styles')
@@ -289,82 +275,6 @@ document.addEventListener('DOMContentLoaded', function() {
         errorToastMsg.textContent = jsToastError.dataset.message;
         errorToast.classList.remove('hidden');
         setTimeout(() => { errorToast.classList.add('hidden'); }, 2000);
-    }
-
-    // Grafik tren harga statis di halaman
-    const selectChartProduct = document.getElementById('selectChartProduct');
-    const chartLoading = document.getElementById('chartLoading');
-    const chartEmpty = document.getElementById('chartEmpty');
-    let priceChartInstance = null;
-    function loadChart(productId) {
-        chartLoading.classList.remove('hidden');
-        chartEmpty.classList.add('hidden');
-        if (priceChartInstance) priceChartInstance.destroy();
-        fetch(`/admin/harga-strategi/${productId}/history`)
-            .then(res => res.json())
-            .then(data => {
-                chartLoading.classList.add('hidden');
-                if (!data.history || data.history.length === 0) {
-                    chartEmpty.classList.remove('hidden');
-                    return;
-                }
-                const ctx = document.getElementById('priceChart').getContext('2d');
-                const labels = data.history.map(h => h.created_at);
-                const prices = data.history.map(h => h.new_price);
-                priceChartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Harga',
-                            data: prices,
-                            borderColor: '#2563eb',
-                            backgroundColor: 'rgba(37,99,235,0.1)',
-                            fill: true,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            pointBackgroundColor: '#2563eb',
-                            pointBorderColor: '#fff',
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return 'Rp ' + parseInt(context.parsed.y).toLocaleString('id-ID');
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function(value) {
-                                        return 'Rp ' + value.toLocaleString('id-ID');
-                                    },
-                                    color: '#6b7280',
-                                },
-                                grid: { color: '#e5e7eb' }
-                            },
-                            x: {
-                                ticks: { color: '#6b7280' },
-                                grid: { color: '#e5e7eb' }
-                            }
-                        }
-                    }
-                });
-            });
-    }
-    // Load chart for first product on page load
-    if (selectChartProduct) {
-        loadChart(selectChartProduct.value);
-        selectChartProduct.addEventListener('change', function() {
-            loadChart(this.value);
-        });
     }
 });
 </script>

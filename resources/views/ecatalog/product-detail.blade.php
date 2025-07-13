@@ -59,12 +59,17 @@
                     <h1 class="text-3xl font-bold text-blue-900">{{ $product->nama }}</h1>
                     
                     <div class="flex items-baseline">
-                        <p class="text-3xl font-bold text-blue-600">
-                            Rp {{ number_format($product->harga, 0, ',', '.') }}
-                        </p>
-                        @if($product->old_price)
+                        @if($product->discount && $product->discount > 0)
+                            <p class="text-3xl font-bold text-blue-600">
+                                Rp {{ number_format($product->harga_setelah_diskon, 0, ',', '.') }}
+                            </p>
                             <p class="ml-4 text-lg text-blue-300 line-through">
-                                Rp {{ number_format($product->old_price, 0, ',', '.') }}
+                                Rp {{ number_format($product->harga, 0, ',', '.') }}
+                            </p>
+                            <span class="ml-2 inline-block px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">-{{ number_format($product->discount, 1) }}%</span>
+                        @else
+                            <p class="text-3xl font-bold text-blue-600">
+                                Rp {{ number_format($product->harga, 0, ',', '.') }}
                             </p>
                         @endif
                     </div>
