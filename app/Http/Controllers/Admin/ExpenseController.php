@@ -61,7 +61,7 @@ class ExpenseController extends Controller
             'deskripsi' => 'nullable|string',
         ]);
 
-        $request->merge(['user_id' => auth()->id()]);
+
 
         Expense::create($request->all());
 
