@@ -24,10 +24,12 @@ class Login extends Component
 
             $user = Auth::user();
 
-            if ($user->role === 'admin') {
+            // Redirect all admin roles to admin dashboard
+            if (in_array($user->role, ['admin', 'kasir', 'gudang', 'owner', 'karyawan'])) {
                 return redirect()->route('admin.dashboard');
             }
 
+            // Default: pembeli ke ecatalog
             return redirect()->route('ecatalog.index');
         }
 

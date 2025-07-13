@@ -25,74 +25,197 @@
             </a>
         </div>
 
-        <!-- Master Data -->
-        <div>
-            <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Master Data</h3>
-            <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="package" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Produk</span>
-            </a>
-            <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="layers" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Kategori</span>
-            </a>
-            <a href="{{ route('supplier.index') }}" class="{{ request()->routeIs('supplier.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="truck" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Supplier</span>
-            </a>
-        </div>
+        @php $user = Auth::user(); @endphp
 
-        <!-- Sales & Orders -->
-        <div>
-            <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Penjualan & Pesanan</h3>
-            <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="shopping-cart" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Pesanan</span>
-            </a>
-            <a href="{{ route('admin.harga-strategi.index') }}" class="{{ request()->routeIs('admin.harga-strategi.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="trending-up" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Strategi Harga</span>
-            </a>
-            <a href="{{ route('admin.manual-invoice.index') }}" class="{{ request()->routeIs('admin.manual-invoice.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="file-text" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Invoice Manual</span>
-            </a>
-        </div>
+        {{-- KASIR: pesanan, invoice manual, data pengeluaran, data pemasukan --}}
+        @if($user->isKasir())
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Penjualan & Pesanan</h3>
+                <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Pesanan</span>
+                </a>
+                <a href="{{ route('admin.manual-invoice.index') }}" class="{{ request()->routeIs('admin.manual-invoice.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="file-text" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Invoice Manual</span>
+                </a>
+            </div>
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Manajemen Keuangan</h3>
+                <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="dollar-sign" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Data Pengeluaran</span>
+                </a>
+                <a href="{{ route('admin.laporan.index') }}" class="{{ request()->routeIs('admin.laporan.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Data Pemasukan</span>
+                </a>
+            </div>
+        @endif
 
-        <!-- Inventory Management -->
-        <div>
-            <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Manajemen Inventory</h3>
-            <a href="{{ route('inventory-logs.index') }}" class="{{ request()->routeIs('inventory-logs.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="clipboard-list" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Log Inventory</span>
-            </a>
-        </div>
+        {{-- GUDANG: produk, kategori, supplier, log inventory --}}
+        @if($user->isGudang())
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Master Data</h3>
+                <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="package" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Produk</span>
+                </a>
+                <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="layers" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Kategori Barang</span>
+                </a>
+                <a href="{{ route('supplier.index') }}" class="{{ request()->routeIs('supplier.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="truck" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Supplier</span>
+                </a>
+            </div>
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Manajemen Inventory</h3>
+                <a href="{{ route('inventory-logs.index') }}" class="{{ request()->routeIs('inventory-logs.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Log Inventory</span>
+                </a>
+            </div>
+        @endif
 
-        <!-- Financial Management -->
-        <div>
-            <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Manajemen Keuangan</h3>
-            <a href="{{ route('expense-categories.index') }}" class="{{ request()->routeIs('expense-categories.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="folder-open" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Kategori Pengeluaran</span>
-            </a>
-            <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="dollar-sign" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Data Pengeluaran</span>
-            </a>
-        </div>
+        {{-- OWNER: strategi harga, invoice manual, log inventory, kategori pengeluaran, data pengeluaran, analisis penjualan, laporan keuangan --}}
+        @if($user->isOwner())
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Penjualan & Strategi</h3>
+                <a href="{{ route('admin.harga-strategi.index') }}" class="{{ request()->routeIs('admin.harga-strategi.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="trending-up" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Strategi Harga</span>
+                </a>
+                <a href="{{ route('admin.manual-invoice.index') }}" class="{{ request()->routeIs('admin.manual-invoice.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="file-text" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Invoice Manual</span>
+                </a>
+            </div>
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Inventory & Keuangan</h3>
+                <a href="{{ route('inventory-logs.index') }}" class="{{ request()->routeIs('inventory-logs.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Log Inventory</span>
+                </a>
+                <a href="{{ route('expense-categories.index') }}" class="{{ request()->routeIs('expense-categories.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="folder-open" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Kategori Pengeluaran</span>
+                </a>
+                <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="dollar-sign" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Data Pengeluaran</span>
+                </a>
+            </div>
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Analisis & Laporan</h3>
+                <a href="{{ route('admin.sales.analysis') }}" class="{{ request()->routeIs('admin.sales.analysis') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Analisis Penjualan</span>
+                </a>
+                <a href="{{ route('admin.laporan.index') }}" class="{{ request()->routeIs('admin.laporan.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Laporan Keuangan</span>
+                </a>
+            </div>
+        @endif
 
-        <!-- Reports & Analytics -->
-        <div>
-            <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Laporan & Analisis</h3>
-            <a href="{{ route('admin.sales.analysis') }}" class="{{ request()->routeIs('admin.sales.analysis') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="bar-chart-3" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Analisis Penjualan</span>
-            </a>
-            <a href="{{ route('admin.laporan.index') }}" class="{{ request()->routeIs('admin.laporan.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
-                <i data-lucide="bar-chart-2" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="sidebar-label">Laporan Keuangan</span>
-            </a>
-        </div>
+        {{-- KARYAWAN: produk, pesanan, invoice manual, log inventory --}}
+        @if($user->isKaryawan())
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Master Data</h3>
+                <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="package" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Produk</span>
+                </a>
+            </div>
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Penjualan & Pesanan</h3>
+                <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Pesanan</span>
+                </a>
+                <a href="{{ route('admin.manual-invoice.index') }}" class="{{ request()->routeIs('admin.manual-invoice.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="file-text" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Invoice Manual</span>
+                </a>
+            </div>
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Manajemen Inventory</h3>
+                <a href="{{ route('inventory-logs.index') }}" class="{{ request()->routeIs('inventory-logs.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Log Inventory</span>
+                </a>
+            </div>
+        @endif
+
+        {{-- ADMIN: tampilkan semua menu (default lama) --}}
+        @if($user->isAdmin())
+            <!-- Master Data -->
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Master Data</h3>
+                <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="package" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Produk</span>
+                </a>
+                <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="layers" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Kategori</span>
+                </a>
+                <a href="{{ route('supplier.index') }}" class="{{ request()->routeIs('supplier.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="truck" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Supplier</span>
+                </a>
+            </div>
+            <!-- Sales & Orders -->
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Penjualan & Pesanan</h3>
+                <a href="{{ route('orders.index') }}" class="{{ request()->routeIs('orders.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Pesanan</span>
+                </a>
+                <a href="{{ route('admin.harga-strategi.index') }}" class="{{ request()->routeIs('admin.harga-strategi.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="trending-up" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Strategi Harga</span>
+                </a>
+                <a href="{{ route('admin.manual-invoice.index') }}" class="{{ request()->routeIs('admin.manual-invoice.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="file-text" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Invoice Manual</span>
+                </a>
+            </div>
+            <!-- Inventory Management -->
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Manajemen Inventory</h3>
+                <a href="{{ route('inventory-logs.index') }}" class="{{ request()->routeIs('inventory-logs.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Log Inventory</span>
+                </a>
+            </div>
+            <!-- Financial Management -->
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Manajemen Keuangan</h3>
+                <a href="{{ route('expense-categories.index') }}" class="{{ request()->routeIs('expense-categories.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="folder-open" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Kategori Pengeluaran</span>
+                </a>
+                <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="dollar-sign" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Data Pengeluaran</span>
+                </a>
+            </div>
+            <!-- Reports & Analytics -->
+            <div>
+                <h3 class="text-xs text-gray-400 font-semibold mb-2 pl-2 uppercase tracking-wider sidebar-label">Laporan & Analisis</h3>
+                <a href="{{ route('admin.sales.analysis') }}" class="{{ request()->routeIs('admin.sales.analysis') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Analisis Penjualan</span>
+                </a>
+                <a href="{{ route('admin.laporan.index') }}" class="{{ request()->routeIs('admin.laporan.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label">Laporan Keuangan</span>
+                </a>
+            </div>
+        @endif
     </nav>
     <div class="p-4 border-t border-gray-700">
         <form method="POST" action="{{ route('logout') }}">

@@ -15,7 +15,8 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
+        $adminRoles = ['admin', 'kasir', 'gudang', 'owner', 'karyawan'];
+        if (in_array($user->role, $adminRoles)) {
             // Data untuk cards
             $totalUsers = User::count();
             $totalOrders = Order::count();
@@ -93,7 +94,7 @@ class DashboardController extends Controller
             ));
         }
 
-        // Jika bukan admin, arahkan ke halaman katalog
+        // Jika bukan admin panel role, arahkan ke halaman katalog
         return redirect()->route('ecatalog.index');
     }
 }

@@ -102,12 +102,12 @@
                 @endforelse
             </tbody>
         </table>
+        @if ($categories->hasPages())
+            <div class="py-4 bg-white dark:bg-gray-800 border-t border-blue-200 dark:border-blue-700 flex flex-col items-center justify-center">
+                {{-- Modern Pagination --}}
+                {{ $categories->links('vendor.pagination.modern') }}
+            </div>
+        @endif
     </div>
-
-    @if ($categories->hasPages())
-        <div class="p-3 sm:p-6 bg-white dark:bg-gray-800 border-t border-blue-200 dark:border-blue-700">
-            {{ $categories->links('vendor.pagination.modern') }}
-        </div>
-    @endif
 </div>
 @endsection
