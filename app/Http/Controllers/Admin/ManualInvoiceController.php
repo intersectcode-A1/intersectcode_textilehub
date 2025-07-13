@@ -9,7 +9,7 @@ class ManualInvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = \App\Models\ManualInvoice::with('items')->orderByDesc('created_at')->get();
+        $invoices = \App\Models\ManualInvoice::with('items')->orderByDesc('created_at')->paginate(10);
         return view('admin.manual_invoice.index', compact('invoices'));
     }
 

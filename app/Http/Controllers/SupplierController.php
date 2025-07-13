@@ -18,7 +18,7 @@ class SupplierController extends Controller
                   ->orWhere('produk', 'like', "%$search%");
             });
         }
-        $suppliers = $query->get();
+        $suppliers = $query->paginate(10)->withQueryString();
         return view('admin.supplier.index', compact('suppliers'));
     }
 

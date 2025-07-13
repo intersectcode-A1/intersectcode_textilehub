@@ -5,35 +5,35 @@
             Kembali ke E-Catalog
         </a>
 
-        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-800 animate-fade-in">
+        <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 animate-fade-in">
             <div class="flex flex-col sm:flex-row justify-between items-start mb-8 gap-4">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-blue-900 dark:text-white mb-2">Detail Pesanan #{{ $order->id }}</h1>
-                    <p class="text-blue-700 dark:text-blue-200">{{ $order->created_at->format('d M Y, H:i') }}</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-blue-900 mb-2">Detail Pesanan #{{ $order->id }}</h1>
+                    <p class="text-blue-700">{{ $order->created_at->format('d M Y, H:i') }}</p>
                 </div>
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold shadow animate-fade-in
-                    @if($order->status === 'completed') bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700
-                    @elseif($order->status === 'processing' || $order->status === 'pending') bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700
-                    @elseif($order->status === 'cancelled') bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700
-                    @else bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 @endif">
+                    @if($order->status === 'completed') bg-green-100 text-green-700 border border-green-200
+                    @elseif($order->status === 'processing' || $order->status === 'pending') bg-blue-100 text-blue-700 border border-blue-200
+                    @elseif($order->status === 'cancelled') bg-red-100 text-red-700 border border-red-200
+                    @else bg-gray-100 text-gray-700 border border-gray-200 @endif">
                     {{ $order->status_label }}
                 </span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div>
-                    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">Informasi Pemesan</h2>
+                    <h2 class="text-lg font-semibold text-blue-900 mb-4">Informasi Pemesan</h2>
                     <div class="space-y-3">
-                        <p class="text-blue-700 dark:text-blue-200">
+                        <p class="text-blue-700">
                             <span class="font-medium">Nama:</span> {{ $order->user_name }}
                         </p>
-                        <p class="text-blue-700 dark:text-blue-200">
+                        <p class="text-blue-700">
                             <span class="font-medium">Email:</span> {{ $order->email }}
                         </p>
-                        <p class="text-blue-700 dark:text-blue-200">
+                        <p class="text-blue-700">
                             <span class="font-medium">Telepon:</span> {{ $order->telepon }}
                         </p>
-                        <p class="text-blue-700 dark:text-blue-200">
+                        <p class="text-blue-700">
                             <span class="font-medium">Alamat:</span><br>
                             {{ $order->alamat }}
                         </p>
@@ -41,15 +41,15 @@
                 </div>
 
                 <div>
-                    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">Rincian Pesanan</h2>
+                    <h2 class="text-lg font-semibold text-blue-900 mb-4">Rincian Pesanan</h2>
                     <div class="space-y-4">
                         @foreach($order->items as $item)
-                            <div class="flex justify-between items-start border-b border-blue-100 dark:border-blue-700 pb-4 last:border-0">
+                            <div class="flex justify-between items-start border-b border-blue-100 pb-4 last:border-0">
                                 <div>
-                                    <h3 class="font-medium text-blue-900 dark:text-white">{{ $item->product_name }}</h3>
-                                    <p class="text-sm text-blue-700 dark:text-blue-200">{{ $item->quantity }} x Rp{{ number_format($item->price, 0, ',', '.') }}</p>
+                                    <h3 class="font-medium text-blue-900">{{ $item->product_name }}</h3>
+                                    <p class="text-sm text-blue-700">{{ $item->quantity }} x Rp{{ number_format($item->price, 0, ',', '.') }}</p>
                                 </div>
-                                <p class="font-semibold text-blue-900 dark:text-white">
+                                <p class="font-semibold text-blue-900">
                                     Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}
                                 </p>
                             </div>
@@ -58,17 +58,17 @@
                 </div>
             </div>
 
-            <div class="border-t border-blue-100 dark:border-blue-700 pt-6">
+            <div class="border-t border-blue-100 pt-6">
                 <div class="flex justify-between items-center">
-                    <span class="text-lg font-semibold text-blue-900 dark:text-white">Total Pesanan</span>
-                    <span class="text-2xl font-bold text-green-600 dark:text-green-300">
+                    <span class="text-lg font-semibold text-blue-900">Total Pesanan</span>
+                    <span class="text-2xl font-bold text-green-600">
                         Rp{{ number_format($order->total, 0, ',', '.') }}
                     </span>
                 </div>
             </div>
 
             @if($order->status === 'pending')
-                <div class="mt-8 border-t border-blue-100 dark:border-blue-700 pt-6">
+                <div class="mt-8 border-t border-blue-100 pt-6">
                     <form action="{{ route('order.cancel', $order->id) }}" method="POST" class="text-right">
                         @csrf
                         @method('PATCH')

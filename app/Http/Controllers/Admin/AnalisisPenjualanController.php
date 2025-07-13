@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\InventoryLog;
+use App\Exports\SalesAnalysisExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AnalisisPenjualanController extends Controller
 {
@@ -47,7 +51,7 @@ class AnalisisPenjualanController extends Controller
             $produkTerlarisList = $this->getTopSellingProducts($startDate, $endDate, 10);
         } catch (\Exception $e) {
             // Jika ada error, gunakan data kosong
-            \Log::error('Error in sales analysis: ' . $e->getMessage());
+            Log::error('Error in sales analysis: ' . $e->getMessage());
         }
         
         $labelsKategori = $kategoriProduk->pluck('kategori');
@@ -55,6 +59,11 @@ class AnalisisPenjualanController extends Controller
         
         // 6. Data Produk Terlaris
         $produkTerlarisTop = $produkTerlarisList->first();
+
+        // 7. Data Inventory Logs
+        $inventorySummary = InventoryLog::getSummary($startDate, $endDate);
+        $recentInventoryLogs = $this->getRecentInventoryLogs($startDate, $endDate);
+        $inventoryChartData = $this->getInventoryChartData($startDate, $endDate);
 
         return view('admin.analisis_penjualan.index', [
             'totalPenjualan' => $currentData['totalPenjualan'],
@@ -70,6 +79,9 @@ class AnalisisPenjualanController extends Controller
             'produkTerlarisList' => $produkTerlarisList,
             'produkTerlaris' => $produkTerlarisTop->nama ?? '-',
             'jumlahTerjual' => $produkTerlarisTop->jumlah_terjual ?? 0,
+            'inventorySummary' => $inventorySummary,
+            'recentInventoryLogs' => $recentInventoryLogs,
+            'inventoryChartData' => $inventoryChartData,
         ]);
     }
 
@@ -144,7 +156,7 @@ class AnalisisPenjualanController extends Controller
                 ->orderBy('total_penjualan', 'desc')
                 ->limit(5)->get();
         } catch (\Exception $e) {
-            \Log::error('Error in getCategorySales: ' . $e->getMessage());
+            Log::error('Error in getCategorySales: ' . $e->getMessage());
             return collect();
         }
     }
@@ -192,8 +204,98 @@ class AnalisisPenjualanController extends Controller
                 ->orderBy('jumlah_terjual', 'desc')
                 ->limit($limit)->get();
         } catch (\Exception $e) {
-            \Log::error('Error in getTopSellingProducts: ' . $e->getMessage());
+            Log::error('Error in getTopSellingProducts: ' . $e->getMessage());
             return collect();
+        }
+    }
+
+    private function getRecentInventoryLogs($startDate, $endDate)
+    {
+        try {
+            return InventoryLog::with(['product', 'user'])
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get();
+        } catch (\Exception $e) {
+            Log::error('Error in getRecentInventoryLogs: ' . $e->getMessage());
+            return collect();
+        }
+    }
+
+    private function getInventoryChartData($startDate, $endDate)
+    {
+        try {
+            $dailyData = InventoryLog::whereBetween('created_at', [$startDate, $endDate])
+                ->select(
+                    DB::raw('DATE(created_at) as tanggal'),
+                    DB::raw('SUM(CASE WHEN type = "in" THEN quantity ELSE 0 END) as barang_masuk'),
+                    DB::raw('SUM(CASE WHEN type = "out" THEN quantity ELSE 0 END) as barang_keluar')
+                )
+                ->groupBy('tanggal')
+                ->orderBy('tanggal')
+                ->get();
+
+            return [
+                'labels' => $dailyData->map(fn($item) => Carbon::parse($item->tanggal)->format('d M')),
+                'barang_masuk' => $dailyData->pluck('barang_masuk'),
+                'barang_keluar' => $dailyData->pluck('barang_keluar')
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error in getInventoryChartData: ' . $e->getMessage());
+            return [
+                'labels' => collect(),
+                'barang_masuk' => collect(),
+                'barang_keluar' => collect()
+            ];
+        }
+    }
+
+    public function export(Request $request)
+    {
+        $period = $request->input('period', 7);
+        $endDate = Carbon::now();
+        $startDate = Carbon::now()->subDays($period);
+        
+        $prevEndDate = $startDate->copy()->subDay();
+        $prevStartDate = $prevEndDate->copy()->subDays($period);
+
+        // Get current period data
+        $currentData = $this->getSalesData($startDate, $endDate);
+        
+        // Get previous period data
+        $previousData = $this->getSalesData($prevStartDate, $prevEndDate);
+
+        // Calculate growth percentages
+        $persentasePertumbuhan = $this->calculateGrowth($currentData['totalPenjualan'], $previousData['totalPenjualan']);
+        $persentaseTransaksi = $this->calculateGrowth($currentData['jumlahTransaksi'], $previousData['jumlahTransaksi']);
+        $persentaseRataRata = $this->calculateGrowth($currentData['rataRataTransaksi'], $previousData['rataRataTransaksi']);
+
+        // Prepare data for export
+        $exportData = [
+            'totalPenjualan' => $currentData['totalPenjualan'],
+            'jumlahTransaksi' => $currentData['jumlahTransaksi'],
+            'rataRataTransaksi' => $currentData['rataRataTransaksi'],
+            'persentasePertumbuhan' => $persentasePertumbuhan,
+            'persentaseTransaksi' => $persentaseTransaksi,
+            'persentaseRataRata' => $persentaseRataRata,
+        ];
+
+        $periodText = match($period) {
+            7 => '7_hari',
+            30 => '30_hari',
+            90 => '3_bulan',
+            365 => '1_tahun',
+            default => $period . '_hari'
+        };
+
+        $filename = 'analisis_penjualan_' . $periodText . '_' . Carbon::now()->format('Y-m-d_H-i-s') . '.xlsx';
+
+        try {
+            return Excel::download(new SalesAnalysisExport($period, $exportData), $filename);
+        } catch (\Exception $e) {
+            Log::error('Error exporting sales analysis: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengexport data. Silakan coba lagi.');
         }
     }
 } 

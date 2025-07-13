@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\InventoryLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Exports\StockReportExport;
@@ -111,6 +112,8 @@ class ProductController extends Controller
             'foto' => $path,
         ]);
 
+
+
         // Simpan varian jika ada
         if ($request->has('variants')) {
             foreach ($request->variants as $variantData) {
@@ -155,6 +158,35 @@ class ProductController extends Controller
         if ($request->hasFile('foto')) {
             if ($product->foto) Storage::disk('public')->delete($product->foto);
             $data['foto'] = $request->file('foto')->store('produk', 'public');
+        }
+
+        // Log perubahan stok jika ada
+        $oldStock = $product->stok;
+        $newStock = $request->stok;
+        
+        if ($oldStock != $newStock) {
+            $difference = $newStock - $oldStock;
+            if ($difference > 0) {
+                // Stok bertambah
+                InventoryLog::logIncoming(
+                    $product->id,
+                    $difference,
+                    'Penyesuaian stok - penambahan',
+                    'adjustment',
+                    null,
+                    null
+                );
+            } else {
+                // Stok berkurang
+                InventoryLog::logOutgoing(
+                    $product->id,
+                    abs($difference),
+                    'Penyesuaian stok - pengurangan',
+                    'adjustment',
+                    null,
+                    null
+                );
+            }
         }
 
         $product->update($data);
