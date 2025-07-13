@@ -30,14 +30,18 @@
         <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" onclick="closeMobileSidebar()"></div>
         
         <!-- Sidebar -->
-        <aside id="sidebar" class="fixed lg:relative lg:flex lg:flex-shrink-0 bg-gray-800 shadow-lg h-screen lg:sticky lg:top-0 transition-all duration-300 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 lg:w-64">
+        <aside id="sidebar" class="fixed lg:relative lg:flex lg:flex-shrink-0 bg-gray-800 shadow-lg h-screen lg:sticky lg:top-0 transition-all duration-300 flex flex-col z-50 transform -translate-x-full lg:translate-x-0">
             @include('components.navigation.admin-sidebar')
         </aside>
         
         <!-- Main Content -->
-        <div id="main-content" class="flex-1 flex flex-col transition-all duration-300 w-full">
-            @include('components.navigation.admin-topsider')
-            <main class="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">
+        <div id="main-content" class="flex-1 flex flex-col transition-all duration-300 w-full h-screen overflow-hidden">
+            <!-- Fixed Top Navbar -->
+            <div class="sticky top-0 z-40 bg-white dark:bg-gray-800">
+                @include('components.navigation.admin-topsider')
+            </div>
+            <!-- Scrollable Main Content -->
+            <main id="main-content-inner" class="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto bg-gray-100 dark:bg-gray-900 transition-all duration-300">
                 @yield('content')
             </main>
         </div>
@@ -77,6 +81,7 @@
             const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
             const sidebar = document.getElementById('sidebar');
             const mobileOverlay = document.getElementById('mobile-overlay');
+            const mainContentInner = document.getElementById('main-content-inner');
 
             const applySidebarState = (state) => {
                 const isCollapsed = state === 'collapsed';
@@ -112,6 +117,8 @@
                 if (!isMobile) {
                     localStorage.setItem('sidebar-state', state);
                 }
+
+                // HAPUS: Tidak perlu margin kiri pada main content
             };
 
             // Close mobile sidebar function

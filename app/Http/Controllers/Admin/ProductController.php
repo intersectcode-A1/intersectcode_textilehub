@@ -12,12 +12,67 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Muat relasi category dan unit
-        $products = Product::with(['category'])->latest()->paginate(10);
+        // Build query with search and filter
+        $query = Product::with(['category', 'variants']);
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama', 'like', '%' . $search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $search . '%')
+                  ->orWhere('satuan', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Category filter
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Sorting
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'latest':
+                    $query->latest();
+                    break;
+                case 'name_asc':
+                    $query->orderBy('nama', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('nama', 'desc');
+                    break;
+                case 'price_low':
+                    $query->orderBy('harga', 'asc');
+                    break;
+                case 'price_high':
+                    $query->orderBy('harga', 'desc');
+                    break;
+                case 'stock_low':
+                    $query->orderBy('stok', 'asc');
+                    break;
+                case 'stock_high':
+                    $query->orderBy('stok', 'desc');
+                    break;
+                default:
+                    $query->latest();
+                    break;
+            }
+        } else {
+            $query->latest();
+        }
+
+        // Paginate with query string preservation
+        $products = $query->paginate(10)->withQueryString();
+        
+        // Check if all products have empty stock
         $semuaKosong = $products->count() > 0 && $products->every(fn ($p) => $p->stok == 0);
-        $categories = Category::all(); // Tambahkan ini untuk dropdown filter
+        
+        // Get categories for filter dropdown
+        $categories = Category::all();
+
         return view('admin.products.index', compact('products', 'semuaKosong', 'categories'));
     }
 
@@ -104,20 +159,40 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        // Update varian
+        // Handle variants properly
         if ($request->has('variants')) {
-            // Hapus varian yang ada
-            $product->variants()->delete();
+            $submittedVariantIds = [];
             
-            // Tambah varian baru
             foreach ($request->variants as $variantData) {
-                $product->variants()->create([
-                    'type' => $variantData['type'],
-                    'name' => $variantData['name'],
-                    'stock' => $variantData['stock'],
-                    'additional_price' => $variantData['additional_price']
-                ]);
+                if (isset($variantData['id']) && !empty($variantData['id'])) {
+                    // Update existing variant
+                    $variant = $product->variants()->find($variantData['id']);
+                    if ($variant) {
+                        $variant->update([
+                            'type' => $variantData['type'],
+                            'name' => $variantData['name'],
+                            'stock' => $variantData['stock'],
+                            'additional_price' => $variantData['additional_price']
+                        ]);
+                        $submittedVariantIds[] = $variant->id;
+                    }
+                } else {
+                    // Create new variant
+                    $newVariant = $product->variants()->create([
+                        'type' => $variantData['type'],
+                        'name' => $variantData['name'],
+                        'stock' => $variantData['stock'],
+                        'additional_price' => $variantData['additional_price']
+                    ]);
+                    $submittedVariantIds[] = $newVariant->id;
+                }
             }
+            
+            // Delete variants that were not submitted (removed from frontend)
+            $product->variants()->whereNotIn('id', $submittedVariantIds)->delete();
+        } else {
+            // If no variants submitted, delete all existing variants
+            $product->variants()->delete();
         }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');

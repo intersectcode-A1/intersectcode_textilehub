@@ -17,11 +17,11 @@
                 <i data-lucide="file-spreadsheet" class="w-5 h-5 mr-2"></i>
                 Export Laporan Stok
             </a>
-            <a href="{{ route('products.create') }}" 
-               class="inline-flex items-center px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl shadow-lg backdrop-blur-md border border-white/30 hover:scale-105 hover:brightness-110 hover:shadow-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
-                Tambah Produk
-            </a>
+        <a href="{{ route('products.create') }}" 
+           class="inline-flex items-center px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl shadow-lg backdrop-blur-md border border-white/30 hover:scale-105 hover:brightness-110 hover:shadow-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
+            Tambah Produk
+        </a>
         </div>
     </div>
 

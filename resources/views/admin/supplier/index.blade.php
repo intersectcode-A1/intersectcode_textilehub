@@ -67,7 +67,9 @@
                         <td class="px-6 py-4 whitespace-normal break-all min-w-[200px] text-xs sm:text-sm text-gray-500">{{ $supplier->produk }}</td>
                         <td class="px-6 py-4 whitespace-normal break-all min-w-[200px] text-xs sm:text-sm text-gray-500">{{ $supplier->alamat }}</td>
                         <td class="px-6 py-4 whitespace-normal break-all min-w-[180px] text-xs sm:text-sm text-gray-500">{{ $supplier->kontak }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700 font-bold">Rp {{ number_format($supplier->harga_modal,0,',','.') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700 font-bold">
+                            Rp {{ number_format($supplier->harga_modal,0,',','.') }}@if($supplier->satuan)/{{ $supplier->satuan }}@endif
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right">
                             <div class="flex flex-row items-center justify-end space-x-2">
                                 <a href="{{ route('supplier.edit', $supplier) }}" class="p-2 bg-blue-100 hover:bg-blue-400 text-blue-600 hover:text-white rounded-full shadow transition-all duration-200">
