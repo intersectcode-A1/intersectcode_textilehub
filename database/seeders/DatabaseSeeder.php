@@ -24,6 +24,43 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 
+    // Tambahkan user kasir
+    if (!User::where('email', 'kasir@gmail.com')->exists()) {
+        User::factory()->create([
+            'name' => 'Kasir',
+            'email' => 'kasir@gmail.com',
+            'password' => Hash::make('admin'),
+            'role' => 'kasir',
+        ]);
+    }
+    // Tambahkan user gudang
+    if (!User::where('email', 'gudang@gmail.com')->exists()) {
+        User::factory()->create([
+            'name' => 'Gudang',
+            'email' => 'gudang@gmail.com',
+            'password' => Hash::make('admin'),
+            'role' => 'gudang',
+        ]);
+    }
+    // Tambahkan user owner
+    if (!User::where('email', 'owner@gmail.com')->exists()) {
+        User::factory()->create([
+            'name' => 'Owner',
+            'email' => 'owner@gmail.com',
+            'password' => Hash::make('admin'),
+            'role' => 'owner',
+        ]);
+    }
+    // Tambahkan user karyawan
+    if (!User::where('email', 'karyawan@gmail.com')->exists()) {
+        User::factory()->create([
+            'name' => 'Karyawan',
+            'email' => 'karyawan@gmail.com',
+            'password' => Hash::make('admin'),
+            'role' => 'karyawan',
+        ]);
+    }
+
     // Panggil seeder kategori dulu
     $this->call([
         CategorySeeder::class,

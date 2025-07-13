@@ -53,7 +53,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public static function validRoles()
     {
-        return ['admin', 'pembeli'];
+        // Update: add new roles
+        return ['admin', 'kasir', 'gudang', 'owner', 'karyawan', 'pembeli'];
     }
 
     /**
@@ -79,6 +80,46 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin()
     {
         return strtolower($this->attributes['role']) === 'admin';
+    }
+
+    /**
+     * Fungsi untuk mengecek apakah user adalah kasir.
+     *
+     * @return bool
+     */
+    public function isKasir()
+    {
+        return strtolower($this->attributes['role']) === 'kasir';
+    }
+
+    /**
+     * Fungsi untuk mengecek apakah user adalah gudang.
+     *
+     * @return bool
+     */
+    public function isGudang()
+    {
+        return strtolower($this->attributes['role']) === 'gudang';
+    }
+
+    /**
+     * Fungsi untuk mengecek apakah user adalah owner.
+     *
+     * @return bool
+     */
+    public function isOwner()
+    {
+        return strtolower($this->attributes['role']) === 'owner';
+    }
+
+    /**
+     * Fungsi untuk mengecek apakah user adalah karyawan.
+     *
+     * @return bool
+     */
+    public function isKaryawan()
+    {
+        return strtolower($this->attributes['role']) === 'karyawan';
     }
 
     /**
