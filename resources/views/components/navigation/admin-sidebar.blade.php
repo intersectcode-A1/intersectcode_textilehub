@@ -63,7 +63,7 @@
                 </a>
                 <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
                     <i data-lucide="layers" class="w-5 h-5 flex-shrink-0"></i>
-                    <span class="sidebar-label">Kategori</span>
+                    <span class="sidebar-label">Kategori Barang</span>
                 </a>
                 <a href="{{ route('supplier.index') }}" class="{{ request()->routeIs('supplier.*') ? 'flex items-center gap-3 py-2 px-3 rounded-lg text-white font-semibold bg-gray-700 border-l-4 border-blue-500' : 'flex items-center gap-3 py-2 px-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white' }} transition-colors duration-200">
                     <i data-lucide="truck" class="w-5 h-5 flex-shrink-0"></i>
