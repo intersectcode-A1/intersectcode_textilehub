@@ -65,7 +65,7 @@
                         @forelse($orders as $order)
                             <tr class="hover:bg-blue-50 transition-all duration-150">
                                 <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-blue-900">#{{ $order->order_number }}</td>
-                                <td class="px-6 py-3 whitespace-nowrap text-sm text-blue-700">{{ $order->created_at->format('d M Y H:i') }}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-blue-700">{{ $order->created_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}</td>
                                 <td class="px-6 py-3 whitespace-nowrap text-sm font-bold text-blue-900">Rp {{ number_format($order->total, 0, ',', '.') }}</td>
                                 <td class="px-6 py-3 whitespace-nowrap">
                                     <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full shadow animate-fade-in

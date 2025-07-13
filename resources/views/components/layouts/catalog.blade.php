@@ -112,7 +112,6 @@
                         Beranda
                     </a>
 
-                    
                     @auth
                         {{-- Cart Icon --}}
                         <div class="relative">
@@ -123,6 +122,16 @@
                         <div class="relative">
                         <x-order-status-icon />
                         </div>
+
+                        <!-- Riwayat Pembelian Icon -->
+                        <a href="{{ route('purchase.history') }}" class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
+                            <i class="fas fa-history text-xl"></i>
+                        </a>
+
+                        <!-- Bantuan Pengiriman Icon -->
+                        <a href="{{ route('bantuan.pengiriman') }}" class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 transition-all duration-200">
+                            <i class="fas fa-truck text-xl"></i>
+                        </a>
 
                         {{-- User Menu --}}
                         <div class="relative" x-data="{ open: false }" x-cloak>
@@ -262,9 +271,13 @@
                 </a>
                     <a href="{{ route('purchase.history') }}" 
                        class="flex items-center px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">
-                        <i class="fas fa-history mr-3 text-gray-400"></i>
-                    Riwayat Pembelian
-                </a>
+                        <i class="fas fa-history text-gray-400"></i>
+                    </a>
+                    <!-- Bantuan Pengiriman Icon Mobile -->
+                    <a href="{{ route('bantuan.pengiriman') }}" 
+                       class="flex items-center px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 transition-all duration-200">
+                        <i class="fas fa-truck text-green-400"></i>
+                    </a>
                     
                     <div class="border-t border-gray-200 mt-4 pt-4">
                 <form method="POST" action="{{ route('logout') }}">

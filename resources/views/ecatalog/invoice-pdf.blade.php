@@ -34,7 +34,7 @@
         <tr>
             <td class="no-border" style="width: 60%;">
                 <b>No. Pesanan:</b> {{ $order->order_number }}<br>
-                <b>Tanggal:</b> {{ $order->created_at->format('d M Y') }}<br>
+                <b>Tanggal:</b> {{ $order->created_at->timezone('Asia/Jakarta')->format('d M Y') }}<br>
                 <b>Status:</b> 
                 @if($order->payment_status === 'paid' || $order->status === 'completed')
                     <span style="color: green; font-weight: bold;">LUNAS</span>

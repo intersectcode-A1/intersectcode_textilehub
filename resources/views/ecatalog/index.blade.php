@@ -106,7 +106,7 @@
             {{-- Action Buttons --}}
             <div class="flex flex-wrap justify-center gap-6 mb-12">
             <a href="{{ route('cart.index') }}"
-                class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg text-white font-semibold text-base transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2">
+                class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white hover:from-yellow-500 hover:to-yellow-600 rounded-2xl shadow-lg font-semibold text-base transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-yellow-200 focus:ring-offset-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
@@ -120,11 +120,16 @@
                 <span>Status Pemesanan</span>
             </a>
             <a href="{{ route('purchase.history') }}"
-                class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 rounded-2xl shadow-lg font-semibold text-base transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:ring-offset-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl shadow-lg font-semibold text-base transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-offset-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                 </svg>
                 <span>Riwayat Pembelian</span>
+            </a>
+            <a href="{{ route('bantuan.pengiriman') }}"
+                class="group inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg hover:from-green-600 hover:to-emerald-600 rounded-2xl font-semibold text-base transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-green-200 focus:ring-offset-2">
+                <i class="fas fa-truck h-5 w-5 group-hover:scale-110 transition-transform text-white"></i>
+                <span>Bantuan Pengiriman</span>
             </a>
         </div>
             <div class="flex flex-col lg:flex-row gap-8">
