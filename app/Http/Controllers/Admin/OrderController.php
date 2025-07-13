@@ -5,15 +5,32 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\InventoryLog;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with(['user', 'items.product'])->latest()->paginate(10);
+        $query = Order::with(['user', 'items.product']);
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $orders = $query->latest()->paginate(10)->withQueryString();
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -34,12 +51,26 @@ class OrderController extends Controller
         $oldStatus = $order->status;
         $order->status = $request->status;
 
-        // Jika status berubah menjadi completed, update stok
+        // Jika status berubah menjadi completed, update stok dan log inventory
         if ($oldStatus !== 'completed' && $request->status === 'completed') {
             foreach ($order->items as $item) {
                 $product = $item->product;
                 if ($product && $product->stok < $item->quantity) {
                     return redirect()->back()->with('error', 'Stok produk ' . $product->nama . ' tidak mencukupi.');
+                }
+            }
+            
+            // Log barang keluar untuk setiap item
+            foreach ($order->items as $item) {
+                if ($item->product) {
+                    InventoryLog::logOutgoing(
+                        $item->product->id,
+                        $item->quantity,
+                        'Penjualan - Order #' . $order->order_number,
+                        'order',
+                        $order->id,
+                        null
+                    );
                 }
             }
         }
@@ -98,26 +129,6 @@ class OrderController extends Controller
         };
 
         return Response::stream($callback, 200, $headers);
-    }
-
-    public function filter(Request $request)
-    {
-        $query = Order::with(['user', 'items.product']);
-
-        if ($request->status) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->date_from) {
-            $query->whereDate('created_at', '>=', $request->date_from);
-        }
-
-        if ($request->date_to) {
-            $query->whereDate('created_at', '<=', $request->date_to);
-        }
-
-        $orders = $query->latest()->paginate(10);
-        return view('admin.orders.index', compact('orders'));
     }
 
     public function verifyPayment(Request $request, $id)

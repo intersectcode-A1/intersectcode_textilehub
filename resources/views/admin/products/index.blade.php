@@ -219,7 +219,7 @@
 
         @if ($products->hasPages())
             <div class="p-3 sm:p-6 bg-white dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
-                {{ $products->links() }}
+                {{ $products->links('vendor.pagination.modern') }}
             </div>
         @endif
     </div>

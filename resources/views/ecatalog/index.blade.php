@@ -1,6 +1,6 @@
 <x-layouts.catalog>
     {{-- Hero Section dengan Background Modern --}}
-    <div x-data="{ dark: localStorage.getItem('theme') === 'dark', toggle() { this.dark = !this.dark; localStorage.setItem('theme', this.dark ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', this.dark); } }" x-init="if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}" class="relative bg-gradient-to-br from-blue-500 via-blue-200 to-white overflow-hidden dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+    <div class="relative bg-gradient-to-br from-blue-500 via-blue-200 to-white overflow-hidden">
         {{-- Animated SVG Particles --}}
         <svg class="absolute left-0 top-0 w-full h-full pointer-events-none z-0" style="opacity:0.10;" aria-hidden="true">
             <circle cx="120" cy="80" r="18">
@@ -80,7 +80,7 @@
         </div>
     </div>
     {{-- Main Content Section --}}
-    <div class="bg-gray-50 min-h-screen dark:bg-gray-900">
+    <div class="bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             {{-- Alert Messages --}}
         @if(session('success'))
@@ -336,7 +336,7 @@
                     @if($products->hasPages())
                 <div class="mt-16">
                     <div class="bg-white rounded-2xl shadow-md border border-blue-100 p-6">
-                        {{ $products->links() }}
+                        {{ $products->links('vendor.pagination.modern') }}
                     </div>
                 </div>
             @endif

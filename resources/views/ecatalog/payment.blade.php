@@ -1,5 +1,5 @@
 <x-layouts.catalog>
-    <section class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white dark:bg-gray-900 transition-colors duration-300 rounded-3xl">
+    <section class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white transition-colors duration-300 rounded-3xl">
         <!-- Subtle background gradient -->
         <div class="relative z-10 bg-white/80 glass rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
             <div class="p-8">

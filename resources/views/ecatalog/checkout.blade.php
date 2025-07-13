@@ -6,7 +6,7 @@
     $subtotal = $price;
 @endphp
 <x-layouts.catalog>
-    <div class="bg-white dark:bg-gray-900 min-h-screen py-12 transition-colors duration-300">
+    <div class="bg-white min-h-screen py-12 transition-colors duration-300">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Tombol Kembali ke E-Catalog (paling atas) --}}
             <a href="{{ route('ecatalog.index') }}" class="inline-flex items-center mb-6 px-5 py-2 bg-blue-600 hover:bg-blue-800 text-white font-bold rounded-xl shadow-md hover:scale-105 transition-all duration-150">

@@ -6,20 +6,20 @@
             Kembali ke E-Catalog
         </a>
 
-        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden animate-fade-in border border-gray-100 dark:border-gray-800">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in border border-gray-100">
             {{-- Header --}}
-            <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col sm:flex-row sm:justify-between sm:items-center transition-colors duration-300">
+            <div class="px-8 py-6 border-b border-gray-100 bg-white flex flex-col sm:flex-row sm:justify-between sm:items-center transition-colors duration-300">
                 <div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-900 dark:text-white mb-1 flex items-center gap-2">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-900 mb-1 flex items-center gap-2">
                         <svg class="w-7 h-7 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v4a1 1 0 001 1h3m10-5h2a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h2"/></svg>
                         Order #{{ $order->order_number }}
                     </h2>
-                    <p class="text-sm text-blue-700 dark:text-blue-200 mt-1">{{ $order->created_at->format('d M Y H:i') }}</p>
+                    <p class="text-sm text-blue-700 mt-1">{{ $order->created_at->format('d M Y H:i') }}</p>
                 </div>
                 <span class="px-4 py-2 rounded-full text-sm font-bold shadow flex items-center gap-2 animate-fade-in
-                    @if($order->status === 'completed') bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700
-                    @elseif($order->status === 'cancelled') bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700
-                    @else bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-700 @endif">
+                    @if($order->status === 'completed') bg-green-100 text-green-700 border border-green-200
+                    @elseif($order->status === 'cancelled') bg-red-100 text-red-700 border border-red-200
+                    @else bg-yellow-100 text-yellow-700 border border-yellow-200 @endif">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="10" stroke-width="2" class="@if($order->status === 'completed') stroke-green-400 @elseif($order->status === 'cancelled') stroke-red-400 @else stroke-yellow-400 @endif"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" class="@if($order->status === 'completed') stroke-green-500 @else hidden @endif"/>
@@ -31,66 +31,66 @@
             </div>
 
             {{-- Customer Info --}}
-            <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-800 bg-blue-50 dark:bg-gray-800 transition-colors duration-300">
-                <h3 class="text-lg font-bold text-blue-900 dark:text-white mb-3 flex items-center gap-2">
+            <div class="px-8 py-6 border-b border-gray-100 bg-blue-50 transition-colors duration-300">
+                <h3 class="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
                     <svg class="w-5 h-5 text-blue-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     Informasi Penerima
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <p class="text-sm text-blue-700 dark:text-blue-200 flex items-center gap-1"><svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804"/></svg>Nama:</p>
-                        <p class="font-bold text-blue-900 dark:text-white">{{ $order->user_name }}</p>
+                        <p class="text-sm text-blue-700 flex items-center gap-1"><svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804"/></svg>Nama:</p>
+                        <p class="font-bold text-blue-900">{{ $order->user_name }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-blue-700 dark:text-blue-200 flex items-center gap-1"><svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 01-8 0"/></svg>Email:</p>
-                        <p class="font-bold text-blue-900 dark:text-white">{{ $order->email }}</p>
+                        <p class="text-sm text-blue-700 flex items-center gap-1"><svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 01-8 0"/></svg>Email:</p>
+                        <p class="font-bold text-blue-900">{{ $order->email }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-blue-700 dark:text-blue-200 flex items-center gap-1"><svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10a1 1 0 011-1h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V10z"/></svg>Telepon:</p>
-                        <p class="font-bold text-blue-900 dark:text-white">{{ $order->telepon }}</p>
+                        <p class="text-sm text-blue-700 flex items-center gap-1"><svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10a1 1 0 011-1h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V10z"/></svg>Telepon:</p>
+                        <p class="font-bold text-blue-900">{{ $order->telepon }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-blue-700 dark:text-blue-200 flex items-center gap-1"><svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2h5"/></svg>Alamat:</p>
-                        <p class="font-bold text-blue-900 dark:text-white">{{ $order->alamat }}</p>
+                        <p class="text-sm text-blue-700 flex items-center gap-1"><svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2h5"/></svg>Alamat:</p>
+                        <p class="font-bold text-blue-900">{{ $order->alamat }}</p>
                     </div>
                 </div>
             </div>
 
             {{-- Order Items --}}
             <div class="px-8 py-6">
-                <h3 class="text-lg font-bold text-blue-900 dark:text-white mb-3">Detail Pesanan</h3>
-                <div class="divide-y divide-blue-100 dark:divide-gray-800">
+                <h3 class="text-lg font-bold text-blue-900 mb-3">Detail Pesanan</h3>
+                <div class="divide-y divide-blue-100">
                     @foreach($order->items as $item)
                         <div class="py-4 flex justify-between items-center">
                             <div class="flex-1">
-                                <h4 class="font-bold text-blue-900 dark:text-white">{{ $item->product_name }}</h4>
+                                <h4 class="font-bold text-blue-900">{{ $item->product_name }}</h4>
                                 @if(!empty($item->variant_info) && count((array)$item->variant_info) > 0)
                                     <div class="mt-2 flex flex-wrap gap-2">
                                         @foreach((array)$item->variant_info as $variant)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide bg-blue-500 dark:bg-blue-700 text-white shadow animate-fade-in">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide bg-blue-500 text-white shadow animate-fade-in">
                                                 {{ ucfirst($variant['type'] ?? '') }}
                                             </span>
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-gray-800 text-xs text-blue-900 dark:text-blue-200 font-semibold border border-blue-100 dark:border-blue-700 shadow-sm animate-fade-in">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-xs text-blue-900 font-semibold border border-blue-100 shadow-sm animate-fade-in">
                                                 {{ $variant['name'] ?? '' }}
                                                 @if(!empty($variant['additional_price']) && $variant['additional_price'] > 0)
-                                                    <span class="ml-2 text-green-600 dark:text-green-300 font-bold">(+Rp {{ number_format($variant['additional_price'], 0, ',', '.') }})</span>
+                                                    <span class="ml-2 text-green-600 font-bold">(+Rp {{ number_format($variant['additional_price'], 0, ',', '.') }})</span>
                                                 @endif
                                             </span>
                                         @endforeach
                                     </div>
                                 @endif
-                                <p class="text-sm text-blue-700 dark:text-blue-200 mt-1">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                                <p class="text-sm text-blue-700 mt-1">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                             </div>
                             <div class="text-right">
-                                <p class="font-bold text-blue-900 dark:text-white text-lg">Rp {{ number_format($item->quantity * $item->price, 0, ',', '.') }}</p>
+                                <p class="font-bold text-blue-900 text-lg">Rp {{ number_format($item->quantity * $item->price, 0, ',', '.') }}</p>
                             </div>
                         </div>
                     @endforeach
                 </div>
 
                 {{-- Total --}}
-                <div class="mt-8 pt-6 border-t border-blue-100 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-xl shadow flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-6">
-                    <span class="text-xl font-extrabold text-blue-900 dark:text-white">Total</span>
+                <div class="mt-8 pt-6 border-t border-blue-100 bg-white rounded-xl shadow flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-6">
+                    <span class="text-xl font-extrabold text-blue-900">Total</span>
                     <span class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600 text-right">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
                 </div>
 
@@ -139,23 +139,23 @@
 
         {{-- Messages --}}
         @if(session('success'))
-            <div class="mt-8 rounded-xl bg-green-50 dark:bg-green-900 p-4 border-l-4 border-green-500 dark:border-green-400 shadow animate-fade-in">
+            <div class="mt-8 rounded-xl bg-green-50 p-4 border-l-4 border-green-500 shadow animate-fade-in">
                 <div class="flex items-center">
-                    <svg class="h-5 w-5 text-green-500 dark:text-green-300 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="h-5 w-5 text-green-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
-                    <span class="text-green-800 dark:text-green-200 font-semibold">{{ session('success') }}</span>
+                    <span class="text-green-800 font-semibold">{{ session('success') }}</span>
                 </div>
             </div>
         @endif
 
         @if(session('error'))
-            <div class="mt-8 rounded-xl bg-red-50 dark:bg-red-900 p-4 border-l-4 border-red-500 dark:border-red-400 shadow animate-fade-in">
+            <div class="mt-8 rounded-xl bg-red-50 p-4 border-l-4 border-red-500 shadow animate-fade-in">
                 <div class="flex items-center">
-                    <svg class="h-5 w-5 text-red-500 dark:text-red-300 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                     </svg>
-                    <span class="text-red-800 dark:text-red-200 font-semibold">{{ session('error') }}</span>
+                    <span class="text-red-800 font-semibold">{{ session('error') }}</span>
                 </div>
             </div>
         @endif

@@ -84,6 +84,12 @@
             </tbody>
         </table>
     </div>
+    
+    @if ($invoices->hasPages())
+        <div class="p-3 sm:p-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+            {{ $invoices->links('vendor.pagination.modern') }}
+        </div>
+    @endif
 </div>
 @endsection
 

@@ -113,5 +113,11 @@
             </tbody>
         </table>
     </div>
+    
+    @if ($suppliers->hasPages())
+        <div class="p-3 sm:p-6 bg-white border-t border-blue-200">
+            {{ $suppliers->links('vendor.pagination.modern') }}
+        </div>
+    @endif
 </div>
 @endsection
